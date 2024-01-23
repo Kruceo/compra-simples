@@ -5,5 +5,11 @@
         "schema": "principal",
         "host": "localhost",
         "dialect": "postgres"
+    },
+    "server":{
+        "port":8080
+    },
+    "security":{
+        "secret":"xyz","tokenExpireTime":"1m"
     }
 }

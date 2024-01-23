@@ -11,7 +11,7 @@ const _ID = {
 
 const Usuario = dbserver.define("usuario", {
     id: _ID,
-    nome: { type: DataTypes.STRING, allowNull: false },
+    nome: { type: DataTypes.STRING, allowNull: false, unique: true },
     senha: { type: DataTypes.STRING, allowNull: false }
 }, {
     tableName: "usuarios",
@@ -27,9 +27,9 @@ const Bote = dbserver.define("bote", {
 }, {
     tableName: "botes",
     freezeTableName: true,
-    name:{
-        plural:  "botes",
-        singular:"bote"
+    name: {
+        plural: "botes",
+        singular: "bote"
     }
 })
 
@@ -50,9 +50,9 @@ const Fornecedor = dbserver.define("fornecedor", {
 }, {
     tableName: "fornecedores",
     freezeTableName: true,
-    name:{
-        plural:"fornecedores",
-        singular:"fornecedor"
+    name: {
+        plural: "fornecedores",
+        singular: "fornecedor"
     }
 })
 
@@ -69,9 +69,9 @@ const Produto = dbserver.define("produto", {
 }, {
     tableName: "produtos",
     freezeTableName: true,
-    name:{
-        plural:"produtos",
-        singular:"produto"
+    name: {
+        plural: "produtos",
+        singular: "produto"
     }
 })
 
@@ -106,9 +106,9 @@ const Entrada = dbserver.define("entrada", {
 }, {
     tableName: "entradas",
     freezeTableName: true,
-    name:{
-        plural:"entradas",
-        singular:"entrada"
+    name: {
+        plural: "entradas",
+        singular: "entrada"
     }
 })
 
@@ -138,9 +138,9 @@ const Entrada_item = dbserver.define("entrada_item", {
 }, {
     tableName: "entrada_items",
     freezeTableName: true,
-    name:{
-        plural:  "entrada_item",
-        singular:"entrada_items"
+    name: {
+        plural: "entrada_item",
+        singular: "entrada_items"
     }
 })
 
@@ -164,10 +164,10 @@ Entrada.hasMany(Entrada_item, { foreignKey: 'entrada_id' })
 Entrada_item.belongsTo(Produto, { foreignKey: 'produto_id' })
 Produto.hasMany(Entrada_item, { foreignKey: 'produto_id' })
 
-Entrada.belongsTo(Fornecedor,{foreignKey:"fornecedor_id"})
+Entrada.belongsTo(Fornecedor, { foreignKey: "fornecedor_id" })
 Fornecedor.hasMany(Entrada, { foreignKey: 'fornecedor_id' })
 
-Entrada.belongsTo(Usuario,{foreignKey:    "usuario_id"})
+Entrada.belongsTo(Usuario, { foreignKey: "usuario_id" })
 Usuario.hasMany(Entrada, { foreignKey: 'usuario_id' })
 
 export default {
