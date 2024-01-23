@@ -1,31 +1,31 @@
 import { Router } from "express";
 import tables, { Bote } from "../../database/tables.mjs";
 import statusCodes from "../../utils/statusCode.mjs";
+import opBuilder from "../../utils/operatorBuilder.mjs";
 
 /**
  * @type {Router}
  */
 const boteRouter = new Router()
 
-boteRouter.get(`/bote/:id`, async (req, res) => {
-    const { include } = req.query
-    const id = req.params.id
+// boteRouter.get(`/bote`, async (req, res) => {
+//     const { include,id } = req.query
 
-    const data = await Bote.findOne({
-        where: { id },
-        include: tables[include]
-    })
+//     const data = await Bote.findOne({
+//         where: { id },
+//         include: tables[include]
+//     })
 
-    res.json({ data })
-})
+//     res.json({ data })
+// })
 
 boteRouter.get(`/botes`, async (req, res) => {
     const { nome, id, limit, include } = req.query
 
     var whereClause = {}
 
-    if (id) whereClause.id = parseInt(id, 10)
-    if (nome) whereClause.nome = nome
+    if (id) whereClause.id = opBuilder(id)
+    if (nome) whereClause.nome = opBuilder(nome)
 
     const data = await Bote.findAll({
         where: whereClause,

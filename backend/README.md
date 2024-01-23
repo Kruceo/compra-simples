@@ -12,3 +12,5 @@ Usando o metodo **GET**, use o cominho /v1/botes. E.g: `192.168.0.10:8080/v1/bot
     })
     const botes = await resposta.json()
 ```
+
+Pode se usar também ´queries´ como id,limit e nome, os parametros batem de acordo com a tabela selecionada. E.g: `192.168.0.10:8080/v1/botes?nome=maritimo&limit=20`
