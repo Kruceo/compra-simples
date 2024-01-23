@@ -14,7 +14,8 @@ const Usuario = dbserver.define("usuario", {
     nome: { type: DataTypes.STRING, allowNull: false },
     senha: { type: DataTypes.STRING, allowNull: false }
 }, {
-    tableName: "usuarios"
+    tableName: "usuarios",
+    freezeTableName: true
 })
 
 const Bote = dbserver.define("bote", {
@@ -24,7 +25,12 @@ const Bote = dbserver.define("bote", {
         allowNull: false
     }
 }, {
-    tableName: "botes"
+    tableName: "botes",
+    freezeTableName: true,
+    name:{
+        plural:  "botes",
+        singular:"bote"
+    }
 })
 
 const Fornecedor = dbserver.define("fornecedor", {
@@ -42,7 +48,12 @@ const Fornecedor = dbserver.define("fornecedor", {
         type: DataTypes.INTEGER
     }
 }, {
-    tableName: "fornecedores"
+    tableName: "fornecedores",
+    freezeTableName: true,
+    name:{
+        plural:"fornecedores",
+        singular:"fornecedor"
+    }
 })
 
 const Produto = dbserver.define("produto", {
@@ -56,7 +67,12 @@ const Produto = dbserver.define("produto", {
         allowNull: false
     }
 }, {
-    tableName: "produtos"
+    tableName: "produtos",
+    freezeTableName: true,
+    name:{
+        plural:"produtos",
+        singular:"produto"
+    }
 })
 
 const Entrada = dbserver.define("entrada", {
@@ -88,7 +104,12 @@ const Entrada = dbserver.define("entrada", {
         references: { model: Usuario, key: 'id' }
     }
 }, {
-    tableName: "entradas"
+    tableName: "entradas",
+    freezeTableName: true,
+    name:{
+        plural:"entradas",
+        singular:"entrada"
+    }
 })
 
 const Entrada_item = dbserver.define("entrada_item", {
@@ -115,7 +136,12 @@ const Entrada_item = dbserver.define("entrada_item", {
         references: { model: Entrada, key: "id" }
     },
 }, {
-    tableName: "entrada_items"
+    tableName: "entrada_items",
+    freezeTableName: true,
+    name:{
+        plural:  "entrada_item",
+        singular:"entrada_items"
+    }
 })
 
 await Bote.sync({ force: false })

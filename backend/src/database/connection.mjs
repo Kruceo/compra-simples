@@ -1,5 +1,3 @@
-// models/index.js
-import fs from 'fs'
 import Sequelize from 'sequelize';
 import cfg from "../../config/config.json" assert { type: "json" }
 
