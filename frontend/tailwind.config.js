@@ -17,7 +17,9 @@ module.exports = {
         toolbar:"#fff",
         bar:"#eaeaff",
         sidebar:"#efefff",
-        subpanel:"#eee"
+        subpanel:"#eee",
+        submit:"#66f",
+        notification:"#ddf"
       },
     },
   },

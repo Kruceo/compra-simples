@@ -13,11 +13,39 @@ async function get(tables: string | "botes",
     return response.data
 }
 
+async function create(tables: string | "botes", data: BackendTableComp): Promise<BackendResponse> {
+    const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}`
+    const response = await axios.post(full_address, data)
+    return response.data
+}
+
+async function remove(tables: string | "botes", id: number) {
+    const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}/${id}`
+
+    try {
+        const response = await axios.delete(full_address)
+        return response.data
+    } catch (error: any) {
+        if (error.response && error.response.data)
+            return error.response.data
+        else return {
+            error:true,
+            message:"Erro desconhecido. " + error
+        }
+    }
+}
+
+async function edit(tables: string | "botes", id: number): Promise<BackendResponse> {
+    const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}/${id}`
+    const response = await axios.put(full_address)
+    return response.data
+}
+
 interface BackendTableComp {
 
-    id: number | string,
-    createdAt: any,
-    updatedAt: any,
+    id?: number | string,
+    createdAt?: any,
+    updatedAt?: any,
 
     nome?: string,
     preco?: number,
@@ -50,7 +78,7 @@ function obj2URLQuery(obj: Object) {
     return query.slice(0, query.length - 1)
 }
 
-export { get }
-export default { get }
+export { get, create, remove, edit }
+export default { get, create, remove, edit }
 
-export type {BackendResponse,BackendTableComp}
+export type { BackendResponse, BackendTableComp }

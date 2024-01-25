@@ -3,9 +3,9 @@ import React from "react"
 interface TableBarAttributes {
     headerMode?: boolean,
     className?: string,
-    key?: number,
     children: React.ReactNode | React.ReactNode[],
-    disposition?: number[]
+    disposition?: number[],
+    onClick?: React.MouseEventHandler
 }
 
 export function TableBar(props: TableBarAttributes) {
@@ -23,7 +23,8 @@ export function TableBar(props: TableBarAttributes) {
     return <div
         style={{ gridTemplateColumns: gridTemplateColumns }}
         className={`grid p-4 transition-colors ${(!headerMode ? "hover:bg-hovers " : "")} ${props.className}`}
-        key={props.key}>
+        onClick={props.onClick}
+    >
         {
             children.map((child, index) => {
                 return <div
