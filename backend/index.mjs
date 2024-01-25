@@ -5,13 +5,16 @@ import cfg from "./config/config.json" assert { type: "json" }
 import authRouter from './src/routers/auth/loginRouter.mjs'
 import { authenticationMiddleware } from './src/security/authentication.mjs'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
 
 const app = express()
-
+app.use(cors())
 app.use(express.json({ limit: "2mb" }))
 app.use(cookieParser())
 
-app.use('/v1', authenticationMiddleware, boteRouter)
+app.use('/v1',
+    // authenticationMiddleware,
+    boteRouter)
 app.use(authRouter)
 
 app.get("/testing", (req, res) => res.send("ok"))

@@ -2,7 +2,7 @@ import React, { AnchorHTMLAttributes, useState } from "react"
 
 export default function SideBar() {
     return <>
-        <header className="bg-second w-44 mt-14 h-full fixed left-0 top-0 flex flex-col shadow-lg">
+        <header className="bg-sidebar border-r border-borders w-44 mt-14 h-full fixed left-0 top-0 flex flex-col shadow-lg z-50">
             <DropButton
                 title="Registro"
                 dropDownContent={<>
@@ -53,10 +53,10 @@ function DropButton(props: DropButtonAttributes) {
                 <span className="ml-auto">&gt;</span>
             </p>
             {
-                (focused||isMouseOverSubPanel) ?
+                (focused || isMouseOverSubPanel) ?
                     <header onMouseOver={() => setIsMouseOverSubPanel(true)}
                         onMouseLeave={() => setIsMouseOverSubPanel(false)}
-                        className="bg-third min-w-16 w-fit h-fit absolute top-0 left-full flex flex-col text-nowrap shadow-xl">
+                        className="bg-subpanel outline outline-1 outline-borders min-w-16 w-fit h-fit absolute top-0 left-full flex flex-col text-nowrap shadow-xl">
                         {props.dropDownContent}
                     </header>
                     : null

@@ -1,14 +1,16 @@
-import tables from "../src/database/tables.mjs";
 import readline from 'readline'
+import cfg from "../config/config.json" assert { type: "json" }
+import { Sequelize } from "sequelize";
+
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
 console.log('\n'.repeat(50));
-console.log("ATENÇÃO".padEnd(process.stdout.getWindowSize()[0]/2 +7,'-').padStart(process.stdout.getWindowSize()[0],'-'))
+console.log("ATENÇÃO".padEnd(process.stdout.getWindowSize()[0] / 2 + 7, '-').padStart(process.stdout.getWindowSize()[0], '-'))
 console.log("Usar essa ferramenta resultará em perda permanente dos dados contidos na base de dados.")
 console.log("Faça um backup de todos os dados importantes, não haverá outra chance.")
-console.log("".padEnd(process.stdout.getWindowSize()[0]/2 +7,'-').padStart(process.stdout.getWindowSize()[0],'-') +"\n")
+console.log("".padEnd(process.stdout.getWindowSize()[0] / 2 + 7, '-').padStart(process.stdout.getWindowSize()[0], '-') + "\n")
 
 
 
@@ -22,7 +24,23 @@ if (!userAcceptedCLI) {
     }
 }
 
+const dbserver = new Sequelize({
+    // database: cfg.database.database,
+    // schema:   cfg.database.schema,
+    host: cfg.database.host,
+    password: cfg.database.password,
+    username: cfg.database.username,
+    dialect: cfg.database.dialect,
+    logging: false
+});
+
+console.log("Criando esquema...")
+await dbserver.query(`CREATE SCHEMA IF NOT EXISTS ${cfg.database.schema};`);
+
+const tables = await import("../src/database/tables.mjs")
+
 for (const table of Object.entries(tables)) {
+    if (table[0] == "default") continue;
     console.log(`Sincronizando ${table[0]}`)
     await table[1].sync({ force: true })
 }

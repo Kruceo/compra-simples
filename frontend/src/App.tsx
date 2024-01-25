@@ -4,14 +4,15 @@ import Bar from './components/Bar'
 import SideBar from './components/SideBar'
 import Content from './components/Content'
 import ViewBotes from './components/pages/ViewBotes'
+import Table from './components/table/Table'
 
 function App() {
 
   return (
     <>
-     <Routes>
-      <Route path='/view/botes' Component={ViewBotes}></Route>
-     </Routes>
+      <Routes>
+        <Route path='/view/botes' Component={ViewBotes}></Route>
+      </Routes>
     </>
   )
 }

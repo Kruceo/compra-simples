@@ -10,7 +10,14 @@ module.exports = {
         second: '#efefff',
         third: '#eeeeee',
         fourth: '#aaaaff',//subpanels
-        fifth:"#9900cc"
+        fifth:"#9900cc",
+        borders:"#0002",
+        hovers:"#0001",
+
+        toolbar:"#fff",
+        bar:"#eaeaff",
+        sidebar:"#efefff",
+        subpanel:"#eee"
       },
     },
   },

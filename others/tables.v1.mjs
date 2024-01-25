@@ -11,11 +11,10 @@ const _ID = {
 
 const Usuario = dbserver.define("usuario", {
     id: _ID,
-    nome: { type: DataTypes.STRING, allowNull: false, unique: true },
+    nome: { type: DataTypes.STRING, allowNull: false },
     senha: { type: DataTypes.STRING, allowNull: false }
 }, {
-    tableName: "usuarios",
-    freezeTableName: true
+    tableName: "usuarios"
 })
 
 const Bote = dbserver.define("bote", {
@@ -25,12 +24,7 @@ const Bote = dbserver.define("bote", {
         allowNull: false
     }
 }, {
-    tableName: "botes",
-    freezeTableName: true,
-    name: {
-        plural: "botes",
-        singular: "bote"
-    }
+    tableName: "botes"
 })
 
 const Fornecedor = dbserver.define("fornecedor", {
@@ -48,12 +42,7 @@ const Fornecedor = dbserver.define("fornecedor", {
         type: DataTypes.INTEGER
     }
 }, {
-    tableName: "fornecedores",
-    freezeTableName: true,
-    name: {
-        plural: "fornecedores",
-        singular: "fornecedor"
-    }
+    tableName: "fornecedores"
 })
 
 const Produto = dbserver.define("produto", {
@@ -67,12 +56,7 @@ const Produto = dbserver.define("produto", {
         allowNull: false
     }
 }, {
-    tableName: "produtos",
-    freezeTableName: true,
-    name: {
-        plural: "produtos",
-        singular: "produto"
-    }
+    tableName: "produtos"
 })
 
 const Entrada = dbserver.define("entrada", {
@@ -83,6 +67,22 @@ const Entrada = dbserver.define("entrada", {
     },
     obs: {
         type: DataTypes.STRING
+    },
+    peso_total: {
+        type: DataTypes.FLOAT,
+        allowNull: false
+    },
+    valor: {
+        type: DataTypes.FLOAT,
+        allowNull: false
+    },
+    desconto: {
+        type: DataTypes.FLOAT,
+        allowNull: false
+    },
+    valor_total: {
+        type: DataTypes.FLOAT,
+        allowNull: false
     },
     status: {
         type: DataTypes.INTEGER,
@@ -104,12 +104,7 @@ const Entrada = dbserver.define("entrada", {
         references: { model: Usuario, key: 'id' }
     }
 }, {
-    tableName: "entradas",
-    freezeTableName: true,
-    name: {
-        plural: "entradas",
-        singular: "entrada"
-    }
+    tableName: "entradas"
 })
 
 const Entrada_item = dbserver.define("entrada_item", {
@@ -118,7 +113,11 @@ const Entrada_item = dbserver.define("entrada_item", {
         type: DataTypes.FLOAT,
         allowNull: false
     },
-    preco: {
+    preço: {
+        type: DataTypes.FLOAT,
+        allowNull: false
+    },
+    valor_total: {
         type: DataTypes.FLOAT,
         allowNull: false
     },
@@ -136,21 +135,15 @@ const Entrada_item = dbserver.define("entrada_item", {
         references: { model: Entrada, key: "id" }
     },
 }, {
-    tableName: "entrada_items",
-    freezeTableName: true,
-    name: {
-        plural: "entrada_item",
-        singular: "entrada_items"
-    }
+    tableName: "entrada_items"
 })
-await Produto.sync({ force: false })
-await Usuario.sync({ force: false })
-await Bote.sync({ force: false })
 
+await Bote.sync({ force: false })
 await Fornecedor.sync({ force: false })
+await Produto.sync({ force: false })
 await Entrada.sync({ force: false })
 await Entrada_item.sync({ force: false })
-
+await Usuario.sync({ force: false })
 
 /** Setup relations */
 
@@ -165,10 +158,10 @@ Entrada.hasMany(Entrada_item, { foreignKey: 'entrada_id' })
 Entrada_item.belongsTo(Produto, { foreignKey: 'produto_id' })
 Produto.hasMany(Entrada_item, { foreignKey: 'produto_id' })
 
-Entrada.belongsTo(Fornecedor, { foreignKey: "fornecedor_id" })
+Entrada.belongsTo(Fornecedor,{foreignKey:"fornecedor_id"})
 Fornecedor.hasMany(Entrada, { foreignKey: 'fornecedor_id' })
 
-Entrada.belongsTo(Usuario, { foreignKey: "usuario_id" })
+Entrada.belongsTo(Usuario,{foreignKey:    "usuario_id"})
 Usuario.hasMany(Entrada, { foreignKey: 'usuario_id' })
 
 export default {
