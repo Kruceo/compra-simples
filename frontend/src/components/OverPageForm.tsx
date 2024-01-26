@@ -26,3 +26,10 @@ export default function OverPageForm(props: OverPageFormAttributes) {
     </>
 
 }
+
+
+export function RequiredLabel(props: React.DetailedHTMLProps<React.LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>) {
+    return <label {...props} className="mb-2">
+        <strong>{props.children}<span className="opacity-50">*</span></strong>
+    </label>
+}

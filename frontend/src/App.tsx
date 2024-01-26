@@ -4,6 +4,7 @@ import ViewBotes from './components/pages/Botes/ViewBotes'
 import CreateBote from './components/OverPageForm'
 import { ReactNode, createContext, useState } from 'react'
 
+
 const globalPopupsContext = createContext<{
   globalPopups: any,
   setGlobalPopups: any,
@@ -26,11 +27,10 @@ function App() {
 
   return (
     <>
-    {globalPopups}
       <globalPopupsContext.Provider value={{ globalPopups, setGlobalPupupsByKey, setGlobalPopups }}>
+        {globalPopups}
         <Routes>
           <Route path='/view/botes' Component={ViewBotes}></Route>
-          <Route path='/create/botes' Component={CreateBote}></Route>
         </Routes>
       </globalPopupsContext.Provider>
     </>

@@ -29,8 +29,8 @@ async function remove(tables: string | "botes", id: number) {
         if (error.response && error.response.data)
             return error.response.data
         else return {
-            error:true,
-            message:"Erro desconhecido. " + error
+            error: true,
+            message: "Erro desconhecido. " + error
         }
     }
 }
@@ -46,7 +46,6 @@ interface BackendTableComp {
     id?: number | string,
     createdAt?: any,
     updatedAt?: any,
-
     nome?: string,
     preco?: number,
     bote_id?: number,
@@ -60,7 +59,18 @@ interface BackendTableComp {
     desconto?: boolean,
     produto_id?: number,
     entrada_id?: number,
-
+    fornecedores?: BackendTableComp[],
+    fornecedor?: BackendTableComp,
+    botes?: BackendTableComp[],
+    bote?: BackendTableComp,
+    entradas?: BackendTableComp[],
+    entrada?: BackendTableComp,
+    entrada_itens?: BackendTableComp[],
+    entrada_item?: BackendTableComp,
+    usuarios?: BackendTableComp[],
+    usuario?: BackendTableComp,
+    produtos?: BackendTableComp[],
+    produto?: BackendTableComp,
 }
 
 interface BackendResponse {
