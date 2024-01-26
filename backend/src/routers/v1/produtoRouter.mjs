@@ -7,7 +7,7 @@ import orderingBuilder from "../../utils/orderingBuilder.mjs";
 /**
  * @type {Router}
  */
-const boteRouter = new Router()
+const produtoRouter = new Router()
 
 // boteRouter.get(`/bote`, async (req, res) => {
 //     const { include,id } = req.query
@@ -20,7 +20,7 @@ const boteRouter = new Router()
 //     res.json({ data })
 // })
 
-boteRouter.get(`/botes`, async (req, res) => {
+boteRouter.get(`/produto`, async (req, res) => {
     const { nome, id, limit, include, order } = req.query
 
     var whereClause = {}

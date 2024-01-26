@@ -4,15 +4,15 @@
 
 ### Obtendo todos os itens de uma tabela
 
-Para obter todos os itens de uma tabela, utilize o método GET com o seguinte caminho: /v1/botes.
+Para obter todos os itens de uma tabela, utilize o método GET com o seguinte caminho: /v1/bote.
 
 Exemplo de requisição usando JavaScript com fetch:
 
 ```js
-const resposta = await fetch('192.168.0.10:8080/v1/botes',{
+const resposta = await fetch('192.168.0.10:8080/v1/bote',{
     method:"GET"
 })
-const botes = await resposta.json()
+const bote = await resposta.json()
 ```
 
 ### Aplicando Filtros
@@ -22,7 +22,7 @@ Você pode aplicar filtros aos resultados usando parâmetros de consulta (querie
 Exemplo de requisição com consultas (queries) para filtrar por nome e limitar o número de resultados:
 
 ```js
-const resposta = await fetch('192.168.0.10:8080/v1/botes?nome=maritimo&limit=20',{
+const resposta = await fetch('192.168.0.10:8080/v1/bote?nome=maritimo&limit=20',{
     method:"GET"
 })
 const botesFiltrados = await resposta.json()
@@ -36,7 +36,7 @@ Além de obter dados, você pode adicionar, atualizar e remover itens usando os 
 
 #### Adicionando um Item
 
-Para adicionar um novo item, use o método POST com o caminho /v1/botes e inclua os dados do novo item no corpo da requisição.
+Para adicionar um novo item, use o método POST com o caminho /v1/bote e inclua os dados do novo item no corpo da requisição.
 
 Exemplo usando JavaScript com fetch:
 
@@ -46,7 +46,7 @@ const novoBote = {
     // Outros campos...
 };
 
-const resposta = await fetch('192.168.0.10:8080/v1/botes',{
+const resposta = await fetch('192.168.0.10:8080/v1/bote',{
     method:"POST",
     headers: {
         'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ const novoBoteAdicionado = await resposta.json();
 
 #### Atualizando um Item
 
-Para atualizar um item existente, use o método PUT com o caminho /v1/botes/:id, substituindo :id pelo identificador do item que deseja atualizar. Inclua os dados atualizados no corpo da requisição.
+Para atualizar um item existente, use o método PUT com o caminho /v1/bote/:id, substituindo :id pelo identificador do item que deseja atualizar. Inclua os dados atualizados no corpo da requisição.
 
 Exemplo usando JavaScript com fetch:
 
@@ -70,7 +70,7 @@ const dadosAtualizados = {
     // Outros campos...
 };
 
-const resposta = await fetch(`192.168.0.10:8080/v1/botes/${idDoBotePara}`,{
+const resposta = await fetch(`192.168.0.10:8080/v1/bote/${idDoBote}`,{
     method:"PUT",
     headers: {
         'Content-Type': 'application/json',
@@ -83,16 +83,55 @@ const boteAtualizado = await resposta.json();
 
 #### Removendo um Item
 
-Para remover um item, use o método DELETE com o caminho /v1/botes/:id, substituindo :id pelo identificador do item que deseja remover.
+Para remover um item, use o método DELETE com o caminho /v1/bote/:id, substituindo :id pelo identificador do item que deseja remover.
 
 Exemplo usando JavaScript com fetch:
 
 ```js
 const idDoBote = 1;
 
-await fetch(`192.168.0.10:8080/v1/botes/${idDoBote}`,{
+await fetch(`192.168.0.10:8080/v1/bote/${idDoBote}`,{
     method:"DELETE"
 });
+```
+
+### Aplicando Ordenação
+
+Você pode ordenar os resultados usando o parâmetro `order`. Este parâmetro aceita o nome do campo pelo qual você deseja ordenar e a direção da ordenação (ASC para ascendente e DESC para descendente).
+
+Exemplo de requisição para ordenar os "botes" por nome em ordem ascendente:
+
+```js
+const resposta = await fetch('192.168.0.10:8080/v1/bote?order=nome,ASC',{
+    method:"GET"
+})
+const botesOrdenados = await resposta.json()
+```
+
+### Incluindo Dados Relacionados
+
+Você pode incluir dados relacionados usando o parâmetro `include`. Este parâmetro permite trazer informações de tabelas relacionadas na resposta.
+
+Exemplo de requisição para incluir informações do fornecedor ao obter os "botes":
+
+```js
+const resposta = await fetch('192.168.0.10:8080/v1/bote?include=Fornecedor',{
+    method:"GET"
+})
+const botesComFornecedor = await resposta.json()
+```
+
+### Operadores de Comparação
+
+Além dos operadores padrão, você pode usar operadores de comparação nos filtros, como `>`, `<`, `>=`, e `<=`.
+
+Exemplo de requisição para filtrar "botes" com id maior que 100:
+
+```js
+const resposta = await fetch('192.168.0.10:8080/v1/bote?id>100',{
+    method:"GET"
+})
+const botesFiltrados = await resposta.json()
 ```
 
 ### Tabelas Disponíveis
@@ -101,4 +140,4 @@ As tabelas disponíveis na API estão listadas no arquivo MAPS.md. Certifique-se
 
 ### Considerações Finais
 
-Certifique-se de verificar a documentação atualizada para obter informações detalhadas sobre endpoints adicionais, autenticação e qualquer outra configuração específica da API. Esperamos que esta API atenda às suas necessidades de gerenciamento de "botes" de forma eficiente e fácil de usar. Se
+Certifique-se de verificar a documentação atualizada para obter informações detalhadas sobre endpoints adicionais, autenticação e qualquer outra configuração específica da API. Esperamos que esta API atenda às suas necessidades de gerenciamento de "bote" de forma eficiente e fácil de usar.
