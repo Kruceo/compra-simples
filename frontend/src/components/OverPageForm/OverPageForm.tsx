@@ -19,7 +19,7 @@ export default function OverPageForm(props: OverPageFormAttributes) {
                     <h2 className="w-full text-center mb-8"><strong>{props.title}</strong></h2>
                     : null
             }
-            <form className="flex flex-col" {...restProps}>
+            <form autoFocus={true} className="flex flex-col" {...restProps}>
                 {children}
             </form>
         </div>

@@ -4,7 +4,7 @@ import Content from "../../Content";
 import SideBar from "../../SideBar";
 import backend, { BackendTableComp, create } from "../../../constants/backend";
 import ToolBar, { ToolBarButton } from "../../SubTopBar";
-import CreationForm from "../Botes/BoteCreationForm";
+import CreationForm from "../Botes/FormBotes";
 import { globalPopupsContext } from "../../../App";
 import OverPageInfo from "../../OverPageInfo";
 import Table from "../../table/Table";

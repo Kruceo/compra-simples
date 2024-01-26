@@ -23,7 +23,7 @@ export default function TableItem(props: TableBarAttributes) {
 
     return <div
         style={{ gridTemplateColumns: gridTemplateColumns }}
-        className={`grid p-4 transition-colors ${(!headerMode ? "hover:bg-hovers " : "border-b border-borders font-bold shadow-lg")} ${props.selected == true?"bg-blue-300":""} ${props.className}`}
+        className={`relative grid p-4 transition-colors ${(!headerMode ? "" : "border-b border-borders font-bold shadow-lg")} ${props.selected == true?"bg-blue-300":"hover:bg-hovers"} ${props.className}`}
         onClick={props.onClick}
     >
         {

@@ -8,7 +8,7 @@ interface TableToolBarAttributes {
 }
 
 export default function TableToolBar(props: TableToolBarAttributes) {
-    const { selected, createHandler, deleteHandler, editHandler } = props
+    const { selected, createHandler, deleteHandler } = props
 
     return <SubTopBar leftContent={selected.length > 0 ? selected.length + ' itens selecionados' : ''}>
         {/* <ToolBarButton className="hover:bg-yellow-100"><i>&#xe954;</i> Imprimir</ToolBarButton> */}

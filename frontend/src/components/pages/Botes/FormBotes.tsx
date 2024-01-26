@@ -1,7 +1,7 @@
-import { ReactNode, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import backend from "../../../constants/backend";
-import OverPageForm, { RequiredLabel } from "../../OverPageForm";
-import FormInput from "../../FormInput";
+import OverPageForm, { RequiredLabel } from "../../OverPageForm/OverPageForm";
+import FormInput from "../../OverPageForm/FormInput";
 import { globalPopupsContext } from "../../../App";
 import OverPageInfo from "../../OverPageInfo";
 
@@ -10,9 +10,7 @@ export default function BoteCreationForm(props: {
     mode: "creation" | "editing"
     afterSubmit?: Function
 }) {
-
     const [error, setError] = useState('')
-
     const { setGlobalPupupsByKey } = useContext(globalPopupsContext)
 
     const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -25,17 +23,15 @@ export default function BoteCreationForm(props: {
             return;
         }
 
-        if (props.mode == 'creation') {
-            const response = await backend.create("bote", {
-                nome: data.get("nome")?.toString()
-            })
-            if (response.error) {
-                // Tratamento de erro
-                setGlobalPupupsByKey(4,
-                    <OverPageInfo onAccept={() => setGlobalPupupsByKey(4, null)}>
-                        {response.message}
-                    </OverPageInfo>)
-            }
+        const response = await backend.create("bote", {
+            nome: data.get("nome")?.toString()
+        })
+        // Tratamento de erro
+        if (response.error) {
+            setGlobalPupupsByKey(4,
+                <OverPageInfo onAccept={() => setGlobalPupupsByKey(4, null)}>
+                    {response.message}
+                </OverPageInfo>)
         }
         // EXIT if exists
         props.afterSubmit ? props.afterSubmit() : null
@@ -43,7 +39,6 @@ export default function BoteCreationForm(props: {
     }
 
     return <>
-        {/* {extraContent} */}
         <OverPageForm
             {...props}
             title="Criação de Bote"
