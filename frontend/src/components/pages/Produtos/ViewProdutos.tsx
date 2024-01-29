@@ -3,14 +3,14 @@ import Bar from "../../Bar";
 import Content from "../../Content";
 import SideBar from "../../SideBar";
 import backend, { BackendTableComp } from "../../../constants/backend";
-import CreationForm from "./FormBotes";
+import CreationForm from "./FormProdutos";
 import { globalPopupsContext } from "../../../App";
 import { simpleSpawnInfo } from "../../OverPageInfo";
 import Table, { TableOrderEvent } from "../../table/Table";
 import { bDate } from "../../../constants/dateUtils";
 import TableToolBar from "../../table/TableToolBar";
 
-export default function ViewBotes() {
+export default function ViewProdutos() {
 
     const { setGlobalPupupsByKey } = useContext(globalPopupsContext)
     const [data, setData] = useState<BackendTableComp[]>([]);
@@ -23,10 +23,10 @@ export default function ViewBotes() {
         mockup[key] = value
         setWhere(mockup)
     }
-    
-    const table_to_manage = "bote"
 
-    const data_getter = async ()=> await backend.get(table_to_manage, where)
+    const table_to_manage = "produto"
+
+    const data_getter = async () => await backend.get(table_to_manage, where)
 
     useEffect(() => {
         (async () => {
@@ -44,8 +44,8 @@ export default function ViewBotes() {
     }
 
     // Quando é clicado no botão "pesquisar"
-    const searchHandler = (search:string)=>{
-        setWhereKey("nome","^"+search)
+    const searchHandler = (search: string) => {
+        setWhereKey("nome", "^" + search)
         setUpdate(!update)
     }
 
@@ -66,13 +66,13 @@ export default function ViewBotes() {
         const search = backend.utils.filterUsingID(data, selected[0])
         if (!search)
             return simpleSpawnInfo("Não é possivel selecionar o item escolhido.", setGlobalPupupsByKey);
-        const id = search.id
-        const nome = search.nome
+
+        const { nome, id, preco } = search
         setGlobalPupupsByKey(1,
             <CreationForm
                 key={'editingForm'}
                 mode="editing"
-                defaultValues={{ id, nome }}
+                defaultValues={{ id, nome, preco }}
                 onCancel={() => setGlobalPupupsByKey(1, null)}
                 afterSubmit={() => setUpdate(!update)}
             />
@@ -118,10 +118,10 @@ export default function ViewBotes() {
                     data={data}
                     disposition={[1, 6, 4, 4]}
                     tableItemHandler={(item) => [
-                        item.id, item.nome, bDate(item.createdAt), bDate(item.updatedAt)
+                        item.id, item.nome, "R$ " + (item.preco ?? 0).toFixed(2), bDate(item.updatedAt)
                     ]}
                     tableHeader={[
-                        "ID", "Nome", "Data de Criação", "Ultima Atualização"
+                        "ID", "Nome", "Preço", "Ultima Atualização"
                     ]}
                 />
             </div>

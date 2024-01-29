@@ -63,6 +63,8 @@ universalRouter.post(`/:table`, async (req, res) => {
     const tableAttributes = getOnlyNecessaryAttributes(table)
     const content = {}
 
+
+    console.log(tableName,tableAttributes)
     //Check and pass to content the attributes 
 
     for (const attr of tableAttributes) {

@@ -11,7 +11,7 @@ const dbserver = new Sequelize({
     password: cfg.database.password,
     username: cfg.database.username,
     dialect:  cfg.database.dialect,
-    logging:  true
+    logging:  false
 });
 
 export default dbserver

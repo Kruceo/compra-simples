@@ -15,23 +15,23 @@ interface TableAttributes {
     tableItemHandler: (item: BackendTableComp, index: number) => React.ReactNode[],
     disposition: number[],
     tableHeader: React.ReactNode[],
-    onSelectChange?: (ids: number[]) => any,
+    onSelect?: (ids: number[]) => any,
     onOrderChange?: (event: TableOrderEvent) => any
 }
 
 export default function Table(props: TableAttributes) {
-    let { data, disposition, tableHeader, tableItemHandler, onSelectChange, onOrderChange, selected } = props
+    let { data, disposition, tableHeader, tableItemHandler, onSelect, onOrderChange, selected } = props
 
     const togleSelectedHandler = (id: number) => {
         if (selected.includes(id)) {
             const newSelected = selected.filter(each => { if (each != id) return each })
             //On select change handler spawn
-            onSelectChange ? onSelectChange(newSelected) : null
+            onSelect ? onSelect(newSelected) : null
             //Set local selected
         }
         else {
             //On select change handler spawn
-            onSelectChange ? onSelectChange([...selected, id]) : null
+            onSelect ? onSelect([...selected, id]) : null
             //Set local selected
         }
 

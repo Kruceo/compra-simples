@@ -1,4 +1,5 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useContext, useEffect } from "react";
+import { globalPopupsContext } from "../App";
 
 interface OverPageInfoAttributes {
     children: ReactNode,
@@ -9,7 +10,7 @@ interface OverPageInfoAttributes {
 
 export default function OverPageInfo(props: OverPageInfoAttributes) {
 
-    return <div className="bg-notification border-borders border rounded-sm shadow-xl p-8 fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+    return <div className="bg-notification border-borders border rounded-sm shadow-xl p-8 fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50">
         {props.children}
         <div className="flex">
             <button
@@ -29,4 +30,13 @@ export default function OverPageInfo(props: OverPageInfoAttributes) {
 
         </div>
     </div>
+}
+
+export function simpleSpawnInfo(content: string, setter: (id: number, node: React.ReactNode) => any) {
+    const key = Math.round(10 + Math.random() * 4)
+    setter(
+        key, OverPageInfo({
+            onAccept: () => setter(key, null),
+            children: content
+        }))
 }

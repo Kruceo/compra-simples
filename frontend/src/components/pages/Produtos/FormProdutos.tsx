@@ -5,7 +5,7 @@ import FormInput from "../../OverPageForm/FormInput";
 import { globalPopupsContext } from "../../../App";
 import OverPageInfo from "../../OverPageInfo";
 
-export default function BoteCreationForm(props: {
+export default function ProdutoCreationForm(props: {
     onCancel: Function,
     mode: "creation" | "editing"
     afterSubmit?: Function,
@@ -20,21 +20,28 @@ export default function BoteCreationForm(props: {
         e.preventDefault()
         const data = new FormData(e.currentTarget)
         const nome = data.get("nome")
+        const preco = data.get("preco")
 
         if (!nome) {
             setError("nome")
             return;
         }
+        if (!preco) {
+            setError("preco")
+            return;
+        }
         let response = null
         if (mode == 'creation') {
-            response = await backend.create("bote", {
-                nome: data.get("nome")?.toString()
+            response = await backend.create("produto", {
+                nome: nome.toString(),
+                preco:parseFloat(preco.toString())
             })
         }
         if (mode == 'editing' && defaultValues && defaultValues.id) {
             const id = defaultValues.id
-            response = await backend.edit("bote", id, {
-                nome: data.get("nome")?.toString()
+            response = await backend.edit("produto", id, {
+                nome: nome.toString(),
+                preco:parseFloat(preco.toString())
             })
         }
         // Tratamento de erro
@@ -52,11 +59,15 @@ export default function BoteCreationForm(props: {
     return <>
         <OverPageForm
             onCancel={onCancel}
-            title="Criação de Bote"
+            title="Criação de Produto"
             onSubmit={submitHandler}
         >
             <RequiredLabel htmlFor="nome">Nome</RequiredLabel>
-            <FormInput name="nome" type="text" placeholder="E.g Barco Penha" defaultValue={defaultValues ? defaultValues.nome : undefined} errored={(error == "nome")} />
+            <FormInput name="nome" type="text" placeholder="E.g Dourado" defaultValue={defaultValues ? defaultValues.nome : undefined} errored={(error == "nome")} />
+
+            <RequiredLabel htmlFor="preco">Preço</RequiredLabel>
+            <FormInput name="preco" type="float" placeholder="Preço" defaultValue={defaultValues ? defaultValues.preco : undefined} errored={(error == "preco")} />
+
             <FormInput value="Pronto" type="submit" errored={error == "submit"} />
         </OverPageForm>
     </>

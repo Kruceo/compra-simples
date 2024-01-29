@@ -5,7 +5,7 @@ import FormInput from "../../OverPageForm/FormInput";
 import { globalPopupsContext } from "../../../App";
 import OverPageInfo from "../../OverPageInfo";
 
-export default function BoteCreationForm(props: {
+export default function ProdutoCreationForm(props: {
     onCancel: Function,
     mode: "creation" | "editing"
     afterSubmit?: Function,
@@ -27,14 +27,14 @@ export default function BoteCreationForm(props: {
         }
         let response = null
         if (mode == 'creation') {
-            response = await backend.create("bote", {
-                nome: data.get("nome")?.toString()
+            response = await backend.create("fornecedor", {
+                nome: nome.toString()
             })
         }
         if (mode == 'editing' && defaultValues && defaultValues.id) {
             const id = defaultValues.id
-            response = await backend.edit("bote", id, {
-                nome: data.get("nome")?.toString()
+            response = await backend.edit("fornecedor", id, {
+                nome: nome.toString()
             })
         }
         // Tratamento de erro
@@ -52,11 +52,12 @@ export default function BoteCreationForm(props: {
     return <>
         <OverPageForm
             onCancel={onCancel}
-            title="Criação de Bote"
+            title="Criação de Fornecedor"
             onSubmit={submitHandler}
         >
             <RequiredLabel htmlFor="nome">Nome</RequiredLabel>
-            <FormInput name="nome" type="text" placeholder="E.g Barco Penha" defaultValue={defaultValues ? defaultValues.nome : undefined} errored={(error == "nome")} />
+            <FormInput name="nome" type="text" placeholder="E.g Dourado" defaultValue={defaultValues ? defaultValues.nome : undefined} errored={(error == "nome")} />
+
             <FormInput value="Pronto" type="submit" errored={error == "submit"} />
         </OverPageForm>
     </>

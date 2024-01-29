@@ -39,7 +39,7 @@ await dbserver.query(`CREATE SCHEMA IF NOT EXISTS ${cfg.database.schema};`);
 
 const tables = await import("../src/database/tables.mjs")
 
-for (const table of Object.entries(tables)) {
+for (const table of Object.entries(tables).reverse()) {
     if (table[0] == "default") continue;
     console.log(`Sincronizando ${table[0]}`)
     await table[1].sync({ force: true })

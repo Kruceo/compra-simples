@@ -5,10 +5,14 @@ export const api_protocol = 'http'
 export const api_port = 8080
 export const api_v = "v1"
 
-async function get(tables: string | "botes",
-    where: Object,
+async function get(tables: "bote" | "produto" | "entrada" | "entrada_item" | "fornecedor",
+    where: any,
     limit?: number): Promise<BackendResponse> {
-    const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}?${obj2URLQuery(where)}`
+
+    let whereClause = { ...where }
+    if (limit) whereClause['limit'] = limit
+
+    const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}?${obj2URLQuery(whereClause)}`
     const response = await axios.get(full_address)
     return response.data
 }
@@ -35,9 +39,9 @@ async function remove(tables: string | "botes", id: number) {
     }
 }
 
-async function edit(tables: string | "botes", id: number): Promise<BackendResponse> {
+async function edit(tables: string | "botes", id: number | string, content: BackendTableComp): Promise<BackendResponse> {
     const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}/${id}`
-    const response = await axios.put(full_address)
+    const response = await axios.put(full_address, content)
     return response.data
 }
 
@@ -52,6 +56,10 @@ interface BackendTableComp {
     integracao_id?: number,
     data?: any,
     obs?: string,
+    valor_total?: number,
+    peso_total?: number,
+    tipo?: number,
+    valor?: number,
     status?: string,
     fornecedor_id?: number,
     usuario_id?: number,
@@ -88,7 +96,17 @@ function obj2URLQuery(obj: Object) {
     return query.slice(0, query.length - 1)
 }
 
-export { get, create, remove, edit }
-export default { get, create, remove, edit }
+function filterUsingID(data: BackendTableComp[], id: number) {
+    const result = data.filter(each => { if (each.id == id) return each })
+    console.log(result)
+    return result[0]
+}
+
+const utils = {
+    filterUsingID
+}
+
+export { get, create, remove, edit, utils }
+export default { get, create, remove, edit, utils }
 
 export type { BackendResponse, BackendTableComp }

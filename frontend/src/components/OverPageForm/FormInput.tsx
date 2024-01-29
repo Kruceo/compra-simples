@@ -6,7 +6,7 @@ interface FormInputAttributes extends React.DetailedHTMLProps<React.InputHTMLAtt
 }
 
 export default function FormInput(props: FormInputAttributes) {
-    const { errored, erroredClassName, ...restProps } = props
+    let { errored, erroredClassName, onChange, ...restProps } = props
 
     if (props.type == "button" || props.type == "submit")
         return <input {...restProps} className="bg-submit mt-4 p-2 font-bold rounded-sm cursor-pointer hover:brightness-125" />

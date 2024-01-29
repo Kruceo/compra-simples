@@ -18,8 +18,32 @@ const Usuario = dbserver.define("usuario", {
     freezeTableName: true
 })
 
+const Fornecedor = dbserver.define("fornecedor", {
+    id: _ID,
+    nome: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    integracao_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    }
+}, {
+    tableName: "fornecedores",
+    freezeTableName: true,
+    name: {
+        plural: "fornecedores",
+        singular: "fornecedor"
+    }
+})
+
 const Bote = dbserver.define("bote", {
     id: _ID,
+    fornecedor_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: { model: Fornecedor, key: 'id' }
+    },
     nome: {
         type: DataTypes.STRING,
         allowNull: false
@@ -30,29 +54,6 @@ const Bote = dbserver.define("bote", {
     name: {
         plural: "botes",
         singular: "bote"
-    }
-})
-
-const Fornecedor = dbserver.define("fornecedor", {
-    id: _ID,
-    nome: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    bote_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: { model: Bote, key: 'id' }
-    },
-    integracao_id: {
-        type: DataTypes.INTEGER
-    }
-}, {
-    tableName: "fornecedores",
-    freezeTableName: true,
-    name: {
-        plural: "fornecedores",
-        singular: "fornecedor"
     }
 })
 
@@ -77,17 +78,6 @@ const Produto = dbserver.define("produto", {
 
 const Entrada = dbserver.define("entrada", {
     id: _ID,
-    data: {
-        type: DataTypes.DATEONLY,
-        allowNull: false
-    },
-    obs: {
-        type: DataTypes.STRING
-    },
-    status: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
     fornecedor_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -102,6 +92,31 @@ const Entrada = dbserver.define("entrada", {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: { model: Usuario, key: 'id' }
+    },
+    valor: {
+        type: DataTypes.FLOAT,
+        allowNull: true
+    },
+    peso_total: {
+        type: DataTypes.FLOAT,
+        allowNull: true
+    },
+    desconto_total: {
+        type: DataTypes.FLOAT,
+        allowNull: true
+    },
+    valor_total: {
+        type: DataTypes.FLOAT,
+        allowNull: true
+    },
+    obs: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    status: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
     }
 }, {
     tableName: "entradas",
@@ -114,17 +129,6 @@ const Entrada = dbserver.define("entrada", {
 
 const Entrada_item = dbserver.define("entrada_item", {
     id: _ID,
-    peso: {
-        type: DataTypes.FLOAT,
-        allowNull: false
-    },
-    preco: {
-        type: DataTypes.FLOAT,
-        allowNull: false
-    },
-    desconto: {
-        type: DataTypes.BOOLEAN
-    },
     produto_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -135,9 +139,25 @@ const Entrada_item = dbserver.define("entrada_item", {
         allowNull: false,
         references: { model: Entrada, key: "id" }
     },
+    peso: {
+        type: DataTypes.FLOAT,
+        allowNull: false
+    },
+    preco: {
+        type: DataTypes.FLOAT,
+        allowNull: false
+    },
+    valor_total: {
+        type: DataTypes.FLOAT,
+        allowNull: true
+    },
+    tipo: {
+        type: DataTypes.BOOLEAN
+    }
 }, {
     tableName: "entrada_items",
     freezeTableName: true,
+    timestamps: false,
     name: {
         plural: "entrada_item",
         singular: "entrada_items"
@@ -154,10 +174,10 @@ await Entrada_item.sync({ force: false })
 
 /** Setup relations */
 
-//cada esquerdo tem uma chave de bote_id
-Fornecedor.belongsTo(Bote, { foreignKey: 'bote_id' })
-//tem muitos do direito com uma chave de bote_id
-Bote.hasMany(Fornecedor, { foreignKey: 'bote_id' })
+//cada esquerdo tem uma chave de fornecedor_id
+Bote.belongsTo(Fornecedor, { foreignKey: 'fornecedor_id' })
+//tem muitos do direito com uma chave de fornecedor_id
+Fornecedor.hasMany(Bote, { foreignKey: 'fornecedor_id' })
 
 Entrada_item.belongsTo(Entrada, { foreignKey: 'entrada_id' })
 Entrada.hasMany(Entrada_item, { foreignKey: 'entrada_id' })
@@ -170,6 +190,15 @@ Fornecedor.hasMany(Entrada, { foreignKey: 'fornecedor_id' })
 
 Entrada.belongsTo(Usuario, { foreignKey: "usuario_id" })
 Usuario.hasMany(Entrada, { foreignKey: 'usuario_id' })
+
+// Sync relations
+
+await Produto.sync({ alter: true })
+await Usuario.sync({ alter: true })
+await Bote.sync({ alter: true })
+await Fornecedor.sync({ alter: true })
+await Entrada.sync({ alter: true })
+await Entrada_item.sync({ alter: true })
 
 export default {
     Bote, Fornecedor, Produto, Entrada, Entrada_item, Usuario
