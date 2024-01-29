@@ -5,7 +5,7 @@ export const api_protocol = 'http'
 export const api_port = 8080
 export const api_v = "v1"
 
-async function get(tables: "bote" | "produto" | "entrada" | "entrada_item" | "fornecedor",
+async function get(tables: string|"bote" | "produto" | "entrada" | "entrada_item" | "fornecedor",
     where: any,
     limit?: number): Promise<BackendResponse> {
 

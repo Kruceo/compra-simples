@@ -36,9 +36,9 @@ universalRouter.get(`/:table`, async (req, res) => {
     })
 
     var orderClause = []
-    if (order) {
+    if (order)
         orderClause.push(orderingBuilder(order))
-    }
+
     try {
         const data = await tables[tableName].findAll({
             where: whereClause,
@@ -63,8 +63,6 @@ universalRouter.post(`/:table`, async (req, res) => {
     const tableAttributes = getOnlyNecessaryAttributes(table)
     const content = {}
 
-
-    console.log(tableName,tableAttributes)
     //Check and pass to content the attributes 
 
     for (const attr of tableAttributes) {
@@ -124,7 +122,7 @@ universalRouter.put(`/:table/:id`, async (req, res) => {
                 })
         content[attr] = body[attr]
     }
-   
+
     // Só utilizar o "ID" como seletor
     if (!id)
         return res.status(statusCodes.BadRequest)

@@ -46,6 +46,7 @@ export default function ViewProdutos() {
     // Quando é clicado no botão "pesquisar"
     const searchHandler = (search: string) => {
         setWhereKey("nome", "^" + search)
+        setSelected([])
         setUpdate(!update)
     }
 
@@ -120,6 +121,7 @@ export default function ViewProdutos() {
                     tableItemHandler={(item) => [
                         item.id, item.nome, "R$ " + (item.preco ?? 0).toFixed(2), bDate(item.updatedAt)
                     ]}
+                    tableOrderKeys={["id","nome","preco","updatedAt"]}
                     tableHeader={[
                         "ID", "Nome", "Preço", "Ultima Atualização"
                     ]}

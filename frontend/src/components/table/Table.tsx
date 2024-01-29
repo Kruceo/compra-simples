@@ -4,7 +4,7 @@ import { BackendTableComp } from "../../constants/backend";
 
 export interface TableOrderEvent {
     // preventDefault: () => void,
-    key: string,
+    key: string | string[],
     order: "ASC" | "DESC"
 
 }
@@ -13,6 +13,7 @@ interface TableAttributes {
     data: BackendTableComp[],
     selected: number[],
     tableItemHandler: (item: BackendTableComp, index: number) => React.ReactNode[],
+    tableOrderKeys: (string | string[])[],
     disposition: number[],
     tableHeader: React.ReactNode[],
     onSelect?: (ids: number[]) => any,
@@ -20,7 +21,7 @@ interface TableAttributes {
 }
 
 export default function Table(props: TableAttributes) {
-    let { data, disposition, tableHeader, tableItemHandler, onSelect, onOrderChange, selected } = props
+    let { data, disposition, tableHeader, tableItemHandler, tableOrderKeys, onSelect, onOrderChange, selected } = props
 
     const togleSelectedHandler = (id: number) => {
         if (selected.includes(id)) {
@@ -39,9 +40,6 @@ export default function Table(props: TableAttributes) {
     if (data.length == 0) {
         return "No data"
     }
-
-    const itemKeys = Object.keys(data[0])
-
     const orderHandler = onOrderChange ? onOrderChange : () => null
 
     return <div>
@@ -51,8 +49,7 @@ export default function Table(props: TableAttributes) {
             {tableHeader.map((each, index) => {
                 return <div className="flex group">
                     {each}
-                    <OrderButton
-                        onClick={(order) => orderHandler({ key: itemKeys[index], order })} />
+                    <OrderButton onClick={(order) => orderHandler({ key: tableOrderKeys[index], order })} />
                 </div>
             })}
         </TableItem>

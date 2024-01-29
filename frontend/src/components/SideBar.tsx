@@ -1,4 +1,5 @@
 import React, { AnchorHTMLAttributes, useState } from "react"
+import { Link } from "react-router-dom"
 
 export default function SideBar() {
     return <>
@@ -6,16 +7,17 @@ export default function SideBar() {
             <DropButton
                 title="Registro"
                 dropDownContent={<>
-                    <PanelLink href="produtos">Produtos</PanelLink>
-                    <PanelLink href="fornecedores">Fornecedores</PanelLink>
-                    <PanelLink href="botes">Botes</PanelLink>
+                    <PanelLink href="/view/produtos">Produtos</PanelLink>
+                    <PanelLink href="/view/fornecedores">Fornecedores</PanelLink>
+                    <PanelLink href="/view/botes">Botes</PanelLink>
                 </>}>
                 <i>&#xe905;</i> Registro
             </DropButton>
             <DropButton
                 title="Entradas"
                 dropDownContent={<>
-                    <PanelLink href="entradas/nova">Nova</PanelLink>
+                    <PanelLink href="/entradas/nova">Nova</PanelLink>
+                    <PanelLink href="/view/entradas">Listagem</PanelLink>
                 </>}>
                 <i>&#xe935;</i> Entrada
             </DropButton>
@@ -56,7 +58,7 @@ function DropButton(props: DropButtonAttributes) {
                 (focused || isMouseOverSubPanel) ?
                     <header onMouseOver={() => setIsMouseOverSubPanel(true)}
                         onMouseLeave={() => setIsMouseOverSubPanel(false)}
-                        className="bg-subpanel outline outline-1 outline-borders min-w-16 w-fit h-fit absolute top-0 left-full flex flex-col text-nowrap shadow-xl">
+                        className="bg-subpanel outline outline-1 outline-borders min-w-28 w-fit h-fit absolute top-0 left-full flex flex-col text-nowrap shadow-xl">
                         {props.dropDownContent}
                     </header>
                     : null
@@ -71,5 +73,5 @@ function DropButton(props: DropButtonAttributes) {
 }
 
 function PanelLink(props: React.HTMLAttributes<HTMLAnchorElement> & { href: string }) {
-    return <a className="hover:bg-[#0002] text-zinc-800 text-left h-14 flex items-center px-4" href={props.href}>{props.children}</a>
+    return <Link className="hover:bg-[#0002] text-zinc-800 text-left h-14 flex items-center px-4" to={props.href}>{props.children}</Link>
 }

@@ -46,6 +46,7 @@ export default function ViewFornecedores() {
     // Quando é clicado no botão "pesquisar"
     const searchHandler = (search: string) => {
         setWhereKey("nome", "^" + search)
+        setSelected([])
         setUpdate(!update)
     }
 
@@ -98,8 +99,6 @@ export default function ViewFornecedores() {
 
     }
 
-
-
     return <>
         <Bar />
         <SideBar />
@@ -120,6 +119,7 @@ export default function ViewFornecedores() {
                     tableItemHandler={(item) => [
                         item.id, item.nome, bDate(item.updatedAt)
                     ]}
+                    tableOrderKeys={["id","nome","updatedAt"]}
                     tableHeader={[
                         "ID", "Nome", "Ultima Atualização"
                     ]}

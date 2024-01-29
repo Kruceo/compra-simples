@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes} from 'react-router-dom'
 import './App.css'
 import ViewBotes from './components/pages/Botes/ViewBotes'
 import CreateBote from './components/OverPageForm/OverPageForm'

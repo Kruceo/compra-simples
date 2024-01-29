@@ -16,17 +16,17 @@ export default function ViewBotes() {
     const [data, setData] = useState<BackendTableComp[]>([]);
     const [update, setUpdate] = useState(true)
     const [selected, setSelected] = useState<number[]>([])
-    const [where, setWhere] = useState<any>({})
+    const [where, setWhere] = useState<any>({ include: "Fornecedor" })
 
     const setWhereKey = (key: string, value: string) => {
         const mockup = { ...where }
         mockup[key] = value
         setWhere(mockup)
     }
-    
+
     const table_to_manage = "bote"
 
-    const data_getter = async ()=> await backend.get(table_to_manage, where)
+    const data_getter = async () => await backend.get(table_to_manage, where)
 
     useEffect(() => {
         (async () => {
@@ -35,8 +35,6 @@ export default function ViewBotes() {
             setData(d.data)
         })()
     }, [update])
-
-
     // Quando é alterado a ordem
     const orderHandler = (e: TableOrderEvent) => {
         setWhereKey("order", `${e.key},${e.order.toUpperCase()}`)
@@ -44,8 +42,8 @@ export default function ViewBotes() {
     }
 
     // Quando é clicado no botão "pesquisar"
-    const searchHandler = (search:string)=>{
-        setWhereKey("nome","^"+search)
+    const searchHandler = (search: string) => {
+        setWhereKey("nome", "^" + search)
         setUpdate(!update)
     }
 
@@ -66,13 +64,14 @@ export default function ViewBotes() {
         const search = backend.utils.filterUsingID(data, selected[0])
         if (!search)
             return simpleSpawnInfo("Não é possivel selecionar o item escolhido.", setGlobalPupupsByKey);
-        const id = search.id
-        const nome = search.nome
+
+        const { id, nome, fornecedor } = search
+
         setGlobalPupupsByKey(1,
             <CreationForm
                 key={'editingForm'}
                 mode="editing"
-                defaultValues={{ id, nome }}
+                defaultValues={{ id, nome, fornecedor}}
                 onCancel={() => setGlobalPupupsByKey(1, null)}
                 afterSubmit={() => setUpdate(!update)}
             />
@@ -94,7 +93,7 @@ export default function ViewBotes() {
         setSelected([])
         setTimeout(() => {
             setUpdate(!update)
-        }, 500)
+        }, 200)
 
     }
 
@@ -118,10 +117,11 @@ export default function ViewBotes() {
                     data={data}
                     disposition={[1, 6, 4, 4]}
                     tableItemHandler={(item) => [
-                        item.id, item.nome, bDate(item.createdAt), bDate(item.updatedAt)
+                        item.id, item.nome, item.fornecedor?.nome, bDate(item.updatedAt)
                     ]}
+                    tableOrderKeys={["id", "nome", ["Fornecedor", "nome"], "updatedAt"]}
                     tableHeader={[
-                        "ID", "Nome", "Data de Criação", "Ultima Atualização"
+                        "ID", "Nome", "Fornecedor", "Ultima Atualização"
                     ]}
                 />
             </div>
