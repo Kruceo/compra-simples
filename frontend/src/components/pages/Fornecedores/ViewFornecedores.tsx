@@ -1,18 +1,17 @@
 import { useContext, useEffect, useState } from "react";
-import Bar from "../../Bar";
-import Content from "../../Content";
-import SideBar from "../../SideBar";
+import Bar from "../../Layout/Bar";
+import Content from "../../Layout/Content";
+import SideBar from "../../Layout/SideBar";
 import backend, { BackendTableComp } from "../../../constants/backend";
 import CreationForm from "./FormFornecedores";
 import { globalPopupsContext } from "../../../App";
-import { simpleSpawnInfo } from "../../OverPageInfo";
 import Table, { TableOrderEvent } from "../../table/Table";
 import { bDate } from "../../../constants/dateUtils";
 import TableToolBar from "../../table/TableToolBar";
 
 export default function ViewFornecedores() {
 
-    const { setGlobalPupupsByKey } = useContext(globalPopupsContext)
+    const { setGlobalPupupsByKey, simpleSpawnInfo } = useContext(globalPopupsContext)
     const [data, setData] = useState<BackendTableComp[]>([]);
     const [update, setUpdate] = useState(true)
     const [selected, setSelected] = useState<number[]>([])
@@ -31,7 +30,7 @@ export default function ViewFornecedores() {
     useEffect(() => {
         (async () => {
             const d = await data_getter()
-            if (!d.data) return;
+            if (!d.data || !Array.isArray(d.data)) return;
             setData(d.data)
         })()
     }, [update])
@@ -54,7 +53,7 @@ export default function ViewFornecedores() {
     const createHandler = () => {
         setGlobalPupupsByKey(0,
             <CreationForm
-                key={"creationForm"}
+                key={"FormFornecedor"}
                 mode="creation"
                 onCancel={() => setGlobalPupupsByKey(0, null)}
                 afterSubmit={() => setUpdate(!update)}
@@ -66,7 +65,7 @@ export default function ViewFornecedores() {
     const editHandler = () => {
         const search = backend.utils.filterUsingID(data, selected[0])
         if (!search)
-            return simpleSpawnInfo("Não é possivel selecionar o item escolhido.", setGlobalPupupsByKey);
+            return simpleSpawnInfo("Não é possivel selecionar o item escolhido.");
 
         const { nome, id, preco } = search
         setGlobalPupupsByKey(1,
@@ -88,8 +87,7 @@ export default function ViewFornecedores() {
                 simpleSpawnInfo(
                     response.message.includes("violates foreign key constraint")
                         ? "Existem itens no banco de dados que dependem deste."
-                        : response.message,
-                    setGlobalPupupsByKey)
+                        : response.message)
 
         })
         setSelected([])
@@ -119,7 +117,7 @@ export default function ViewFornecedores() {
                     tableItemHandler={(item) => [
                         item.id, item.nome, bDate(item.updatedAt)
                     ]}
-                    tableOrderKeys={["id","nome","updatedAt"]}
+                    tableOrderKeys={["id", "nome", "updatedAt"]}
                     tableHeader={[
                         "ID", "Nome", "Ultima Atualização"
                     ]}

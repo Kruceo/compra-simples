@@ -3,7 +3,7 @@ import backend, { BackendTableComp } from "../../../constants/backend";
 import OverPageForm, { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import FormInput from "../../OverPageForm/FormInput";
 import { globalPopupsContext } from "../../../App";
-import OverPageInfo from "../../OverPageInfo";
+import OverPageInfo from "../../Layout/OverPageInfo";
 
 export default function ProdutoCreationForm(props: {
     onCancel: Function,

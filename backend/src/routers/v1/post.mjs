@@ -12,16 +12,14 @@ import { getOnlyNecessaryAttributes } from "../../utils/tableUtils.mjs";
 export default async function postRequestHandler(req, res) {
     const tableName = upperCaseLetter(req.params.table, 0)
     let body = req.body
+    body.usuario_id = 2
     const table = tables[tableName]
     if (!table) return;
     const tableNecessaryAttributes = getOnlyNecessaryAttributes(table)
 
-    console.log(body)
-
     if (!Array.isArray(body)) {
         body = [req.body]
     }
-    console.log(body)
     //Check the attributes
 
     for (const item of body) {
@@ -38,22 +36,24 @@ export default async function postRequestHandler(req, res) {
         body[i] = wipeNoTableAttributes(body[i], table)
     }
 
-    // case exist only 1 itens in body
-    if (body.length === 1) {
-        const data = await table.create(body[0])
-        res.json({ data, message: "O item foi criado com sucesso." })
+    try {
+        if (body.length === 1) {
+            const data = await table.create(body[0])
+            res.json({ data, message: "O item foi criado com sucesso." })
+            return;
+        }
+        const data = await table.bulkCreate(body)
+        res.json({ data, message: "Os itens foram criados com sucesso." })
         return;
+    } catch (error) {
+        return res.status(statusCodes.InternalServerError)
+            .json({ error: true, message: "Houve um erro de SQL: " + error })
     }
-    // case exist more than 1 itens in body
-    const data = await table.bulkCreate(body)
-    res.json({ data, message: "Os itens foram criados com sucesso." })
-    return;
-
 }
 
 function checkAttributes(item, tableAttributes) {
     for (const attr of tableAttributes) {
-        if (!item[attr]) {
+        if (item[attr] == undefined || item[attr] == null) {
             console.log(attr)
             return false
         }

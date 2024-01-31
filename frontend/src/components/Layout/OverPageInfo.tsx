@@ -1,5 +1,4 @@
 import { ReactNode, useContext, useEffect } from "react";
-import { globalPopupsContext } from "../App";
 
 interface OverPageInfoAttributes {
     children: ReactNode,
@@ -30,13 +29,4 @@ export default function OverPageInfo(props: OverPageInfoAttributes) {
 
         </div>
     </div>
-}
-
-export function simpleSpawnInfo(content: string, setter: (id: number, node: React.ReactNode) => any) {
-    const key = Math.round(10 + Math.random() * 4)
-    setter(
-        key, OverPageInfo({
-            onAccept: () => setter(key, null),
-            children: content
-        }))
 }

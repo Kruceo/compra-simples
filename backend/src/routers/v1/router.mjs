@@ -1,11 +1,5 @@
 import { Router } from "express";
-import tables, { Bote, Entrada, Entrada_item } from "../../database/tables.mjs";
 import statusCodes from "../../utils/statusCode.mjs";
-import opBuilder from "../../utils/operatorBuilder.mjs";
-import orderingBuilder from "../../utils/orderingBuilder.mjs";
-import { upperCaseLetter } from "../../utils/stringUtils.mjs";
-import { getOnlyNecessaryAttributes, getReferenciedModels } from "../../utils/tableUtils.mjs";
-import includeBuilder from "../../utils/includeBuilder.mjs";
 import postRequestHandler from "./post.mjs";
 import deleteRequestHandler from "./delete.mjs";
 import putRequestHandler from "./put.mjs";

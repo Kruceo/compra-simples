@@ -14,7 +14,7 @@ import { upperCaseLetter } from "../../utils/stringUtils.mjs"
 export default async function getRequestHandler(req, res) {
 
     const tableName = upperCaseLetter(req.params.table, 0)
-    const { limit, order, ...restQuery } = req.query
+    const { limit, order, include, ...restQuery } = req.query
 
     var whereClause = {}
 
@@ -31,7 +31,7 @@ export default async function getRequestHandler(req, res) {
         const data = await tables[tableName].findAll({
             where: whereClause,
             limit: limit,
-            include: includeBuilder(tables[tableName]),
+            include: includeBuilder(include),
             order: orderClause
         })
         res.json({ data })

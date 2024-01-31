@@ -1,22 +1,22 @@
 import { useContext, useEffect, useState } from "react";
-import Bar from "../../Bar";
-import Content from "../../Content";
-import SideBar from "../../SideBar";
+import Bar from "../../Layout/Bar";
+import Content from "../../Layout/Content";
+import SideBar from "../../Layout/SideBar";
 import backend, { BackendTableComp } from "../../../constants/backend";
 import CreationForm from "./FormBotes";
 import { globalPopupsContext } from "../../../App";
-import { simpleSpawnInfo } from "../../OverPageInfo";
 import Table, { TableOrderEvent } from "../../table/Table";
 import { bDate } from "../../../constants/dateUtils";
 import TableToolBar from "../../table/TableToolBar";
 
 export default function ViewBotes() {
 
-    const { setGlobalPupupsByKey } = useContext(globalPopupsContext)
+    const { setGlobalPupupsByKey, simpleSpawnInfo } = useContext(globalPopupsContext)
+
     const [data, setData] = useState<BackendTableComp[]>([]);
     const [update, setUpdate] = useState(true)
     const [selected, setSelected] = useState<number[]>([])
-    const [where, setWhere] = useState<any>({ include: "Fornecedor" })
+    const [where, setWhere] = useState<any>({})
 
     const setWhereKey = (key: string, value: string) => {
         const mockup = { ...where }
@@ -31,7 +31,7 @@ export default function ViewBotes() {
     useEffect(() => {
         (async () => {
             const d = await data_getter()
-            if (!d.data) return;
+            if (!d.data || !Array.isArray(d.data)) return;
             setData(d.data)
         })()
     }, [update])
@@ -44,6 +44,7 @@ export default function ViewBotes() {
     // Quando é clicado no botão "pesquisar"
     const searchHandler = (search: string) => {
         setWhereKey("nome", "^" + search)
+        setSelected([])
         setUpdate(!update)
     }
 
@@ -51,7 +52,7 @@ export default function ViewBotes() {
     const createHandler = () => {
         setGlobalPupupsByKey(0,
             <CreationForm
-                key={"creationForm"}
+                key={"FormBotes"}
                 mode="creation"
                 onCancel={() => setGlobalPupupsByKey(0, null)}
                 afterSubmit={() => setUpdate(!update)}
@@ -63,7 +64,7 @@ export default function ViewBotes() {
     const editHandler = () => {
         const search = backend.utils.filterUsingID(data, selected[0])
         if (!search)
-            return simpleSpawnInfo("Não é possivel selecionar o item escolhido.", setGlobalPupupsByKey);
+            return simpleSpawnInfo("Não é possivel selecionar o item escolhido.");
 
         const { id, nome, fornecedor } = search
 
@@ -71,7 +72,7 @@ export default function ViewBotes() {
             <CreationForm
                 key={'editingForm'}
                 mode="editing"
-                defaultValues={{ id, nome, fornecedor}}
+                defaultValues={{ id, nome, fornecedor }}
                 onCancel={() => setGlobalPupupsByKey(1, null)}
                 afterSubmit={() => setUpdate(!update)}
             />
@@ -86,8 +87,7 @@ export default function ViewBotes() {
                 simpleSpawnInfo(
                     response.message.includes("violates foreign key constraint")
                         ? "Existem itens no banco de dados que dependem deste."
-                        : response.message,
-                    setGlobalPupupsByKey)
+                        : response.message)
 
         })
         setSelected([])

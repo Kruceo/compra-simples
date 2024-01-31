@@ -7,17 +7,17 @@ export default function SideBar() {
             <DropButton
                 title="Registro"
                 dropDownContent={<>
-                    <PanelLink href="/view/produtos">Produtos</PanelLink>
-                    <PanelLink href="/view/fornecedores">Fornecedores</PanelLink>
-                    <PanelLink href="/view/botes">Botes</PanelLink>
+                    <PanelLink href="/view/produto">Produtos</PanelLink>
+                    <PanelLink href="/view/fornecedor">Fornecedores</PanelLink>
+                    <PanelLink href="/view/bote">Botes</PanelLink>
                 </>}>
                 <i>&#xe905;</i> Registro
             </DropButton>
             <DropButton
                 title="Entradas"
                 dropDownContent={<>
-                    <PanelLink href="/entradas/nova">Nova</PanelLink>
-                    <PanelLink href="/view/entradas">Listagem</PanelLink>
+                    <PanelLink href="/create/entrada">Nova</PanelLink>
+                    <PanelLink href="/view/entrada">Listagem</PanelLink>
                 </>}>
                 <i>&#xe935;</i> Entrada
             </DropButton>

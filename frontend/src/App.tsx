@@ -1,40 +1,54 @@
-import { Route, Routes} from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import './App.css'
 import ViewBotes from './components/pages/Botes/ViewBotes'
-import CreateBote from './components/OverPageForm/OverPageForm'
-import { ReactNode, createContext, useState } from 'react'
+import { createContext, useState } from 'react'
 import ViewProdutos from './components/pages/Produtos/ViewProdutos'
 import ViewFornecedores from './components/pages/Fornecedores/ViewFornecedores'
+import CreateEntrada from './components/pages/Entrada/CreateEntrada'
+import OverPageInfo from './components/Layout/OverPageInfo'
+import PrintEntrada from './components/pages/Entrada/PrintEntrada'
 
 
 const globalPopupsContext = createContext<{
   globalPopups: any,
   setGlobalPopups: any,
-  setGlobalPupupsByKey: (id: number, content: ReactNode) => void
+  setGlobalPupupsByKey: (id: number, content: React.ReactElement|null) => void
+  simpleSpawnInfo: (message: string) => any
 }>({
   globalPopups: 1,
   setGlobalPopups: 1,
-  setGlobalPupupsByKey: () => null
+  setGlobalPupupsByKey: () => null,
+  simpleSpawnInfo: () => null
 });
 
 function App() {
-  const [globalPopups, setGlobalPopups]: [React.ReactNode[], React.Dispatch<React.SetStateAction<React.ReactNode[]>>] =
-    useState<React.ReactNode[]>([]);
+  const [globalPopups, setGlobalPopups] = useState<(React.ReactElement | null)[]>([]);
 
-  const setGlobalPupupsByKey = (key: number, content: ReactNode) => {
+  function setGlobalPupupsByKey(key: number, content: React.ReactElement | null) {
     let mockup = [...globalPopups]
     mockup[key] = content
     setGlobalPopups(mockup)
   }
+  function simpleSpawnInfo(content: string) {
+    const key = Math.round(10 + Math.random() * 10)
+    setGlobalPupupsByKey(
+      key, <OverPageInfo key={key} onAccept={() => setGlobalPupupsByKey(key, null)}>{content}</OverPageInfo>
+    )
+  }
 
   return (
     <>
-      <globalPopupsContext.Provider value={{ globalPopups, setGlobalPupupsByKey, setGlobalPopups }}>
-        {globalPopups}
+      <globalPopupsContext.Provider value={{ globalPopups, setGlobalPupupsByKey, setGlobalPopups, simpleSpawnInfo }}>
+        {
+          globalPopups.map((each) => each)
+        }
         <Routes>
-          <Route path='/view/botes' Component={ViewBotes}/>
-          <Route path='/view/produtos' Component={ViewProdutos}/>
-          <Route path='/view/fornecedores' Component={ViewFornecedores}/>
+          <Route path='/view/bote' Component={ViewBotes} />
+          <Route path='/view/produto' Component={ViewProdutos} />
+          <Route path='/view/fornecedor' Component={ViewFornecedores} />
+
+          <Route path='/create/entrada' Component={CreateEntrada} />
+          <Route path='/print/entrada/:id' Component={PrintEntrada} />
         </Routes>
       </globalPopupsContext.Provider>
     </>

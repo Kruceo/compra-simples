@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SubTopBar, { ToolBarButton } from "../SubTopBar";
+import SubTopBar, { ToolBarButton } from "../Layout/SubTopBar";
 
 interface TableToolBarAttributes {
     selected: number[],

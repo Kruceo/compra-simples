@@ -12,7 +12,7 @@ export interface TableOrderEvent {
 interface TableAttributes {
     data: BackendTableComp[],
     selected: number[],
-    tableItemHandler: (item: BackendTableComp, index: number) => React.ReactNode[],
+    tableItemHandler: (item: BackendTableComp, index: number) => React.ReactNode|React.ReactNode[],
     tableOrderKeys: (string | string[])[],
     disposition: number[],
     tableHeader: React.ReactNode[],

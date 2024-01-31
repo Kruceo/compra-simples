@@ -14,14 +14,16 @@ export function getOnlyNecessaryAttributes(table) {
     }).map(each => each.field)
 }
 
-export function getReferenciedModels(table) {
-    const attributes = Object.entries(table.getAttributes())
-
-    const selected = attributes.filter(each => {
-        if (each[1].references) {
-            return each
-        }
-    }).map(each => each[1].references.model)
+/**
+ * Return the referenciedModels of table
+ * @param {import("sequelize").ModelStatic<Model<any, any>>} table 
+ * @returns {{type:"HasMany"|"BelongsTo",model:import("sequelize").ModelStatic<Model<any, any>>}[]}
+ */
+export function getAssociatedModels(table) {
+    const attributes = Object.entries(table.associations)
+    const selected = attributes.map(each => {
+        return { type: each[1].associationType, model: each[1].target }
+    })
 
     return selected
 }
