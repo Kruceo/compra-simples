@@ -78,11 +78,6 @@ const Produto = dbserver.define("produto", {
 
 const Entrada = dbserver.define("entrada", {
     id: _ID,
-    fornecedor_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: { model: Fornecedor, key: 'id' }
-    },
     bote_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -93,19 +88,20 @@ const Entrada = dbserver.define("entrada", {
         allowNull: false,
         references: { model: Usuario, key: 'id' }
     },
-    valor: {
+    valor_compra: {
         type: DataTypes.FLOAT,
         allowNull: true
     },
-    peso_total: {
+    peso_compra: {
         type: DataTypes.FLOAT,
         allowNull: true
     },
-    desconto_total: {
+
+    valor_venda: {
         type: DataTypes.FLOAT,
         allowNull: true
     },
-    valor_total: {
+    peso_venda: {
         type: DataTypes.FLOAT,
         allowNull: true
     },
@@ -185,20 +181,24 @@ Entrada.hasMany(Entrada_item, { foreignKey: 'entrada_id' })
 Entrada_item.belongsTo(Produto, { foreignKey: 'produto_id' })
 Produto.hasMany(Entrada_item, { foreignKey: 'produto_id' })
 
-Entrada.belongsTo(Fornecedor, { foreignKey: "fornecedor_id" })
-Fornecedor.hasMany(Entrada, { foreignKey: 'fornecedor_id' })
+// Entrada.belongsTo(Fornecedor, { foreignKey: "fornecedor_id" })
+// Fornecedor.hasMany(Entrada, { foreignKey: 'fornecedor_id' })
+
+
+Entrada.belongsTo(Bote, { foreignKey: "bote_id" })
+Bote.hasMany(Entrada, { foreignKey:   'bote_id' })
 
 Entrada.belongsTo(Usuario, { foreignKey: "usuario_id" })
 Usuario.hasMany(Entrada, { foreignKey: 'usuario_id' })
 
 // Sync relations
 
-await Produto.sync({ alter: true })
-await Usuario.sync({ alter: true })
-await Bote.sync({ alter: true })
-await Fornecedor.sync({ alter: true })
-await Entrada.sync({ alter: true })
-await Entrada_item.sync({ alter: true })
+// await Produto.sync({ alter: true })
+// await Usuario.sync({ alter: true })
+// await Bote.sync({ alter: true })
+// await Fornecedor.sync({ alter: true })
+// await Entrada.sync({ alter: true })
+// await Entrada_item.sync({ alter: true })
 
 export default {
     Bote, Fornecedor, Produto, Entrada, Entrada_item, Usuario

@@ -9,35 +9,23 @@ let columns = []
 for (const table of Object.entries(tables)) {
     let column = [table[1].tableName]
 
-    getOnlyNecessaryAttributes(table[1]).forEach(each => {
-        column.push(each)
-    })
-    column.push("createdAt","updatedAt")
+    Object.values(table[1].getAttributes()).filter((each) => { return each }).map(each => each.field).forEach(each => column.push(each))
     columns.push(column)
 }
 
-let lengthI = columns.length
-let lengthX = (()=>{
-    let max = 0
-    columns.forEach(each=>{
-        if(each.length > max)max = each.length
-    })
-    return max
-})()
+let lengthI = 32
+let lengthX = 32
 
 let text = ''
 for (let i = 0; i < lengthX; i++) {
     for (let x = 0; x < lengthI; x++) {
-        if(columns[x]&&columns[x][i])
-        text += (columns[x][i]) + ' ,'
+        if (columns[x] && columns[x][i])
+            text += (columns[x][i]) + ' ,'
         else text += " ,"
-        
-    }
-    text+="X\n"
-}
-text += "createdAt,createdAt,createdAt,createdAt,createdAt,createdAt,createdAt,createdAt,createdAt,createdAt\n"
-text += "updatedAt,updatedAt,updatedAt,updatedAt,updatedAt,updatedAt,updatedAt,updatedAt,updatedAt,updatedAt\n"
 
-const user = cp.execSync("whoami").toString().replaceAll("\n","")
+    }
+    text += "X\n"
+}
+const user = cp.execSync("whoami").toString().replaceAll("\n", "")
 console.log(columns[3])
-fs.writeFileSync(path.resolve(`/home/${user}/Área de trabalho/csv.csv`),text)
+fs.writeFileSync(path.resolve(`/home/${user}/Área de trabalho/csv.csv`), text)

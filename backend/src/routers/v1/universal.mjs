@@ -4,7 +4,8 @@ import statusCodes from "../../utils/statusCode.mjs";
 import opBuilder from "../../utils/operatorBuilder.mjs";
 import orderingBuilder from "../../utils/orderingBuilder.mjs";
 import { upperCaseLetter } from "../../utils/stringUtils.mjs";
-import { getOnlyNecessaryAttributes } from "../../utils/tableUtils.mjs";
+import { getOnlyNecessaryAttributes, getReferenciedModels } from "../../utils/tableUtils.mjs";
+import includeBuilder from "../../utils/includeBuilder.mjs";
 
 /**
  * @type {Router}
@@ -39,11 +40,15 @@ universalRouter.get(`/:table`, async (req, res) => {
     if (order)
         orderClause.push(orderingBuilder(order))
 
+    var includeClause = []
+
+    includeClause = getReferenciedModels(tables[tableName])
+
     try {
         const data = await tables[tableName].findAll({
             where: whereClause,
             limit: limit,
-            include: tables[include],
+            include: includeBuilder(tables[tableName]),
             order: orderClause
         })
         res.json({ data })

@@ -123,7 +123,7 @@ const botesComFornecedor = await resposta.json()
 
 ### Operadores de Comparação
 
-Além dos operadores padrão, você pode usar operadores de comparação nos filtros, como `>`, `<`, `>=`, e `<=`.
+Além dos operadores padrão, você pode usar operadores de comparação nos filtros, como `>`, `<` e `^`.
 
 Exemplo de requisição para filtrar "botes" com id maior que 100:
 

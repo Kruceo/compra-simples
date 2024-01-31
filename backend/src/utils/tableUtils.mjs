@@ -13,3 +13,15 @@ export function getOnlyNecessaryAttributes(table) {
             return each
     }).map(each => each.field)
 }
+
+export function getReferenciedModels(table) {
+    const attributes = Object.entries(table.getAttributes())
+
+    const selected = attributes.filter(each => {
+        if (each[1].references) {
+            return each
+        }
+    }).map(each => each[1].references.model)
+
+    return selected
+}

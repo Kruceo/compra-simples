@@ -1,5 +1,4 @@
 import express from 'express'
-import boteRouter from './src/routers/v1/boteRouter.mjs'
 import { Usuario } from './src/database/tables.mjs'
 import cfg from "./config/config.json" assert { type: "json" }
 import authRouter from './src/routers/auth/loginRouter.mjs'
