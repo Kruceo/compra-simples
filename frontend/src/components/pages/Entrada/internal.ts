@@ -1,9 +1,10 @@
 import backend, { BackendTableComp } from "../../../constants/backend";
 
 export async function saveEntradaStack(bote_id: number, obs: string, valorCompra: number, pesoCompra: number, valorVenda: number, pesoVenda: number, entradaItens: BackendTableComp[]) {
-    alert('ok')
+
     const boteResponse = await backend.get('bote', { id: bote_id })
     if (boteResponse.error || !boteResponse.data || !Array.isArray(boteResponse.data) || !boteResponse.data[0]) return boteResponse
+
     const bote = boteResponse.data[0]
     const entradaResponse = await backend.create('entrada', {
         bote_id: parseInt("" + bote.id),
@@ -26,6 +27,17 @@ export async function saveEntradaStack(bote_id: number, obs: string, valorCompra
 
     const entradaItensResponse = await backend.create("entrada_item", parsedEntradaItens)
 
+    if (entradaItensResponse.error) {
+        return entradaItensResponse
+    }
+
     return { data: { entrada_id } }
+
+}
+
+export async function changeEntradaStatus(selected: number[], status: number) {
+    selected.forEach(each => {
+        backend.edit('entrada', each, { status })
+    })
 
 }

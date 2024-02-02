@@ -52,7 +52,7 @@ export default function CreateEntrada() {
                 <div className="flex mb-4">
                     <h2>Itens</h2>
                     <button className="px-4 py-2 ml-auto rounded-sm font-bold hover:bg-red-100"
-                        onClick={()=>{removeEntradaItem(...selectedEntradaItens);setSelectedEntradaItens([])}}>
+                        onClick={() => { removeEntradaItem(...selectedEntradaItens); setSelectedEntradaItens([]) }}>
                         <i>&#xe9ac;</i> Remover
                     </button>
                     <button className="px-4 py-2 rounded-sm font-bold hover:bg-green-100"
@@ -88,12 +88,14 @@ export default function CreateEntrada() {
             <div className="p-4">
                 <button className="px-4 py-2 rounded-sm bg-green-300 font-bold hover:brightness-125"
                     onClick={async () => {
-                        if(addedEntradaItensData.length===0)return simpleSpawnInfo("É necessario adicionar algum item à entrada.")
-                        
-                        const response = await saveEntradaStack(boteId, '', sumValores(0), sumPeso(0), sumValores(1), sumPeso(1), addedEntradaItensData)
-                        if (response.error || !response.data || Array.isArray(response.data))
+                        if (addedEntradaItensData.length === 0) return simpleSpawnInfo("É necessario adicionar algum item à entrada.")
+
+                        const response = await saveEntradaStack(boteId, '', sumValores(0), sumPeso(0), sumValores(1), sumPeso(1), backend.utils.removeAttributeFromAll(addedEntradaItensData, "id"))
+
+                        if (response.error || !response.data)
                             return simpleSpawnInfo(response.message ?? "Houve um problema desconhecido ao criar uma entrada.")
-                        window.location.assign('/print/entrada/' + response.data.entrada_id)
+                        if (!Array.isArray(response.data))
+                            window.location.assign('/print/entrada/' + response.data.entrada_id)
                     }}
                 >
                     <i>&#xe962;</i> Finalizar
@@ -189,3 +191,5 @@ function AddProdutoForm(props: { onCancel: Function, onSubmit: (entrada_item: Ba
 
     </OverPageForm>
 }
+
+

@@ -13,14 +13,23 @@ async function get(tables: string | "bote" | "produto" | "entrada" | "entrada_it
     if (limit) whereClause['limit'] = limit
 
     const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}?${obj2URLQuery(whereClause)}`
-    const response = await axios.get(full_address)
-    return response.data
+    try {
+        const response = await axios.get(full_address)
+        return response.data
+    } catch (error: any) {
+        return error.response.data
+    }
+
 }
 
-async function create(tables: string | "botes", data: BackendTableComp|BackendTableComp[]): Promise<BackendResponse> {
+async function create(tables: string | "botes", data: BackendTableComp | BackendTableComp[]): Promise<BackendResponse> {
     const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}`
-    const response = await axios.post(full_address, data)
-    return response.data
+    try {
+        const response = await axios.post(full_address, data)
+        return response.data
+    } catch (error: any) {
+        return error.response.data
+    }
 }
 
 async function remove(tables: string | "botes", id: number) {
@@ -30,19 +39,20 @@ async function remove(tables: string | "botes", id: number) {
         const response = await axios.delete(full_address)
         return response.data
     } catch (error: any) {
-        if (error.response && error.response.data)
-            return error.response.data
-        else return {
-            error: true,
-            message: "Erro desconhecido. " + error
-        }
+        return error.response.data
     }
 }
 
 async function edit(tables: string | "botes", id: number | string, content: BackendTableComp): Promise<BackendResponse> {
     const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}/${id}`
-    const response = await axios.put(full_address, content)
-    return response.data
+
+    try {
+        const response = await axios.put(full_address, content)
+        return response.data
+    } catch (error: any) {
+        return error.response.data
+    }
+
 }
 
 interface BackendTableComp {
@@ -61,7 +71,7 @@ interface BackendTableComp {
 
     //Entrada
     obs?: string,
-    status?: string,
+    status?: number,
     fornecedor_id?: number,
     usuario_id?: number,
     valor_compra?: number
@@ -114,9 +124,17 @@ async function getByID(table: string, where: BackendTableComp) {
     if (result.error || !result.data || !Array.isArray(result.data) || !result.data[0]) return null
     return result.data[0]
 }
-
+function removeAttributeFromAll(data: BackendTableComp[], attribute: string): BackendTableComp[] {
+    const newData = data.map(each => {
+        const item: any = { ...each }
+        delete item[attribute]
+        return item
+    })
+    return newData
+}
 const utils = {
-    filterUsingID
+    filterUsingID,
+    removeAttributeFromAll
 }
 
 export { getByID, get, create, remove, edit, utils }

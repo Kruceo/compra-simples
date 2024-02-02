@@ -7,15 +7,16 @@ import ViewFornecedores from './components/pages/Fornecedores/ViewFornecedores'
 import CreateEntrada from './components/pages/Entrada/CreateEntrada'
 import OverPageInfo from './components/Layout/OverPageInfo'
 import PrintEntrada from './components/pages/Entrada/PrintEntrada'
+import ViewEntrada from './components/pages/Entrada/ViewEntrada'
 
 
 const globalPopupsContext = createContext<{
-  globalPopups: any,
+  globalPopups: any[],
   setGlobalPopups: any,
-  setGlobalPupupsByKey: (id: number, content: React.ReactElement|null) => void
-  simpleSpawnInfo: (message: string) => any
+  setGlobalPupupsByKey: (id: number, content: React.ReactElement | null) => void
+  simpleSpawnInfo: (message: string, onAccept?: Function, onRecuse?: Function) => any
 }>({
-  globalPopups: 1,
+  globalPopups: [],
   setGlobalPopups: 1,
   setGlobalPupupsByKey: () => null,
   simpleSpawnInfo: () => null
@@ -29,10 +30,16 @@ function App() {
     mockup[key] = content
     setGlobalPopups(mockup)
   }
-  function simpleSpawnInfo(content: string) {
+  function simpleSpawnInfo(content: string, onAccept?: Function, onRecuse?: Function) {
     const key = Math.round(10 + Math.random() * 10)
     setGlobalPupupsByKey(
-      key, <OverPageInfo key={key} onAccept={() => setGlobalPupupsByKey(key, null)}>{content}</OverPageInfo>
+      key, <OverPageInfo key={key}
+        //onAccept existe de qualquer forma, com adendo do argumento, se houver
+        onAccept={() => { onAccept ? onAccept() : null; setGlobalPupupsByKey(key, null) }}
+        //onRecuse só existe se houver o argumento onRecuse 
+        onRecuse={onRecuse ? () => { onRecuse(); setGlobalPupupsByKey(key, null) } : undefined}
+
+      >{content}</OverPageInfo>
     )
   }
 
@@ -48,6 +55,7 @@ function App() {
           <Route path='/view/fornecedor' Component={ViewFornecedores} />
 
           <Route path='/create/entrada' Component={CreateEntrada} />
+          <Route path='/view/entrada/' Component={ViewEntrada} />
           <Route path='/print/entrada/:id' Component={PrintEntrada} />
         </Routes>
       </globalPopupsContext.Provider>

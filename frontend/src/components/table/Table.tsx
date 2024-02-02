@@ -3,17 +3,15 @@ import TableItem from "./TableItem";
 import { BackendTableComp } from "../../constants/backend";
 
 export interface TableOrderEvent {
-    // preventDefault: () => void,
     key: string | string[],
     order: "ASC" | "DESC"
-
 }
 
 interface TableAttributes {
     data: BackendTableComp[],
     selected: number[],
-    tableItemHandler: (item: BackendTableComp, index: number) => React.ReactNode|React.ReactNode[],
-    tableOrderKeys: (string | string[])[],
+    tableItemHandler: (item: BackendTableComp, index: number) => React.ReactNode[],
+    tableOrderKeys?: (string | string[])[],
     disposition: number[],
     tableHeader: React.ReactNode[],
     onSelect?: (ids: number[]) => any,
@@ -37,22 +35,26 @@ export default function Table(props: TableAttributes) {
         }
 
     }
-    if (data.length == 0) {
-        return "No data"
-    }
     const orderHandler = onOrderChange ? onOrderChange : () => null
 
     return <div>
         <TableItem
             headerMode={true}
             disposition={disposition}>
-            {tableHeader.map((each, index) => {
-                return <div className="flex group">
-                    {each}
-                    <OrderButton onClick={(order) => orderHandler({ key: tableOrderKeys[index], order })} />
-                </div>
-            })}
+            {
+                tableHeader.map((each, index) => {
+                    return <div key={index} className="flex group">
+                        {each}
+                        {
+                            (tableOrderKeys && tableOrderKeys[index]) ?
+                                <OrderButton onClick={(order) => { if (tableOrderKeys) orderHandler({ key: tableOrderKeys[index], order }) }} />
+                                : null
+                        }
+
+                    </div>
+                })}
         </TableItem>
+        {data.length === 0 ? <p className="p-4 w-full text-center">Nenhum item</p>: null}
         {
             data.map((item, index) => {
                 const itemId = parseInt("" + item.id)
@@ -63,7 +65,10 @@ export default function Table(props: TableAttributes) {
                     onClick={() => {
                         if (item.id) togleSelectedHandler(itemId)
                     }}>
-                    {tableItemHandler(item, index)}
+                    {
+                        tableItemHandler(item, index)
+                            .map((attr, attrIndex) => <p key={attrIndex}>{attr}</p>)
+                    }
                 </TableItem>
             })
         }

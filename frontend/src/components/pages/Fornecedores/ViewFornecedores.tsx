@@ -81,20 +81,22 @@ export default function ViewFornecedores() {
 
     // Quando é clicado no botão "deletar"
     const deleteHandler = () => {
-        selected.forEach(async (each, index) => {
-            const response = await backend.remove(table_to_manage, each)
-            if (response.error)
-                simpleSpawnInfo(
-                    response.message.includes("violates foreign key constraint")
-                        ? "Existem itens no banco de dados que dependem deste."
-                        : response.message)
+        const onAcceptHandler = () => {
+            selected.forEach(async (each, index) => {
+                const response = await backend.remove(table_to_manage, each)
+                if (response.error)
+                    simpleSpawnInfo(
+                        response.message.includes("violates foreign key constraint")
+                            ? "Existem itens no banco de dados que dependem deste."
+                            : response.message)
 
-        })
-        setSelected([])
-        setTimeout(() => {
-            setUpdate(!update)
-        }, 500)
-
+            })
+            setSelected([])
+            setTimeout(() => {
+                setUpdate(!update)
+            }, 200)
+        }
+        simpleSpawnInfo(`Deseja mesmo remover ${selected.length} itens?`, onAcceptHandler, () => null)
     }
 
     return <>
