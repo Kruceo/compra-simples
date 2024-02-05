@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
@@ -74,7 +74,7 @@ export default function ViewEntry() {
         <SideBar />
         <Content>
             <SubTopBar>
-                <ToolBarButton className="hover:bg-green-100" onClick={()=>navigate("/create/entrada")}><i>&#xea3b;</i> Criar</ToolBarButton>
+                <ToolBarButton className="hover:bg-green-100" onClick={() => navigate("/create/entrada")}><i>&#xea3b;</i> Criar</ToolBarButton>
                 <ToolBarButton className="hover:bg-red-100" enabled={selected.length > 0} onClick={invalidEntradas}><i>&#xea0d;</i> Invalidar</ToolBarButton>
             </SubTopBar>
             <div className="w-full h-full mt-[6.5rem]">
@@ -82,18 +82,20 @@ export default function ViewEntry() {
                     onOrderChange={orderHandler}
                     selected={selected} onSelect={setSelected}
                     data={data}
-                    disposition={[1, 3, 3, 3, 3]}
+                    disposition={[1, 6, 3, 3, 3, 3, 3]}
                     tableItemHandler={(item) => [
                         item.id,
                         item.bote?.nome,
-                        `R$ ${(item.valor_compra ?? -1).toLocaleString()}`,
-                        item.peso_compra + ' KG',
+                        `R$ ${(item.valor_compra ?? -1).toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
+                        (item.peso_compra ?? -1).toLocaleString(undefined, { minimumFractionDigits: 2 }) + ' KG',
+                        `R$ ${(item.valor_venda ?? -1).toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
+                        (item.peso_venda ?? -1).toLocaleString(undefined, { minimumFractionDigits: 2 }) + ' KG',
                         // item.status==0?<i title="Válido">&#xea10;</i>:<i title="Cancelado">&#xea0d;</i>,
                         bDate(item.updatedAt)
                     ]}
-                    tableOrderKeys={["id", ["Bote", "nome"], "valor_compra", "peso_compra", "updatedAt"]}
+                    tableOrderKeys={["id", ["Bote", "nome"], "valor_compra", "peso_compra", "valor_venda", "peso_venda", "updatedAt"]}
                     tableHeader={[
-                        "ID", "Bote", "Valor da Compra", "Peso da compra", "Ultima Atualização"
+                        "ID", "Bote", "Valor da Compra", "Peso da Compra", "Valor da Venda", "Peso da Venda", "Ultima Atualização"
                     ]}
                 />
             </div>

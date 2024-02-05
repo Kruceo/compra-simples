@@ -88,10 +88,10 @@ export default function CreateEntry() {
                 </div>
                 <div className="py-2">
                     <p>
-                        <i>&#xea3b;</i> Valor da Compra: R$ {sumValores(1).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                        <i>&#xea3f;</i> Valor da Venda: R$ {sumValores(1).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </p>
                     <p>
-                        <i>&#xe9b0;</i> Peso da Compra: {sumPeso(1).toLocaleString()} KG
+                        <i>&#xe9b0;</i> Peso da Venda: {sumPeso(1).toLocaleString()} KG
                     </p>
                 </div>
             </div>

@@ -8,7 +8,7 @@ import CreateEntry from './components/pages/Entrada/CreateEntry'
 import OverPageInfo from './components/Layout/OverPageInfo'
 import PrintEntry from './components/pages/Entrada/PrintEntry'
 import ViewEntry from './components/pages/Entrada/ViewEntry'
-import ViewReports from './components/pages/Relatorios/ViewRelatorio'
+import ViewReports from './components/pages/Relatorios/ViewReports'
 
 
 const globalPopupsContext = createContext<{

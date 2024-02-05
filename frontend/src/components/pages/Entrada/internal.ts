@@ -10,7 +10,7 @@ export async function productEntryPriceComparation(date1: Date, date2: Date) {
     )
 
     const d1 = date1
-    date1.setDate(d1.getDate()-1)
+    date1.setDate(d1.getDate() - 1)
     const d2 = date2
     const where = {
         createdAt: `>${d1},<${d2}`
