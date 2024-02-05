@@ -1,4 +1,4 @@
-import { ReactNode, useContext, useEffect } from "react";
+import { ReactNode } from "react";
 
 interface OverPageInfoAttributes {
     children: ReactNode,

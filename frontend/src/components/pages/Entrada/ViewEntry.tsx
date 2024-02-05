@@ -7,12 +7,11 @@ import backend, { BackendTableComp } from "../../../constants/backend";
 // import CreationForm from "./FormBotes";
 import Table, { TableOrderEvent } from "../../table/Table";
 import { bDate } from "../../../constants/dateUtils";
-import { cashify } from "../../../constants/numberUtils";
 import SubTopBar, { ToolBarButton } from "../../Layout/SubTopBar";
-import { changeEntradaStatus } from "./internal";
+import { changeEntryStatus } from "./internal";
 import { globalPopupsContext } from "../../../App";
 
-export default function ViewEntrada() {
+export default function ViewEntry() {
 
     const { simpleSpawnInfo } = useContext(globalPopupsContext)
     const navigate = useNavigate()
@@ -51,7 +50,7 @@ export default function ViewEntrada() {
     // Quando é clicado no botão "deletar"
     const invalidEntradas = () => {
         const onAcceptHandler = () => {
-            changeEntradaStatus(selected, 1)
+            changeEntryStatus(selected, 1)
             setSelected([])
             setTimeout(() => {
                 setUpdate(!update)
@@ -87,7 +86,7 @@ export default function ViewEntrada() {
                     tableItemHandler={(item) => [
                         item.id,
                         item.bote?.nome,
-                        `R$ ${cashify(item.valor_compra ?? -1)}`,
+                        `R$ ${(item.valor_compra ?? -1).toLocaleString()}`,
                         item.peso_compra + ' KG',
                         // item.status==0?<i title="Válido">&#xea10;</i>:<i title="Cancelado">&#xea0d;</i>,
                         bDate(item.updatedAt)

@@ -1,13 +1,14 @@
 import { Route, Routes } from 'react-router-dom'
-import './App.css'
-import ViewBotes from './components/pages/Botes/ViewBotes'
+
+import ViewBotes from './components/pages/Botes/ViewBoat'
 import { createContext, useState } from 'react'
-import ViewProdutos from './components/pages/Produtos/ViewProdutos'
-import ViewFornecedores from './components/pages/Fornecedores/ViewFornecedores'
-import CreateEntrada from './components/pages/Entrada/CreateEntrada'
+import ViewProducts from './components/pages/Produtos/ViewProducts'
+import ViewVendors from './components/pages/Fornecedores/ViewVendors'
+import CreateEntry from './components/pages/Entrada/CreateEntry'
 import OverPageInfo from './components/Layout/OverPageInfo'
-import PrintEntrada from './components/pages/Entrada/PrintEntrada'
-import ViewEntrada from './components/pages/Entrada/ViewEntrada'
+import PrintEntry from './components/pages/Entrada/PrintEntry'
+import ViewEntry from './components/pages/Entrada/ViewEntry'
+import ViewReports from './components/pages/Relatorios/ViewRelatorio'
 
 
 const globalPopupsContext = createContext<{
@@ -23,6 +24,8 @@ const globalPopupsContext = createContext<{
 });
 
 function App() {
+  window.document.title = 'Compra Simples'
+
   const [globalPopups, setGlobalPopups] = useState<(React.ReactElement | null)[]>([]);
 
   function setGlobalPupupsByKey(key: number, content: React.ReactElement | null) {
@@ -51,12 +54,14 @@ function App() {
         }
         <Routes>
           <Route path='/view/bote' Component={ViewBotes} />
-          <Route path='/view/produto' Component={ViewProdutos} />
-          <Route path='/view/fornecedor' Component={ViewFornecedores} />
+          <Route path='/view/produto' Component={ViewProducts} />
+          <Route path='/view/fornecedor' Component={ViewVendors} />
 
-          <Route path='/create/entrada' Component={CreateEntrada} />
-          <Route path='/view/entrada/' Component={ViewEntrada} />
-          <Route path='/print/entrada/:id' Component={PrintEntrada} />
+          <Route path='/create/entrada' Component={CreateEntry} />
+          <Route path='/view/entrada/' Component={ViewEntry} />
+          <Route path='/print/entrada/:id' Component={PrintEntry} />
+
+          <Route path='/relatorio' Component={ViewReports} />
         </Routes>
       </globalPopupsContext.Provider>
     </>

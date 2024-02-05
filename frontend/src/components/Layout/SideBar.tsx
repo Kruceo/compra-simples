@@ -16,7 +16,7 @@ export default function SideBar() {
             <DropButton
                 title="Entradas"
                 dropDownContent={<>
-                    <PanelLink href="/create/entrada">Nova</PanelLink>
+                    <PanelLink href="/create/entrada">Nova Entrada</PanelLink>
                     <PanelLink href="/view/entrada">Listagem</PanelLink>
                 </>}>
                 <i>&#xe935;</i> Entrada
@@ -24,7 +24,7 @@ export default function SideBar() {
             <DropButton
                 title="Relatórios"
                 dropDownContent={<>
-                    <PanelLink href="relatorio">Por Data</PanelLink>
+                    <PanelLink href="/relatorio">Comparativo de Preços</PanelLink>
                 </>}>
 
                 <i>&#xe99c;</i> Relatório

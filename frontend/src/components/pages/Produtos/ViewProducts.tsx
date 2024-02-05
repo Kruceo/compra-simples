@@ -3,13 +3,13 @@ import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
 import backend, { BackendTableComp } from "../../../constants/backend";
-import CreationForm from "./FormFornecedores";
+import CreationForm from "./FormProducts";
 import { globalPopupsContext } from "../../../App";
 import Table, { TableOrderEvent } from "../../table/Table";
 import { bDate } from "../../../constants/dateUtils";
 import TableToolBar from "../../table/TableToolBar";
 
-export default function ViewFornecedores() {
+export default function ViewProducts() {
 
     const { setGlobalPupupsByKey, simpleSpawnInfo } = useContext(globalPopupsContext)
     const [data, setData] = useState<BackendTableComp[]>([]);
@@ -23,7 +23,7 @@ export default function ViewFornecedores() {
         setWhere(mockup)
     }
 
-    const table_to_manage = "fornecedor"
+    const table_to_manage = "produto"
 
     const data_getter = async () => await backend.get(table_to_manage, where)
 
@@ -53,7 +53,7 @@ export default function ViewFornecedores() {
     const createHandler = () => {
         setGlobalPupupsByKey(0,
             <CreationForm
-                key={"FormFornecedor"}
+                key={"FormProdutos"}
                 mode="creation"
                 onCancel={() => setGlobalPupupsByKey(0, null)}
                 afterSubmit={() => setUpdate(!update)}
@@ -99,6 +99,8 @@ export default function ViewFornecedores() {
         simpleSpawnInfo(`Deseja mesmo remover ${selected.length} itens?`, onAcceptHandler, () => null)
     }
 
+
+
     return <>
         <Bar />
         <SideBar />
@@ -115,13 +117,15 @@ export default function ViewFornecedores() {
                     onOrderChange={orderHandler}
                     selected={selected} onSelect={setSelected}
                     data={data}
-                    disposition={[1, 10, 4]}
+                    disposition={[1, 6, 4, 4]}
                     tableItemHandler={(item) => [
-                        item.id, item.nome, bDate(item.updatedAt)
+                        item.id, item.nome,
+                        "R$ " + (item.preco ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 }),
+                        bDate(item.updatedAt)
                     ]}
-                    tableOrderKeys={["id", "nome", "updatedAt"]}
+                    tableOrderKeys={["id", "nome", "preco", "updatedAt"]}
                     tableHeader={[
-                        "ID", "Nome", "Ultima Atualização"
+                        "ID", "Nome", "Preço", "Ultima Atualização"
                     ]}
                 />
             </div>

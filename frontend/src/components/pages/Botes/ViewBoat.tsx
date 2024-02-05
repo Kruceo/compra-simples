@@ -3,14 +3,13 @@ import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
 import backend, { BackendTableComp } from "../../../constants/backend";
-import CreationForm from "./FormBotes";
+import CreationForm from "./FormBoat";
 import { globalPopupsContext } from "../../../App";
 import Table, { TableOrderEvent } from "../../table/Table";
 import { bDate } from "../../../constants/dateUtils";
 import TableToolBar from "../../table/TableToolBar";
 
-export default function ViewBotes() {
-
+export default function ViewBoat() {
     const { setGlobalPupupsByKey, simpleSpawnInfo } = useContext(globalPopupsContext)
 
     const [data, setData] = useState<BackendTableComp[]>([]);

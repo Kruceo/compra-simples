@@ -7,12 +7,10 @@ import SideBar from "../../Layout/SideBar";
 import backend, { BackendTableComp } from "../../../constants/backend";
 import Table from "../../table/Table";
 import FormSelection from "../../OverPageForm/FormSelection";
-import SubTopBar from "../../Layout/SubTopBar";
-import { cashify } from "../../../constants/numberUtils";
 import { globalPopupsContext } from "../../../App";
-import { saveEntradaStack } from "./internal";
+import { saveEntryStack } from "./internal";
 
-export default function CreateEntrada() {
+export default function CreateEntry() {
 
     const { setGlobalPupupsByKey, simpleSpawnInfo } = useContext(globalPopupsContext)
 
@@ -68,7 +66,11 @@ export default function CreateEntrada() {
                         selected={selectedEntradaItens} onSelect={setSelectedEntradaItens}
                         tableHeader={["Produto", "Tipo", "Peso", "Preço/KG", "Valor total"]}
                         tableItemHandler={(item) => {
-                            return [item.produto ? item.produto.nome : "Sem nome", item.tipo ? "Venda" : "Compra", `${item.peso} KG`, `R$ ${cashify(item.preco ?? -1)}`, `R$ ${cashify(item.valor_total ?? -1)}`]
+                            return [item.produto ? item.produto.nome : "Sem nome",
+                            item.tipo ? "Venda" : "Compra",
+                            `${item.peso?.toLocaleString()} KG`,
+                            `R$ ${(item.preco ?? -1).toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
+                            `R$ ${(item.valor_total ?? -1).toLocaleString(undefined, { minimumFractionDigits: 2 })}`]
                         }}
                         tableOrderKeys={[]}
                     />
@@ -77,12 +79,20 @@ export default function CreateEntrada() {
             <div className="p-4 border-b border-borders">
                 <h2 className="mb-4">Resumo</h2>
                 <div className="border-borders border-b py-2">
-                    <p><i>&#xea3b;</i> Valor da Compra: R$ {cashify(sumValores(0))}</p>
-                    <p><i>&#xe9b0;</i> Peso da Compra: {sumPeso(0)} KG</p>
+                    <p>
+                        <i>&#xea3b;</i> Valor da Compra: R$ {sumValores(0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                    </p>
+                    <p>
+                        <i>&#xe9b0;</i> Peso da Compra: {sumPeso(0).toLocaleString()} KG
+                    </p>
                 </div>
                 <div className="py-2">
-                    <p><i>&#xea3f;</i> Valor da Venda: R$ {cashify(sumValores(1))}</p>
-                    <p><i>&#xe9b0;</i> Peso da Venda: {sumPeso(1)} KG</p>
+                    <p>
+                        <i>&#xea3b;</i> Valor da Compra: R$ {sumValores(1).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                    </p>
+                    <p>
+                        <i>&#xe9b0;</i> Peso da Compra: {sumPeso(1).toLocaleString()} KG
+                    </p>
                 </div>
             </div>
             <div className="p-4">
@@ -90,7 +100,7 @@ export default function CreateEntrada() {
                     onClick={async () => {
                         if (addedEntradaItensData.length === 0) return simpleSpawnInfo("É necessario adicionar algum item à entrada.")
 
-                        const response = await saveEntradaStack(boteId, '', sumValores(0), sumPeso(0), sumValores(1), sumPeso(1), backend.utils.removeAttributeFromAll(addedEntradaItensData, "id"))
+                        const response = await saveEntryStack(boteId, '', sumValores(0), sumPeso(0), sumValores(1), sumPeso(1), backend.utils.removeAttributeFromAll(addedEntradaItensData, "id"))
 
                         if (response.error || !response.data)
                             return simpleSpawnInfo(response.message ?? "Houve um problema desconhecido ao criar uma entrada.")
@@ -185,7 +195,9 @@ function AddProdutoForm(props: { onCancel: Function, onSubmit: (entrada_item: Ba
         </FormSelection>
 
         <RequiredLabel>Valor Total</RequiredLabel>
-        <p>R$ {cashify(peso * preco)}</p>
+        <p>
+            R$ {(peso * preco).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+        </p>
 
         <FormInput name="submit" type="submit" value={"Pronto"} />
 

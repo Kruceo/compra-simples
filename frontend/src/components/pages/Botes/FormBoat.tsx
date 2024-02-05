@@ -1,11 +1,12 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import backend, { BackendTableComp } from "../../../constants/backend";
 import OverPageForm, { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import FormInput from "../../OverPageForm/FormInput";
 import { globalPopupsContext } from "../../../App";
 import OverPageInfo from "../../Layout/OverPageInfo";
+import FormSelection from "../../OverPageForm/FormSelection";
 
-export default function ProdutoCreationForm(props: {
+export default function BoatCreationForm(props: {
     onCancel: Function,
     mode: "creation" | "editing"
     afterSubmit?: Function,
@@ -13,35 +14,36 @@ export default function ProdutoCreationForm(props: {
 }) {
     const [error, setError] = useState('')
     const { setGlobalPupupsByKey } = useContext(globalPopupsContext)
-
     const { onCancel, mode, afterSubmit, defaultValues } = props
 
     const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const data = new FormData(e.currentTarget)
         const nome = data.get("nome")
-        const preco = data.get("preco")
+        const fornecedor_id = data.get("fornecedor_id")
 
         if (!nome) {
             setError("nome")
             return;
         }
-        if (!preco) {
-            setError("preco")
+
+        if (!fornecedor_id) {
+            setError("fornecedor_id")
             return;
         }
+
         let response = null
         if (mode == 'creation') {
-            response = await backend.create("produto", {
+            response = await backend.create("bote", {
                 nome: nome.toString(),
-                preco:parseFloat(preco.toString())
+                fornecedor_id: parseInt(fornecedor_id.toString())
             })
         }
         if (mode == 'editing' && defaultValues && defaultValues.id) {
             const id = defaultValues.id
-            response = await backend.edit("produto", id, {
-                nome: nome.toString(),
-                preco:parseFloat(preco.toString())
+            response = await backend.edit("bote", id, {
+                nome: data.get("nome")?.toString(),
+                fornecedor_id: parseInt(fornecedor_id.toString())
             })
         }
         // Tratamento de erro
@@ -55,18 +57,19 @@ export default function ProdutoCreationForm(props: {
         afterSubmit ? afterSubmit() : null
         onCancel()
     }
-
+    
     return <>
         <OverPageForm
             onCancel={onCancel}
-            title="Criação de Produto"
+            title="Criação de Bote"
             onSubmit={submitHandler}
         >
             <RequiredLabel htmlFor="nome">Nome</RequiredLabel>
-            <FormInput name="nome" type="text" placeholder="E.g Dourado" defaultValue={defaultValues ? defaultValues.nome : undefined} errored={(error == "nome")} />
+            <FormInput name="nome" type="text" placeholder="E.g Barco Penha" defaultValue={defaultValues ? defaultValues.nome : undefined} errored={(error == "nome")} />
 
-            <RequiredLabel htmlFor="preco">Preço</RequiredLabel>
-            <FormInput name="preco" type="float" placeholder="Preço" defaultValue={defaultValues ? defaultValues.preco : undefined} errored={(error == "preco")} />
+            <RequiredLabel>Fornecedor</RequiredLabel>
+
+            <FormSelection name="fornecedor_id" defaultValue={defaultValues?.fornecedor?.id} useTable="Fornecedor" errored={error == "fornecedor_id"} />
 
             <FormInput value="Pronto" type="submit" errored={error == "submit"} />
         </OverPageForm>
