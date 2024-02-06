@@ -13,7 +13,7 @@ export default function BoatCreationForm(props: {
     defaultValues?: BackendTableComp
 }) {
     const [error, setError] = useState('')
-    const { setGlobalPupupsByKey } = useContext(globalPopupsContext)
+    const { simpleSpawnInfo } = useContext(globalPopupsContext)
     const { onCancel, mode, afterSubmit, defaultValues } = props
 
     const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -47,17 +47,14 @@ export default function BoatCreationForm(props: {
             })
         }
         // Tratamento de erro
-        if (response && response.error) {
-            setGlobalPupupsByKey(4,
-                <OverPageInfo onAccept={() => setGlobalPupupsByKey(4, null)}>
-                    {response.message}
-                </OverPageInfo>)
+        if (response && response.error && response.message) {
+            simpleSpawnInfo(response.message)
         }
         // EXIT if exists
         afterSubmit ? afterSubmit() : null
         onCancel()
     }
-    
+
     return <>
         <OverPageForm
             onCancel={onCancel}

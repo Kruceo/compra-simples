@@ -32,6 +32,10 @@ export default function CreateEntry() {
         return acum
     }, 0)
 
+    const tableContextMenuButtons = [
+        { element: <><i>&#xe9ac;</i>Remover</>, handler: removeEntradaItem }
+    ]
+
     return <>
         <Bar />
         <SideBar />
@@ -49,21 +53,18 @@ export default function CreateEntry() {
             <div className="w-full min-h-64 p-4 border-b border-borders">
                 <div className="flex mb-4">
                     <h2>Itens</h2>
-                    <button className="px-4 py-2 ml-auto rounded-sm font-bold hover:bg-red-100"
-                        onClick={() => { removeEntradaItem(...selectedEntradaItens); setSelectedEntradaItens([]) }}>
-                        <i>&#xe9ac;</i> Remover
-                    </button>
-                    <button className="px-4 py-2 rounded-sm font-bold hover:bg-green-100"
-                        onClick={() => setGlobalPupupsByKey(5, <AddProdutoForm onSubmit={addEntradaItem}
-                            onCancel={() => setGlobalPupupsByKey(5, null)}
+                    <button className="ml-auto px-4 py-2 rounded-sm font-bold hover:bg-green-100"
+                        onClick={() => setGlobalPupupsByKey("AddEntryProductForm", <AddProdutoForm onSubmit={addEntradaItem}
+                            onCancel={() => setGlobalPupupsByKey("AddEntryProductForm", null)}
                         />)}>
                         <i>&#xe905;</i> Adicionar
                     </button>
                 </div>
                 <div className="overflow-auto h-80">
-                    <Table data={addedEntradaItensData}
+                    <Table
+                        data={addedEntradaItensData}
                         disposition={[1, 1, 1, 1, 1]}
-                        selected={selectedEntradaItens} onSelect={setSelectedEntradaItens}
+                        contextMenu={{ buttons: tableContextMenuButtons }}
                         tableHeader={["Produto", "Tipo", "Peso", "Preço/KG", "Valor total"]}
                         tableItemHandler={(item) => {
                             return [item.produto ? item.produto.nome : "Sem nome",

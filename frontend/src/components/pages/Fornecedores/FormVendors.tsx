@@ -12,7 +12,7 @@ export default function VendorCreationForm(props: {
     defaultValues?: BackendTableComp
 }) {
     const [error, setError] = useState('')
-    const { setGlobalPupupsByKey } = useContext(globalPopupsContext)
+    const { simpleSpawnInfo } = useContext(globalPopupsContext)
 
     const { onCancel, mode, afterSubmit, defaultValues } = props
 
@@ -38,11 +38,8 @@ export default function VendorCreationForm(props: {
             })
         }
         // Tratamento de erro
-        if (response && response.error) {
-            setGlobalPupupsByKey(4,
-                <OverPageInfo onAccept={() => setGlobalPupupsByKey(4, null)}>
-                    {response.message}
-                </OverPageInfo>)
+        if (response && response.error && response.message) {
+            simpleSpawnInfo(response.message)
         }
         // EXIT if exists
         afterSubmit ? afterSubmit() : null

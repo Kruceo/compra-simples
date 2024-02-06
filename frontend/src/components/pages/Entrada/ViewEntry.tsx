@@ -18,7 +18,6 @@ export default function ViewEntry() {
 
     const [data, setData] = useState<BackendTableComp[]>([]);
     const [update, setUpdate] = useState(true)
-    const [selected, setSelected] = useState<number[]>([])
     const [where, setWhere] = useState<any>({ include: "bote,usuario", status: 0 })
 
     const setWhereKey = (key: string, value: string) => {
@@ -39,8 +38,6 @@ export default function ViewEntry() {
         })()
     }, [update])
 
-    console.log(data)
-
     // Quando é alterado a ordem
     const orderHandler = (e: TableOrderEvent) => {
         setWhereKey("order", `${e.key},${e.order.toUpperCase()}`)
@@ -48,26 +45,19 @@ export default function ViewEntry() {
     }
 
     // Quando é clicado no botão "deletar"
-    const invalidEntradas = () => {
-        const onAcceptHandler = () => {
-            changeEntryStatus(selected, 1)
-            setSelected([])
+    const invalidEntries = (id: number) => {
+        const onAcceptHandler = async () => {
+            await changeEntryStatus(id, 1)
             setTimeout(() => {
                 setUpdate(!update)
-            }, 200)
+            }, 150)
         }
-        simpleSpawnInfo(`Deseja mesmo invalidar ${selected.length} itens?`, onAcceptHandler, () => null)
+        simpleSpawnInfo(`Deseja mesmo invalidar este item?`, onAcceptHandler, () => null)
     }
 
-    // Quando é clicado em validar
-    // const validEntradas = () => {
-    //     changeEntradaStatus(selected, 0)
-    //     setSelected([])
-    //     setTimeout(() => {
-    //         setUpdate(!update)
-    //     }, 200)
-
-    // }
+    const tableContextMenuButtons = [
+        { element: <><i>&#xe9ac;</i>Invalidar</>, handler: invalidEntries }
+    ]
 
     return <>
         <Bar />
@@ -75,12 +65,10 @@ export default function ViewEntry() {
         <Content>
             <SubTopBar>
                 <ToolBarButton className="hover:bg-green-100" onClick={() => navigate("/create/entrada")}><i>&#xea3b;</i> Criar</ToolBarButton>
-                <ToolBarButton className="hover:bg-red-100" enabled={selected.length > 0} onClick={invalidEntradas}><i>&#xea0d;</i> Invalidar</ToolBarButton>
             </SubTopBar>
             <div className="w-full h-full mt-[6.5rem]">
                 <Table
                     onOrderChange={orderHandler}
-                    selected={selected} onSelect={setSelected}
                     data={data}
                     disposition={[1, 6, 3, 3, 3, 3, 3]}
                     tableItemHandler={(item) => [
@@ -97,6 +85,7 @@ export default function ViewEntry() {
                     tableHeader={[
                         "ID", "Bote", "Valor da Compra", "Peso da Compra", "Valor da Venda", "Peso da Venda", "Ultima Atualização"
                     ]}
+                    contextMenu={{ buttons: tableContextMenuButtons }}
                 />
             </div>
         </Content>

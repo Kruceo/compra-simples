@@ -94,11 +94,8 @@ export async function saveEntryStack(bote_id: number, obs: string, valorCompra: 
 
 }
 
-export async function changeEntryStatus(selected: number[], status: number) {
-    selected.forEach(each => {
-        backend.edit('entrada', each, { status })
-    })
-
+export async function changeEntryStatus(id: number, status: number) {
+    backend.edit('entrada', id, { status })
 }
 
 async function getGroupedEntryTotalValues(where: any) {

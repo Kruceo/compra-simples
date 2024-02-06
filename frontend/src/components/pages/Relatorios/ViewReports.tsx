@@ -1,23 +1,18 @@
-import jsPDF from "jspdf"
-import { useContext, useEffect, useState } from "react";
-import backend, { BackendTableComp } from "../../../constants/backend";
-import { globalPopupsContext } from "../../../App";
 import SideBar from "../../Layout/SideBar";
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import FormInput from "../../OverPageForm/FormInput";
-import { productEntryPriceComparation } from "../Entrada/internal";
+import { productEntryPriceComparation } from "./internals";
 import { ToolBarButton } from "../../Layout/SubTopBar";
+import { useState } from "react";
 
 export default function ViewReports() {
-
-    // const { simpleSpawnInfo } = useContext(globalPopupsContext)
 
     const nowDate = new Date()
     const defaultLastWeek = new Date(nowDate.getTime() - (7 * 24 * 60 * 60 * 1000))
 
     const [date1, setDate1] = useState(defaultLastWeek)
-    const [date2, setDate2] = useState(defaultLastWeek)
+    const [date2, setDate2] = useState(nowDate)
 
     return <>
         <Bar />

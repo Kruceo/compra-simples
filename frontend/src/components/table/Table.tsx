@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import TableItem from "./TableItem";
 import { BackendTableComp } from "../../constants/backend";
+import { globalPopupsContext } from "../../App";
+import TableContextMenu, { ContextMenuButton } from "./TableContextMenu";
 
 export interface TableOrderEvent {
     key: string | string[],
@@ -9,70 +11,82 @@ export interface TableOrderEvent {
 
 interface TableAttributes {
     data: BackendTableComp[],
-    selected: number[],
+    // selected: number[],
+    // onSelect?: (ids: number[]) => any,
     tableItemHandler: (item: BackendTableComp, index: number) => React.ReactNode[],
     tableOrderKeys?: (string | string[])[],
     disposition: number[],
     tableHeader: React.ReactNode[],
-    onSelect?: (ids: number[]) => any,
-    onOrderChange?: (event: TableOrderEvent) => any
+    onOrderChange?: (event: TableOrderEvent) => any,
+    contextMenu: { buttons: { element: React.ReactNode, handler: (id: number) => any }[] }
 }
 
 export default function Table(props: TableAttributes) {
-    let { data, disposition, tableHeader, tableItemHandler, tableOrderKeys, onSelect, onOrderChange, selected } = props
+    let { data, disposition, tableHeader, tableItemHandler, tableOrderKeys, onOrderChange } = props
 
-    const togleSelectedHandler = (id: number) => {
-        if (selected.includes(id)) {
-            const newSelected = selected.filter(each => { if (each != id) return each })
-            //On select change handler spawn
-            onSelect ? onSelect(newSelected) : null
-            //Set local selected
-        }
-        else {
-            //On select change handler spawn
-            onSelect ? onSelect([...selected, id]) : null
-            //Set local selected
-        }
+    const { setGlobalPupupsByKey, globalPopups } = useContext(globalPopupsContext)
 
-    }
     const orderHandler = onOrderChange ? onOrderChange : () => null
 
-    return <div>
-        <TableItem
-            headerMode={true}
-            disposition={disposition}>
-            {
-                tableHeader.map((each, index) => {
-                    return <div key={index} className="flex group">
-                        {each}
-                        {
-                            (tableOrderKeys && tableOrderKeys[index]) ?
-                                <OrderButton onClick={(order) => { if (tableOrderKeys) orderHandler({ key: tableOrderKeys[index], order }) }} />
-                                : null
-                        }
+    const removeContextMenu = () => setGlobalPupupsByKey("ContextMenu", null)
 
-                    </div>
-                })}
-        </TableItem>
-        {data.length === 0 ? <p className="p-4 w-full text-center">Nenhum item</p>: null}
+    const spawnContextMenu = (itemID: number, x: number, y: number) => {
+        setGlobalPupupsByKey("ContextMenu",
+            <TableContextMenu x={x} y={y}>
+                {
+                    props.contextMenu.buttons.map(each => {
+                        return <ContextMenuButton key={Math.random() + itemID} onClick={() => {
+                            each.handler(itemID);
+                            removeContextMenu()
+                        }}>
+                            {each.element}
+                        </ContextMenuButton>
+                    })
+                }
+            </TableContextMenu>
+        )
+    }
+
+return <div>
+    <TableItem
+        headerMode={true}
+        disposition={disposition}>
         {
-            data.map((item, index) => {
-                const itemId = parseInt("" + item.id)
-                return <TableItem
-                    disposition={disposition}
-                    key={index}
-                    selected={selected.includes(itemId)}
-                    onClick={() => {
-                        if (item.id) togleSelectedHandler(itemId)
-                    }}>
+            tableHeader.map((each, index) => {
+                return <div key={index} className="flex group">
+                    {each}
                     {
-                        tableItemHandler(item, index)
-                            .map((attr, attrIndex) => <p key={attrIndex}>{attr}</p>)
+                        (tableOrderKeys && tableOrderKeys[index]) ?
+                            <OrderButton onClick={(order) => { if (tableOrderKeys) orderHandler({ key: tableOrderKeys[index], order }) }} />
+                            : null
                     }
-                </TableItem>
-            })
-        }
-    </div>
+
+                </div>
+            })}
+    </TableItem>
+    {data.length === 0 ? <p className="p-4 w-full text-center">Nenhum item</p> : null}
+    {
+        data.map((item, index) => {
+
+            const itemID = item.id ?? -1
+            return <TableItem
+                //Acionar o menu de contexto
+                onContextMenu={(e) => {
+                    e.preventDefault();
+                    spawnContextMenu(itemID, e.clientX, e.clientY)
+                }}
+                onClick={removeContextMenu}
+                disposition={disposition}
+                key={index}
+            >
+                {
+                    tableItemHandler(item, index)
+                        .map((attr, attrIndex) => <p key={attrIndex}>{attr}</p>)
+                }
+            </TableItem>
+        })
+    }
+</div >
 }
 
 interface OrderButtonAttributes {

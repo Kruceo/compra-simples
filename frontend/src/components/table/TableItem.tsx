@@ -5,7 +5,8 @@ interface TableBarAttributes {
     className?: string,
     children: React.ReactNode | React.ReactNode[],
     disposition?: number[],
-    selected?:boolean,
+    selected?: boolean,
+    onContextMenu?: React.MouseEventHandler<HTMLDivElement>
     onClick?: React.MouseEventHandler
 }
 
@@ -22,8 +23,9 @@ export default function TableItem(props: TableBarAttributes) {
     const gridTemplateColumns = disposition.reduce((acum, next) => acum + ` ${next}fr`, "")
 
     return <div
+        onContextMenu={props.onContextMenu}
         style={{ gridTemplateColumns: gridTemplateColumns }}
-        className={`relative grid p-4 transition-colors ${(!headerMode ? "" : "border-b border-borders font-bold shadow-lg")} ${props.selected == true?"bg-blue-300":"hover:bg-hovers"} ${props.className}`}
+        className={`relative grid p-4 transition-colors ${(!headerMode ? "" : "border-b border-borders font-bold shadow-lg")} ${props.selected == true ? "bg-blue-300" : "hover:bg-hovers"} ${props.className}`}
         onClick={props.onClick}
     >
         {
