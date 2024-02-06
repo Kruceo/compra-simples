@@ -19,74 +19,76 @@ interface TableAttributes {
     tableHeader: React.ReactNode[],
     onOrderChange?: (event: TableOrderEvent) => any,
     contextMenu: { buttons: { element: React.ReactNode, handler: (id: number) => any }[] }
+    enableContextMenu?: boolean
 }
 
 export default function Table(props: TableAttributes) {
-    let { data, disposition, tableHeader, tableItemHandler, tableOrderKeys, onOrderChange } = props
+    let { data, disposition, tableHeader, tableItemHandler, tableOrderKeys, onOrderChange, enableContextMenu } = props
 
-    const { setGlobalPupupsByKey, globalPopups } = useContext(globalPopupsContext)
+    const { setGlobalPupupsByKey } = useContext(globalPopupsContext)
 
     const orderHandler = onOrderChange ? onOrderChange : () => null
 
     const removeContextMenu = () => setGlobalPupupsByKey("ContextMenu", null)
 
     const spawnContextMenu = (itemID: number, x: number, y: number) => {
-        setGlobalPupupsByKey("ContextMenu",
-            <TableContextMenu x={x} y={y}>
-                {
-                    props.contextMenu.buttons.map(each => {
-                        return <ContextMenuButton key={Math.random() + itemID} onClick={() => {
-                            each.handler(itemID);
-                            removeContextMenu()
-                        }}>
-                            {each.element}
-                        </ContextMenuButton>
-                    })
-                }
-            </TableContextMenu>
-        )
-    }
-
-return <div>
-    <TableItem
-        headerMode={true}
-        disposition={disposition}>
-        {
-            tableHeader.map((each, index) => {
-                return <div key={index} className="flex group">
-                    {each}
+        if (enableContextMenu == undefined || enableContextMenu)
+            setGlobalPupupsByKey("ContextMenu",
+                <TableContextMenu x={x} y={y}>
                     {
-                        (tableOrderKeys && tableOrderKeys[index]) ?
-                            <OrderButton onClick={(order) => { if (tableOrderKeys) orderHandler({ key: tableOrderKeys[index], order }) }} />
-                            : null
+                        props.contextMenu.buttons.map(each => {
+                            return <ContextMenuButton key={Math.random() + itemID} onClick={() => {
+                                each.handler(itemID);
+                                removeContextMenu()
+                            }}>
+                                {each.element}
+                            </ContextMenuButton>
+                        })
                     }
-
-                </div>
-            })}
-    </TableItem>
-    {data.length === 0 ? <p className="p-4 w-full text-center">Nenhum item</p> : null}
-    {
-        data.map((item, index) => {
-
-            const itemID = item.id ?? -1
-            return <TableItem
-                //Acionar o menu de contexto
-                onContextMenu={(e) => {
-                    e.preventDefault();
-                    spawnContextMenu(itemID, e.clientX, e.clientY)
-                }}
-                onClick={removeContextMenu}
-                disposition={disposition}
-                key={index}
-            >
-                {
-                    tableItemHandler(item, index)
-                        .map((attr, attrIndex) => <p key={attrIndex}>{attr}</p>)
-                }
-            </TableItem>
-        })
+                </TableContextMenu>
+            )
     }
-</div >
+
+    return <div>
+        <TableItem
+            headerMode={true}
+            disposition={disposition}>
+            {
+                tableHeader.map((each, index) => {
+                    return <div key={index} className="flex group">
+                        {each}
+                        {
+                            (tableOrderKeys && tableOrderKeys[index]) ?
+                                <OrderButton onClick={(order) => { if (tableOrderKeys) orderHandler({ key: tableOrderKeys[index], order }) }} />
+                                : null
+                        }
+
+                    </div>
+                })}
+        </TableItem>
+        {data.length === 0 ? <p className="p-4 w-full text-center">Nenhum item</p> : null}
+        {
+            data.map((item, index) => {
+
+                const itemID = item.id ?? -1
+                return <TableItem
+                    //Acionar o menu de contexto
+                    onContextMenu={(e) => {
+                        e.preventDefault();
+                        spawnContextMenu(itemID, e.clientX, e.clientY)
+                    }}
+                    onClick={removeContextMenu}
+                    disposition={disposition}
+                    key={index}
+                >
+                    {
+                        tableItemHandler(item, index)
+                            .map((attr, attrIndex) => <p key={attrIndex}>{attr}</p>)
+                    }
+                </TableItem>
+            })
+        }
+    </div >
 }
 
 interface OrderButtonAttributes {

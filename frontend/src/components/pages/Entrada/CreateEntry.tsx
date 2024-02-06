@@ -1,4 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
+import {useNavigate} from 'react-router-dom'
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import FormInput from "../../OverPageForm/FormInput";
@@ -12,10 +13,10 @@ import { saveEntryStack } from "./internal";
 
 export default function CreateEntry() {
 
+    const navigate = useNavigate()
     const { setGlobalPupupsByKey, simpleSpawnInfo } = useContext(globalPopupsContext)
 
     const [addedEntradaItensData, setAddedEntradaItensData] = useState<BackendTableComp[]>([])
-    const [selectedEntradaItens, setSelectedEntradaItens] = useState<number[]>([])
     const [boteId, setBoteID] = useState(-1)
     const addEntradaItem = (entrada_item: BackendTableComp) => setAddedEntradaItensData([...addedEntradaItensData, { ...entrada_item, id: addedEntradaItensData.length + 1 }])
     const removeEntradaItem = (...entrada_item_ids: number[]) => setAddedEntradaItensData(addedEntradaItensData.filter(each => !entrada_item_ids.includes(each.id ?? -1)))
@@ -106,7 +107,7 @@ export default function CreateEntry() {
                         if (response.error || !response.data)
                             return simpleSpawnInfo(response.message ?? "Houve um problema desconhecido ao criar uma entrada.")
                         if (!Array.isArray(response.data))
-                            window.location.assign('/print/entrada/' + response.data.entrada_id)
+                            navigate('/print/entrada/' + response.data.entrada_id)
                     }}
                 >
                     <i>&#xe962;</i> Finalizar
@@ -170,14 +171,6 @@ function AddProdutoForm(props: { onCancel: Function, onSubmit: (entrada_item: Ba
             })
         props.onCancel()
     }
-
-    // useEffect(() => {
-    //     const produtoIdEl = document.querySelector("[name=produto_id]")
-
-    //     if (!produtoIdEl) return;
-    //     setTimeout(() => produtoIdEl.dispatchEvent(new Event("change", { bubbles: true })), 100)
-
-    // }, [])
 
     return <OverPageForm onSubmit={internalOnSubmit} title="Adicionar produto" onCancel={props.onCancel}>
         <RequiredLabel>Produto</RequiredLabel>

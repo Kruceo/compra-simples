@@ -9,6 +9,7 @@ import OverPageInfo from './components/Layout/OverPageInfo'
 import PrintEntry from './components/pages/Entrada/PrintEntry'
 import ViewEntry from './components/pages/Entrada/ViewEntry'
 import ViewReports from './components/pages/Relatorios/ViewReports'
+import DetailsEntry from './components/pages/Entrada/DetailsEntry'
 
 
 const globalPopupsContext = createContext<{
@@ -24,8 +25,6 @@ const globalPopupsContext = createContext<{
 });
 
 function App() {
-  window.document.title = 'Compra Simples'
-
   const [globalPopups, setGlobalPopups] = useState<{ [key: string]: React.ReactElement | null }>({});
 
   function setGlobalPupupsByKey(key: string, content: React.ReactElement | null) {
@@ -67,6 +66,7 @@ function App() {
 
           <Route path='/create/entrada' Component={CreateEntry} />
           <Route path='/view/entrada/' Component={ViewEntry} />
+          <Route path='/details/entrada/' Component={DetailsEntry} />
           <Route path='/print/entrada/:id' Component={PrintEntry} />
 
           <Route path='/relatorio' Component={ViewReports} />

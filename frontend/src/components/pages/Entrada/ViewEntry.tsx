@@ -56,6 +56,7 @@ export default function ViewEntry() {
     }
 
     const tableContextMenuButtons = [
+        { element: <><i>&#xe922;</i>Detalhes</>, handler: (id:number)=>navigate(`/details/entrada?id=${id}`)},
         { element: <><i>&#xe9ac;</i>Invalidar</>, handler: invalidEntries }
     ]
 
