@@ -5,6 +5,8 @@ export const api_protocol = 'http'
 export const api_port = 8080
 export const api_v = "v1"
 
+const backendAxios = axios.create({ withCredentials: true })
+
 async function get(tables: string | "bote" | "produto" | "entrada" | "entrada_item" | "fornecedor",
     where: any,
     limit?: number): Promise<BackendResponse> {
@@ -14,7 +16,7 @@ async function get(tables: string | "bote" | "produto" | "entrada" | "entrada_it
 
     const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}?${obj2URLQuery(whereClause)}`
     try {
-        const response = await axios.get(full_address)
+        const response = await backendAxios.get(full_address)
         return response.data
     } catch (error: any) {
         return error.response.data
@@ -25,7 +27,7 @@ async function get(tables: string | "bote" | "produto" | "entrada" | "entrada_it
 async function create(tables: string | "botes", data: BackendTableComp | BackendTableComp[]): Promise<BackendResponse> {
     const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}`
     try {
-        const response = await axios.post(full_address, data)
+        const response = await backendAxios.post(full_address, data)
         return response.data
     } catch (error: any) {
         return error.response.data
@@ -36,7 +38,7 @@ async function remove(tables: string | "botes", id: number) {
     const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}/${id}`
 
     try {
-        const response = await axios.delete(full_address)
+        const response = await backendAxios.delete(full_address)
         return response.data
     } catch (error: any) {
         return error.response.data
@@ -47,7 +49,7 @@ async function edit(tables: string | "botes", id: number | string, content: Back
     const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}/${id}`
 
     try {
-        const response = await axios.put(full_address, content)
+        const response = await backendAxios.put(full_address, content)
         return response.data
     } catch (error: any) {
         return error.response.data
@@ -124,6 +126,7 @@ async function getByID(table: string, where: BackendTableComp) {
     if (result.error || !result.data || !Array.isArray(result.data) || !result.data[0]) return null
     return result.data[0]
 }
+
 function removeAttributeFromAll(data: BackendTableComp[], attribute: string): BackendTableComp[] {
     const newData = data.map(each => {
         const item: any = { ...each }
@@ -132,12 +135,27 @@ function removeAttributeFromAll(data: BackendTableComp[], attribute: string): Ba
     })
     return newData
 }
+
+async function login(user: string, password: string) {
+    const full_address = `${api_protocol}://${api_address}:${api_port}/auth/login`
+    try {
+        const response = await axios.post(full_address, { user, password })
+        return response.data
+    } catch (error: any) {
+        return error.response.data
+    }
+}
+
+const auth = {
+    login
+}
+
 const utils = {
     filterUsingID,
     removeAttributeFromAll
 }
 
-export { getByID, get, create, remove, edit, utils }
-export default { getByID, get, create, remove, edit, utils }
+export { getByID, get, create, remove, edit, utils, auth }
+export default { getByID, get, create, remove, edit, utils, auth }
 
 export type { BackendResponse, BackendTableComp }

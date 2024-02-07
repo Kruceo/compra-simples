@@ -28,8 +28,14 @@ export default function ViewBoat() {
 
     useEffect(() => {
         (async () => {
+
             const d = await data_getter()
-            if (!d.data || !Array.isArray(d.data)) return;
+            
+            if (d.error && d.message)
+                return simpleSpawnInfo(d.message)
+            if (!d.data || !Array.isArray(d.data))
+                return
+
             setData(d.data)
         })()
     }, [update])
@@ -103,6 +109,7 @@ export default function ViewBoat() {
         <Bar />
         <SideBar />
         <Content>
+            
             <TableToolBar
                 createHandler={createHandler}
                 searchHandler={searchHandler}

@@ -13,7 +13,7 @@ export default function TableToolBar(props: TableToolBarAttributes) {
     return <SubTopBar
         // leftContent={selected.length > 0 ? selected.length + ' itens selecionados' : ''}
         leftContent={<div className="flex border-border border-b ml-4">
-            <input type="text" placeholder="Pesquisar" className="bg-transparent" onChange={(e) => setSearch(e.target.value)} />
+            <input type="text" placeholder="Pesquisar" className="bg-transparent outline-none" onChange={(e) => setSearch(e.target.value)} />
             <button title="Pesquisar" onClick={() => searchHandler(search)}>
                 <i className="text-borders hover:text-inherit">&#xe986;</i>
             </button>

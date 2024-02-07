@@ -22,7 +22,6 @@ async function authenticateUser(user, password) {
 }
 
 async function authenticateToken(token) {
-
     try {
         const verify = jwt.verify(token, cfg.security.secret)
         return verify

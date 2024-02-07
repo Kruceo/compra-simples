@@ -54,12 +54,14 @@ export default function includeBuilder(query) {
 
         if (!model) return
 
+        const tableAttributes = Object.keys(model.getAttributes()).filter(each => !blockedAttributes.includes(each))
+
         if (each.includes("{") && includeQueryMatch) {
             //troco todos os "%" por "," novamente para que eu possa chamar a funcção de forma recursiva
             const includeQuery = includeQueryMatch[0].replace("%", ",")
             include = includeBuilder(includeQuery)
         }
-        return { model, include }
+        return { model, include, attributes: tableAttributes }
     })
 }
 

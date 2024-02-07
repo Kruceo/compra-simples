@@ -120,8 +120,8 @@ export default function ViewProducts() {
                     disposition={[1, 6, 4, 4]}
                     tableItemHandler={(item) => [
                         item.id, item.nome,
-                        "R$ " + (item.preco ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 }),
-                        bDate(item.updatedAt)
+                        <div className="flex">R$ <span className="ml-auto">{(item.preco ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span></div>,
+                        <div className="flex"><span className="">{bDate(item.updatedAt)}</span></div>
                     ]}
                     tableOrderKeys={["id", "nome", "preco", "updatedAt"]}
                     tableHeader={[

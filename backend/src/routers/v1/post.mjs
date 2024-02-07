@@ -12,7 +12,7 @@ import { getOnlyNecessaryAttributes } from "../../utils/tableUtils.mjs";
 export default async function postRequestHandler(req, res) {
     const tableName = upperCaseLetter(req.params.table, 0)
     let body = req.body
-    body.usuario_id = 2
+    body.usuario_id = 1
     const table = tables[tableName]
     if (!table) return;
     const tableNecessaryAttributes = getOnlyNecessaryAttributes(table)

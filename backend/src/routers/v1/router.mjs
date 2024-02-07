@@ -9,17 +9,15 @@ import getRequestHandler from "./get.mjs";
  * @type {Router}
  */
 const universalRouter = new Router()
-const permitedTables = [
-    "bote", "fornecedor", "produto", "entrada", "entrada_item"
-]
+
 const databaseProtectionMiddleware = (req, res, next) => {
     console.log(req.method.padEnd(7, ' ') + req.originalUrl.padEnd(20, ' '), req.body)
-    const path = req.originalUrl.includes("usuario")
-    if (path)
-        return res.status(statusCodes.NotImplemented).json({
-            error: true,
-            message: "Essa rota não é permitida"
-        })
+    // const path = req.originalUrl.includes("usuario")
+    // if (path)
+    //     return res.status(statusCodes.NotImplemented).json({
+    //         error: true,
+    //         message: "Essa rota não é permitida"
+    //     })
     next()
 }
 

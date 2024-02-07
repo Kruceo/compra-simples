@@ -155,15 +155,16 @@ const Entrada_item = dbserver.define("entrada_item", {
     freezeTableName: true,
     timestamps: false,
     name: {
-        plural: "entrada_item",
-        singular: "entrada_items"
+        plural: "entrada_itens",
+        singular: "entrada_item"
     }
 })
 await Produto.sync({ force: false })
 await Usuario.sync({ force: false })
-await Bote.sync({ force: false })
-
 await Fornecedor.sync({ force: false })
+
+
+await Bote.sync({ force: false })
 await Entrada.sync({ force: false })
 await Entrada_item.sync({ force: false })
 
@@ -193,12 +194,12 @@ Usuario.hasMany(Entrada, { foreignKey: 'usuario_id' })
 
 // Sync relations
 
-// await Produto.sync({ alter: true })
-// await Usuario.sync({ alter: true })
-// await Bote.sync({ alter: true })
-// await Fornecedor.sync({ alter: true })
-// await Entrada.sync({ alter: true })
-// await Entrada_item.sync({ alter: true })
+await Produto.sync({ alter: true })
+await Usuario.sync({ alter: true })
+await Bote.sync({ alter: true })
+await Fornecedor.sync({ alter: true })
+await Entrada.sync({ alter: true })
+await Entrada_item.sync({ alter: true })
 
 export default {
     Bote, Fornecedor, Produto, Entrada, Entrada_item, Usuario

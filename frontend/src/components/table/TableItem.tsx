@@ -25,14 +25,14 @@ export default function TableItem(props: TableBarAttributes) {
     return <div
         onContextMenu={props.onContextMenu}
         style={{ gridTemplateColumns: gridTemplateColumns }}
-        className={`cursor-context-menu relative grid p-4 transition-colors ${(!headerMode ? "" : "border-b border-borders font-bold shadow-lg")} ${props.selected == true ? "bg-blue-300" : "hover:bg-hovers"} ${props.className}`}
+        className={`cursor-context-menu relative grid items-center p-4 transition-colors ${(!headerMode ? "" : "border-b border-borders font-bold shadow-lg")} ${props.selected == true ? "bg-blue-300" : "hover:bg-hovers"} ${props.className}`}
         onClick={props.onClick}
     >
         {
             children.map((child, index) => {
                 return <div
                     key={index}
-                    className={`${index == 0 ? "border-none" : "border-borders"} col-span-1 border-l pl-2`}>
+                    className={`${index == 0 ? "border-none" : "border-borders"} col-span-1 border-l px-3`}>
                     {child}
                 </div>
             })

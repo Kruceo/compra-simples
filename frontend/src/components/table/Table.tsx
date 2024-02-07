@@ -103,7 +103,7 @@ function OrderButton(props: OrderButtonAttributes) {
         props.onClick(currentOrder ? "ASC" : "DESC")
         setCurrentOrder(!currentOrder)
     }
-    } className="ml-auto mr-2 opacity-0 group-hover:opacity-100">
+    } className=" mr-2 opacity-0 group-hover:opacity-100">
         {
             currentOrder ?
                 <i>&#xea3e;</i> :

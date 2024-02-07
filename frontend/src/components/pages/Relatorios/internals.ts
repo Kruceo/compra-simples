@@ -1,6 +1,16 @@
 import jsPDF from "jspdf"
 import backend, { BackendTableComp } from "../../../constants/backend"
 
+interface PdfItemBoundings {
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    x2: number,
+    y2: number,
+    centerX: number
+}
+
 export async function productEntryPriceComparation(date1: Date, date2: Date) {
     const pdf = new jsPDF()
 
@@ -10,14 +20,12 @@ export async function productEntryPriceComparation(date1: Date, date2: Date) {
     )
 
     const d1 = date1
-    d1.setDate(d1.getDate() - 1)    
+    d1.setDate(d1.getDate() - 1)
     const d2 = date2
     // d2.setDate(d2.getDate() + 1)
     const where = {
         createdAt: `>${d1.toISOString()},<${d2.toISOString()}`
     }
-
-    console.log(where)
 
     const groupedTotalValues = await getGroupedEntryTotalValues(where)
     if (!groupedTotalValues || !groupedTotalValues.tables) return
@@ -239,7 +247,7 @@ export function writeHeader(pdf: jsPDF, identification: string, date1: Date, dat
     const pageW = pdf.internal.pageSize.width
     const pageH = pdf.internal.pageSize.height
 
-    pdf.setLineWidth(0.5);
+    pdf.setLineWidth(0.75);
     const headerBox = writeBox(pdf, startX, startY, pageW - 45, height)
     const dateBox = writeBox(pdf, headerBox.x2, headerBox.y, 35, headerBox.h)
 
@@ -258,14 +266,4 @@ export function writeHeader(pdf: jsPDF, identification: string, date1: Date, dat
     const totalW = headerBox.w + dateBox.w
 
     return { x: startX, y: startY, h: height, w: totalW, x2: startX + totalW, y2: startY + height, centerX: startX + totalW / 2 }
-}
-
-interface PdfItemBoundings {
-    x: number,
-    y: number,
-    w: number,
-    h: number,
-    x2: number,
-    y2: number,
-    centerX: number
 }

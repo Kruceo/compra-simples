@@ -1,7 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
-
 import ViewBotes from './components/pages/Botes/ViewBoat'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useState } from 'react'
 import ViewProducts from './components/pages/Produtos/ViewProducts'
 import ViewVendors from './components/pages/Fornecedores/ViewVendors'
 import CreateEntry from './components/pages/Entrada/CreateEntry'
@@ -10,7 +9,9 @@ import PrintEntry from './components/pages/Entrada/PrintEntry'
 import ViewEntry from './components/pages/Entrada/ViewEntry'
 import ViewReports from './components/pages/Relatorios/ViewReports'
 import DetailsEntry from './components/pages/Entrada/DetailsEntry'
-
+import LoginScreen from './components/pages/Login/LoginScreen'
+import ViewDashboard from './components/pages/Dashboard/ViewDashboard'
+import {Proteged} from './components/Layout/ProtegedRoute'
 
 const globalPopupsContext = createContext<{
   globalPopups: { [key: string]: React.ReactElement | null; },
@@ -60,16 +61,18 @@ function App() {
             </div>)
         }
         <Routes>
-          <Route path='/view/bote' Component={ViewBotes} />
-          <Route path='/view/produto' Component={ViewProducts} />
-          <Route path='/view/fornecedor' Component={ViewVendors} />
 
-          <Route path='/create/entrada' Component={CreateEntry} />
-          <Route path='/view/entrada/' Component={ViewEntry} />
-          <Route path='/details/entrada/' Component={DetailsEntry} />
-          <Route path='/print/entrada/:id' Component={PrintEntry} />
+          <Route path='/'                  element={<Proteged>{<ViewDashboard/>}</Proteged>  } />
+          <Route path='/view/bote'         element={<Proteged>{<ViewBotes    />}</Proteged>  } />
+          <Route path='/view/produto'      element={<Proteged>{<ViewProducts />}</Proteged>  } />
+          <Route path='/view/fornecedor'   element={<Proteged>{<ViewVendors  />}</Proteged>  } />
+          <Route path='/create/entrada'    element={<Proteged>{<CreateEntry  />}</Proteged>  } />
+          <Route path='/view/entrada/'     element={<Proteged>{<ViewEntry    />}</Proteged>  } />
+          <Route path='/details/entrada/'  element={<Proteged>{<DetailsEntry />}</Proteged>  } />
+          <Route path='/print/entrada/:id' element={<Proteged>{<PrintEntry   />}</Proteged>  } />
+          <Route path='/relatorio'         element={<Proteged>{<ViewReports  />}</Proteged>  } />
 
-          <Route path='/relatorio' Component={ViewReports} />
+          <Route path='/login'             element={<LoginScreen/>} />
         </Routes>
       </globalPopupsContext.Provider>
     </>
