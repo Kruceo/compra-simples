@@ -45,7 +45,7 @@ export default function FormSelection(props: FormSelectionAttributes) {
             props.children
         }
         {
-            data.map((item) => <option
+            data.map((item) => <option className="bg-background"
                 key={item.id}
                 // selected={item.id == defaultValue}
                 data-item={JSON.stringify(item)}

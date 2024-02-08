@@ -10,8 +10,6 @@ import { TableEngineContext } from "../../Contexts/TableEngineContext";
 
 export default function DetailsEntry() {
 
-    const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
-
     const url = new URL(window.location.href)
     const id = url.searchParams.get("id")
 
@@ -29,7 +27,8 @@ export default function DetailsEntry() {
         <Bar />
         <SideBar />
         <Content>
-            <h2 className="p-4">Produtos da Entrada - ID {id}</h2>
+            <h2 className="p-4">Entrada {id}</h2>
+
             <Table
                 enableContextMenu={false}
                 contextMenu={{ buttons: [] }}

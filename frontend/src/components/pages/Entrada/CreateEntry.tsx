@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import FormInput from "../../OverPageForm/FormInput";
@@ -11,6 +11,7 @@ import FormSelection from "../../OverPageForm/FormSelection";
 
 import { saveEntryStack } from "./internal";
 import { GlobalPopupsContext } from "../../Contexts/PopupContext";
+import beautyNumber from "../../../constants/numberUtils";
 
 export default function CreateEntry() {
 
@@ -175,13 +176,13 @@ function AddProdutoForm(props: { onCancel: Function, onSubmit: (entrada_item: Ba
 
     return <OverPageForm onSubmit={internalOnSubmit} title="Adicionar produto" onCancel={props.onCancel}>
         <RequiredLabel>Produto</RequiredLabel>
-        <FormSelection key={'produto_id'}  id="produto_id" onChange={onProdutoChange} name="produto_id" useTable="produto" errored={error == "produto_id"} />
+        <FormSelection key={'produto_id'} id="produto_id" onChange={onProdutoChange} name="produto_id" useTable="produto" errored={error == "produto_id"} />
 
         <RequiredLabel>Preço/KG</RequiredLabel>
-        <FormInput name="preco" type="float" placeholder="E.g 10.5" errored={error == "preco"} onChange={(e) => setPreco(parseFloat(e.target.value))} />
+        <FormInput name="preco" type="number" step={0.01} placeholder="Insira o preço" errored={error == "preco"} onChange={(e) => setPreco(parseFloat(e.target.value))} />
 
         <RequiredLabel>Peso(KG)</RequiredLabel>
-        <FormInput name="peso" type="float" placeholder="E.g 20.5" errored={error == "peso"} onChange={(e) => setPeso(parseFloat(e.target.value))} />
+        <FormInput name="peso" type="number" step={0.01} placeholder="Insira o peso" errored={error == "peso"} onChange={(e) => setPeso(parseFloat(e.target.value))} />
 
         <RequiredLabel>Tipo</RequiredLabel>
         <FormSelection name="tipo" errored={error == "tipo"}>
@@ -191,7 +192,7 @@ function AddProdutoForm(props: { onCancel: Function, onSubmit: (entrada_item: Ba
 
         <RequiredLabel>Valor Total</RequiredLabel>
         <p>
-            R$ {(peso * preco).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+            {beautyNumber(peso * preco)}
         </p>
 
         <FormInput name="submit" type="submit" value={"Pronto"} />

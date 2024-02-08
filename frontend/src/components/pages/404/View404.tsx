@@ -2,12 +2,13 @@ import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
 
-export default function ViewDashboard() {
+export default function View404() {
     return <>
         <Bar />
         <SideBar />
         <Content>
-            <img src="/icon.png" alt="icon" className="w-80 opacity-20 absolute ml-20 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2" />
+            <h2 className="px-4 pt-8 w-full text-center">Essa pagina não existe.</h2>
+            <h1 className="px-4 w-full text-center">404</h1>
         </Content>
     </>
 }

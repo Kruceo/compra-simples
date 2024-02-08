@@ -28,7 +28,8 @@ export async function productEntryPriceComparation(date1: Date, date2: Date) {
     }
 
     const groupedTotalValues = await getGroupedEntryTotalValues(where)
-    if (!groupedTotalValues || !groupedTotalValues.tables) return
+    if (!groupedTotalValues || !groupedTotalValues.tables)
+        return;
 
     let lastTableBounding = headerBox
 
@@ -72,11 +73,11 @@ export async function productEntryPriceComparation(date1: Date, date2: Date) {
 
 async function getGroupedEntryTotalValues(where: any) {
     const response = await backend.get('entrada', { status: 0, include: "entrada_item{produto}", ...where })
-    if ((response.error || !response.data) && response.message) return null
+    if ((response.data.error || !response.data.data)) return alert(1);
 
-    if (!Array.isArray(response.data)) return;
+    if (!Array.isArray(response.data.data)) return alert(2);
     let compraEntradaItens: BackendTableComp[] = []
-    response.data.forEach(each => compraEntradaItens.push(...each.entrada_itens ?? []))
+    response.data.data.forEach(each => compraEntradaItens.push(...each.entrada_itens ?? []))
     //FILTRA PELO TIPO, APENAS ITENS DO TIPO COMPRA
     compraEntradaItens = compraEntradaItens.filter(each => !each.tipo)
 
@@ -127,13 +128,13 @@ async function getGroupedEntryTotalValues(where: any) {
 
 async function getGroupedTotalsByType(type: number, where: any) {
     const response = await backend.get('entrada', { status: 0, include: "entrada_item{produto}", ...where })
-    if ((response.error || !response.data) && response.message) return null
+    if ((!response.data || response.data.error || !response.data.data)) return null
 
-    if (!Array.isArray(response.data)) return;
+    if (!Array.isArray(response.data.data)) return;
 
     let values: any = {}
 
-    response.data.forEach(entrada => {
+    response.data.data.forEach(entrada => {
         entrada.entrada_itens?.forEach(entrada_item => {
             const produto = entrada_item.produto
 
@@ -151,11 +152,11 @@ async function getGroupedTotalsByType(type: number, where: any) {
 
 export async function getSumOfType(type: number, attrToSum: "peso" | "valor_total", where: any) {
     const response = await backend.get('entrada', { status: 0, include: "entrada_item{produto}", ...where })
-    if ((response.error || !response.data) && response.message) return null
+    if ((response.data.error || !response.data.data)) return null
 
-    if (!Array.isArray(response.data)) return;
+    if (!Array.isArray(response.data.data)) return;
     let sum = 0
-    response.data.forEach(entrada => {
+    response.data.data.forEach(entrada => {
         if (!entrada.entrada_itens) return;
         entrada.entrada_itens.forEach(entrada_item => {
             if (entrada_item.tipo == type) {

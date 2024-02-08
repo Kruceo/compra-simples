@@ -79,6 +79,7 @@ export default function Table(props: TableAttributes) {
                     onClick={removeContextMenu}
                     disposition={disposition}
                     key={index}
+                    // className={index/2 != Math.round(index/2)?"bg-[#00000019]":""}
                 >
                     {
                         tableItemHandler(item, index)
@@ -102,7 +103,7 @@ function OrderButton(props: OrderButtonAttributes) {
         props.onClick(currentOrder ? "ASC" : "DESC")
         setCurrentOrder(!currentOrder)
     }
-    } className=" mr-2 opacity-0 group-hover:opacity-100">
+    } className="ml-auto mr-2 opacity-0 group-hover:opacity-100">
         {
             currentOrder ?
                 <i>&#xea3e;</i> :

@@ -10,6 +10,7 @@ import { bDate } from "../../../constants/dateUtils";
 import TableToolBar from "../../table/TableToolBar";
 import { GlobalPopupsContext } from "../../Contexts/PopupContext";
 import { TableEngineContext } from "../../Contexts/TableEngineContext";
+import beautyNumber from "../../../constants/numberUtils";
 
 export default function ViewProducts() {
 
@@ -101,8 +102,8 @@ export default function ViewProducts() {
                     disposition={[1, 6, 4, 4]}
                     tableItemHandler={(item) => [
                         item.id, item.nome,
-                        <div className="flex">R$ <span className="ml-auto">{(item.preco ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span></div>,
-                        <div className="flex"><span className="">{bDate(item.updatedAt)}</span></div>
+                        <div className="text-right">{beautyNumber(item.preco ?? -1)}</div>,
+                        bDate(item.updatedAt)
                     ]}
                     tableOrderKeys={["id", "nome", "preco", "updatedAt"]}
                     tableHeader={[

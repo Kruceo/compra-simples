@@ -33,9 +33,9 @@ export default function LoginScreen() {
         <form onSubmit={submitHandler} className="flex flex-col w-80 bg-subpanel p-4 border-borders border shadow-xl">
             <h2>Login</h2>
             <RequiredLabel>Usuário</RequiredLabel>
-            <FormInput name="user" type="text" errored={error == "user"} />
+            <FormInput placeholder="Insira seu usuário" name="user" type="text" errored={error == "user"} />
             <RequiredLabel>Senha</RequiredLabel>
-            <FormInput name="password" type="password" errored={error == "password"} />
+            <FormInput placeholder="Insira sua senha" name="password" type="password" errored={error == "password"} />
             <FormInput type="submit" value={"Entrar"} />
             <p className="my-4 h-5 text-red-500 text-center">{message}</p>
         </form>

@@ -1,9 +1,9 @@
-import React, {  useState } from "react"
+import React, { useState } from "react"
 import { Link } from "react-router-dom"
 
 export default function SideBar() {
     return <>
-        <header className="bg-sidebar border-r border-borders w-44 mt-14 h-full fixed left-0 top-0 flex flex-col shadow-lg z-50">
+        <nav className="bg-sidebar border-r border-borders w-44 mt-14 h-full fixed left-0 top-0 flex flex-col shadow-lg z-50">
             <DropButton
                 title="Registro"
                 dropDownContent={<>
@@ -29,49 +29,49 @@ export default function SideBar() {
 
                 <i>&#xe99c;</i> Relatório
             </DropButton>
-        </header>
+        </nav>
 
     </>
 }
 
-interface DropButtonAttributes extends React.HTMLAttributes<HTMLDivElement> {
+interface DropButtonAttributes extends React.HTMLAttributes<HTMLButtonElement> {
     dropDownContent: React.ReactNode | React.ReactNode[],
-    title: string
+    dropDownContainerLeft?: number|string
+    dropDownContainerTop?: number|string
 }
 
-function DropButton(props: DropButtonAttributes) {
+export function DropButton(props: DropButtonAttributes) {
     const [focused, setFocused] = useState(false)
     const [hover, setHover] = useState(false)
     const [isMouseOverSubPanel, setIsMouseOverSubPanel] = useState(false)
+
+    const { dropDownContent, dropDownContainerLeft, dropDownContainerTop, ...restProps } = props
+
     return <>
-        <button className={props.className + " h-14 relative focus:bg-[#0002] hover:bg-[#0001] transition-colors"}
+        <button {...restProps} className={props.className + " h-14 relative focus:bg-hovers hover:bg-hovers"}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             onMouseOver={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
         >
-            <p className="gap-2 flex px-4 w-full">
+            <div className="gap-2 flex px-4 w-full">
                 {props.children}
                 <span className="ml-auto">&gt;</span>
-            </p>
+            </div>
             {
                 (focused || isMouseOverSubPanel) ?
                     <header onMouseOver={() => setIsMouseOverSubPanel(true)}
                         onMouseLeave={() => setIsMouseOverSubPanel(false)}
-                        className="bg-subpanel outline outline-1 outline-borders min-w-28 w-fit h-fit absolute top-0 left-full flex flex-col text-nowrap shadow-xl">
-                        {props.dropDownContent}
+                        style={{ left: dropDownContainerLeft ?? "100%", top: dropDownContainerTop }}
+                        className="bg-subpanel outline outline-1 outline-borders min-w-28 w-fit h-fit absolute top-0 flex flex-col text-nowrap shadow-xl">
+                        {dropDownContent}
                     </header>
                     : null
             }
-            {/* {
-                hover&&!focused ?
-                    <strong className="absolute top-0 left-full p-4 h-full bg-white z-10">{props.title.toUpperCase()}</strong>
-                    : null
-            } */}
         </button >
     </>
 }
 
 function PanelLink(props: React.HTMLAttributes<HTMLAnchorElement> & { href: string }) {
-    return <Link className="hover:bg-[#0002] text-zinc-800 text-left h-14 flex items-center px-4" to={props.href}>{props.children}</Link>
+    return <Link className="transition-colors hover:bg-hovers text-default-text text-left h-14 flex items-center px-4" to={props.href}>{props.children}</Link>
 }

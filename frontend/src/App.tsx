@@ -13,6 +13,7 @@ import { Proteged } from './components/Layout/ProtegedRoute'
 import PopupContext from './components/Contexts/PopupContext'
 import ErrorHandler from './components/Contexts/ErrorHandlerContext'
 import TableEngine from './components/Contexts/TableEngineContext'
+import View404 from './components/pages/404/View404'
 
 
 
@@ -35,6 +36,8 @@ function App() {
               <Route path='/relatorio' element={<Proteged>{<ViewReports />}</Proteged>} />
 
               <Route path='/login' element={<LoginScreen />} />
+              
+              <Route path='/*' element={<View404 />} />
             </Routes>
           </TableEngine>
         </ErrorHandler>

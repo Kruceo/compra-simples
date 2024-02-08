@@ -67,7 +67,7 @@ export default function ProductCreationForm(props: {
             <FormInput name="nome" type="text" placeholder="E.g Dourado" defaultValue={defaultValues ? defaultValues.nome : undefined} errored={(error == "nome")} />
 
             <RequiredLabel htmlFor="preco">Preço</RequiredLabel>
-            <FormInput name="preco" type="float" placeholder="Preço" defaultValue={defaultValues ? defaultValues.preco : undefined} errored={(error == "preco")} />
+            <FormInput name="preco" type="number" step={0.01} placeholder="Insira o preço" defaultValue={defaultValues ? defaultValues.preco : undefined} errored={(error == "preco")} />
 
             <FormInput value="Pronto" type="submit" errored={error == "submit"} />
         </OverPageForm>
