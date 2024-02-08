@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react"
+import { TableEngineContext } from "../Contexts/TableEngineContext"
 import backend, { BackendTableComp } from "../../constants/backend"
-import { simpleSpawnInfo } from "../Layout/OverPageInfo"
 
 interface FormSelectionAttributes extends React.HTMLAttributes<HTMLSelectElement> {
     useTable?: string,
@@ -9,27 +9,32 @@ interface FormSelectionAttributes extends React.HTMLAttributes<HTMLSelectElement
 }
 
 export default function FormSelection(props: FormSelectionAttributes) {
+
+    // const { defaultDataGet } = useContext(TableEngineContext)
+
     const { errored, useTable, defaultValue, ...restProps } = props
     const [data, setData] = useState<BackendTableComp[]>([])
     const ref = useRef<HTMLSelectElement>(null)
 
     useEffect(() => {
-        if (useTable) {
-            (async () => {
-                const d = await backend.get(useTable, {})
+        (async () => {
+            if (!useTable) return;
 
-                if (d.error || !d.data) return alert("error in formSlection.tsx " + d.message)
+            let res = await backend.get(useTable, {})
+            // setData(Array.isArray(d.data.data) ? d.data.data : []))
+            let d = res.data.data
 
-                setData(d.data.sort((a) => {
-                    if (a.id == defaultValue) return -1
-                    else return 1
-                }))
-                if (ref.current) {
-                    ref.current.dispatchEvent(new Event("change", { bubbles: true }))
-                }
-               
-            })()
-        }
+            if (!d || !Array.isArray(d)) return;
+
+            d = d.sort((a) => {
+                if (a.id == defaultValue) return -1
+                else return 1
+            })
+            setData(d)
+
+            if (ref.current)
+                ref.current.dispatchEvent(new Event("change", { bubbles: true }))
+        })()
     }, [])
 
     return <select ref={ref} {...restProps}

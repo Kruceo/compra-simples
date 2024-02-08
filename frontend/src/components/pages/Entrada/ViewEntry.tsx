@@ -9,11 +9,14 @@ import Table, { TableOrderEvent } from "../../table/Table";
 import { bDate } from "../../../constants/dateUtils";
 import SubTopBar, { ToolBarButton } from "../../Layout/SubTopBar";
 import { changeEntryStatus } from "./internal";
-import { globalPopupsContext } from "../../../App";
+import beautyNumber from "../../../constants/numberUtils";
+import { GlobalPopupsContext } from "../../Contexts/PopupContext";
+import { TableEngineContext } from "../../Contexts/TableEngineContext";
 
 export default function ViewEntry() {
 
-    const { simpleSpawnInfo } = useContext(globalPopupsContext)
+    const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
+    const {defaultDataGet} = useContext(TableEngineContext)
     const navigate = useNavigate()
 
     const [data, setData] = useState<BackendTableComp[]>([]);
@@ -28,14 +31,8 @@ export default function ViewEntry() {
 
     const table_to_manage = "entrada"
 
-    const data_getter = async () => await backend.get(table_to_manage, where)
-
     useEffect(() => {
-        (async () => {
-            const d = await data_getter()
-            if (!d.data || !Array.isArray(d.data)) return;
-            setData(d.data)
-        })()
+        defaultDataGet(table_to_manage, where, setData)
     }, [update])
 
     // Quando é alterado a ordem
@@ -56,7 +53,7 @@ export default function ViewEntry() {
     }
 
     const tableContextMenuButtons = [
-        { element: <><i>&#xe922;</i>Detalhes</>, handler: (id:number)=>navigate(`/details/entrada?id=${id}`)},
+        { element: <><i>&#xe922;</i>Detalhes</>, handler: (id: number) => navigate(`/details/entrada?id=${id}`) },
         { element: <><i>&#xe9ac;</i>Invalidar</>, handler: invalidEntries }
     ]
 
@@ -71,14 +68,14 @@ export default function ViewEntry() {
                 <Table
                     onOrderChange={orderHandler}
                     data={data}
-                    disposition={[1, 6, 3, 3, 3, 3, 3]}
+                    disposition={[1, 2, 2, 2, 2, 2, 2]}
                     tableItemHandler={(item) => [
                         item.id,
                         item.bote?.nome,
-                        `R$ ${(item.valor_compra ?? -1).toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
-                        (item.peso_compra ?? -1).toLocaleString(undefined, { minimumFractionDigits: 2 }) + ' KG',
-                        `R$ ${(item.valor_venda ?? -1).toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
-                        (item.peso_venda ?? -1).toLocaleString(undefined, { minimumFractionDigits: 2 }) + ' KG',
+                        <div className="text-right">{beautyNumber(item.valor_compra ?? -1)}</div>,
+                        <div className="text-right">{beautyNumber(item.peso_compra ?? -1)} </div>,
+                        <div className="text-right">{beautyNumber(item.valor_venda ?? -1)} </div>,
+                        <div className="text-right">{beautyNumber(item.peso_venda ?? -1)}  </div>,
                         // item.status==0?<i title="Válido">&#xea10;</i>:<i title="Cancelado">&#xea0d;</i>,
                         bDate(item.updatedAt)
                     ]}

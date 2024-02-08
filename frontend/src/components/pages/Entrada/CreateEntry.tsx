@@ -8,13 +8,14 @@ import SideBar from "../../Layout/SideBar";
 import backend, { BackendTableComp } from "../../../constants/backend";
 import Table from "../../table/Table";
 import FormSelection from "../../OverPageForm/FormSelection";
-import { globalPopupsContext } from "../../../App";
+
 import { saveEntryStack } from "./internal";
+import { GlobalPopupsContext } from "../../Contexts/PopupContext";
 
 export default function CreateEntry() {
 
     const navigate = useNavigate()
-    const { setGlobalPupupsByKey, simpleSpawnInfo } = useContext(globalPopupsContext)
+    const { setGlobalPopupByKey, simpleSpawnInfo } = useContext(GlobalPopupsContext)
 
     const [addedEntradaItensData, setAddedEntradaItensData] = useState<BackendTableComp[]>([])
     const [boteId, setBoteID] = useState(-1)
@@ -55,8 +56,8 @@ export default function CreateEntry() {
                 <div className="flex mb-4">
                     <h2>Itens</h2>
                     <button className="ml-auto px-4 py-2 rounded-sm font-bold hover:bg-green-100"
-                        onClick={() => setGlobalPupupsByKey("AddEntryProductForm", <AddProdutoForm onSubmit={addEntradaItem}
-                            onCancel={() => setGlobalPupupsByKey("AddEntryProductForm", null)}
+                        onClick={() => setGlobalPopupByKey("AddEntryProductForm", <AddProdutoForm onSubmit={addEntradaItem}
+                            onCancel={() => setGlobalPopupByKey("AddEntryProductForm", null)}
                         />)}>
                         <i>&#xe905;</i> Adicionar
                     </button>
@@ -174,7 +175,7 @@ function AddProdutoForm(props: { onCancel: Function, onSubmit: (entrada_item: Ba
 
     return <OverPageForm onSubmit={internalOnSubmit} title="Adicionar produto" onCancel={props.onCancel}>
         <RequiredLabel>Produto</RequiredLabel>
-        <FormSelection id="produto_id" onChange={onProdutoChange} name="produto_id" useTable="produto" errored={error == "produto_id"} />
+        <FormSelection key={'produto_id'}  id="produto_id" onChange={onProdutoChange} name="produto_id" useTable="produto" errored={error == "produto_id"} />
 
         <RequiredLabel>Preço/KG</RequiredLabel>
         <FormInput name="preco" type="float" placeholder="E.g 10.5" errored={error == "preco"} onChange={(e) => setPreco(parseFloat(e.target.value))} />

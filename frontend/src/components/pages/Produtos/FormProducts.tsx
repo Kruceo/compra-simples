@@ -2,8 +2,9 @@ import { useContext, useState } from "react";
 import backend, { BackendTableComp } from "../../../constants/backend";
 import OverPageForm, { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import FormInput from "../../OverPageForm/FormInput";
-import { globalPopupsContext } from "../../../App";
+
 import OverPageInfo from "../../Layout/OverPageInfo";
+import { GlobalPopupsContext } from "../../Contexts/PopupContext";
 
 export default function ProductCreationForm(props: {
     onCancel: Function,
@@ -12,7 +13,7 @@ export default function ProductCreationForm(props: {
     defaultValues?: BackendTableComp
 }) {
     const [error, setError] = useState('')
-    const { setGlobalPupupsByKey } = useContext(globalPopupsContext)
+    const { setGlobalPopupByKey } = useContext(GlobalPopupsContext)
 
     const { onCancel, mode, afterSubmit, defaultValues } = props
 
@@ -34,21 +35,21 @@ export default function ProductCreationForm(props: {
         if (mode == 'creation') {
             response = await backend.create("produto", {
                 nome: nome.toString(),
-                preco:parseFloat(preco.toString())
+                preco: parseFloat(preco.toString())
             })
         }
         if (mode == 'editing' && defaultValues && defaultValues.id) {
             const id = defaultValues.id
             response = await backend.edit("produto", id, {
                 nome: nome.toString(),
-                preco:parseFloat(preco.toString())
+                preco: parseFloat(preco.toString())
             })
         }
         // Tratamento de erro
-        if (response && response.error) {
-            setGlobalPupupsByKey(4,
-                <OverPageInfo onAccept={() => setGlobalPupupsByKey(4, null)}>
-                    {response.message}
+        if (response && response.data.error) {
+            setGlobalPopupByKey("EditForm",
+                <OverPageInfo onAccept={() => setGlobalPopupByKey("EditForm", null)}>
+                    {response.data.message}
                 </OverPageInfo>)
         }
         // EXIT if exists

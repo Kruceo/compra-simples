@@ -2,8 +2,7 @@ import { useContext, useState } from "react";
 import backend, { BackendTableComp } from "../../../constants/backend";
 import OverPageForm, { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import FormInput from "../../OverPageForm/FormInput";
-import { globalPopupsContext } from "../../../App";
-import OverPageInfo from "../../Layout/OverPageInfo";
+import { GlobalPopupsContext } from "../../Contexts/PopupContext";
 
 export default function VendorCreationForm(props: {
     onCancel: Function,
@@ -12,7 +11,7 @@ export default function VendorCreationForm(props: {
     defaultValues?: BackendTableComp
 }) {
     const [error, setError] = useState('')
-    const { simpleSpawnInfo } = useContext(globalPopupsContext)
+    const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
 
     const { onCancel, mode, afterSubmit, defaultValues } = props
 
@@ -38,10 +37,10 @@ export default function VendorCreationForm(props: {
             })
         }
         // Tratamento de erro
-        if (response && response.error && response.message) {
-            simpleSpawnInfo(response.message)
+        if (response && response.data.error && response.data.message) {
+            simpleSpawnInfo(response.data.message)
         }
-        // EXIT if exists
+        // afterSubmit if exists
         afterSubmit ? afterSubmit() : null
         onCancel()
     }

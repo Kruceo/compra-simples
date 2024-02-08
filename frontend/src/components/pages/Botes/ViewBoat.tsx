@@ -4,14 +4,18 @@ import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
 import backend, { BackendTableComp } from "../../../constants/backend";
 import CreationForm from "./FormBoat";
-import { globalPopupsContext } from "../../../App";
+
 import Table, { TableOrderEvent } from "../../table/Table";
 import { bDate } from "../../../constants/dateUtils";
 import TableToolBar from "../../table/TableToolBar";
+import { GlobalPopupsContext } from "../../Contexts/PopupContext";
+import { ErrorHandlerContext } from "../../Contexts/ErrorHandlerContext";
+import { TableEngineContext } from "../../Contexts/TableEngineContext";
+
 
 export default function ViewBoat() {
-    const { setGlobalPupupsByKey, simpleSpawnInfo } = useContext(globalPopupsContext)
-
+    const { setGlobalPopupByKey, simpleSpawnInfo } = useContext(GlobalPopupsContext)
+    const { defaultDataGet, defaultDataDelete } = useContext(TableEngineContext)
     const [data, setData] = useState<BackendTableComp[]>([]);
     const [update, setUpdate] = useState(true)
     const [where, setWhere] = useState<any>({ include: 'fornecedor' })
@@ -24,20 +28,8 @@ export default function ViewBoat() {
 
     const table_to_manage = "bote"
 
-    const data_getter = async () => await backend.get(table_to_manage, where)
-
     useEffect(() => {
-        (async () => {
-
-            const d = await data_getter()
-            
-            if (d.error && d.message)
-                return simpleSpawnInfo(d.message)
-            if (!d.data || !Array.isArray(d.data))
-                return
-
-            setData(d.data)
-        })()
+        defaultDataGet(table_to_manage, where, setData)
     }, [update])
 
     // Quando é alterado a ordem
@@ -54,11 +46,11 @@ export default function ViewBoat() {
 
     // Quando é clicado no botão "criar"
     const createHandler = () => {
-        setGlobalPupupsByKey("CreateForm",
+        setGlobalPopupByKey("CreateForm",
             <CreationForm
                 key={"FormBotes"}
                 mode="creation"
-                onCancel={() => setGlobalPupupsByKey("CreateForm", null)}
+                onCancel={() => setGlobalPopupByKey("CreateForm", null)}
                 afterSubmit={() => setUpdate(!update)}
             />
         )
@@ -72,33 +64,20 @@ export default function ViewBoat() {
 
         const { nome, fornecedor } = search
 
-        setGlobalPupupsByKey("EditForm",
+        setGlobalPopupByKey("EditForm",
             <CreationForm
                 key={'editingForm'}
                 mode="editing"
                 defaultValues={{ id, nome, fornecedor }}
-                onCancel={() => setGlobalPupupsByKey("EditForm", null)}
+                onCancel={() => setGlobalPopupByKey("EditForm", null)}
                 afterSubmit={() => setUpdate(!update)}
             />
         )
     }
 
     // Quando é clicado no botão "deletar"
-    const deleteHandler = (id: number) => {
-        const onAcceptHandler = async () => {
-            const response = await backend.remove(table_to_manage, id)
-            if (response.error)
-                simpleSpawnInfo(
-                    response.message.includes("violates foreign key constraint")
-                        ? "Existem itens no banco de dados que dependem deste."
-                        : response.message)
-
-            setTimeout(() => {
-                setUpdate(!update)
-            }, 200)
-        }
-        simpleSpawnInfo(`Deseja mesmo remover este item?`, onAcceptHandler, () => null)
-    }
+    const deleteHandler = (id: number) => defaultDataDelete(table_to_manage, id)
+        .then(()=>setUpdate(!update))
 
     const tableContextMenuButtons = [
         { element: <><i>&#xe905;</i>Editar</>, handler: editHandler },
@@ -109,7 +88,7 @@ export default function ViewBoat() {
         <Bar />
         <SideBar />
         <Content>
-            
+
             <TableToolBar
                 createHandler={createHandler}
                 searchHandler={searchHandler}

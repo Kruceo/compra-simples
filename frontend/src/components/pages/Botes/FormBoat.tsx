@@ -2,9 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import backend, { BackendTableComp } from "../../../constants/backend";
 import OverPageForm, { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import FormInput from "../../OverPageForm/FormInput";
-import { globalPopupsContext } from "../../../App";
-import OverPageInfo from "../../Layout/OverPageInfo";
 import FormSelection from "../../OverPageForm/FormSelection";
+import { GlobalPopupsContext } from "../../Contexts/PopupContext";
 
 export default function BoatCreationForm(props: {
     onCancel: Function,
@@ -13,7 +12,7 @@ export default function BoatCreationForm(props: {
     defaultValues?: BackendTableComp
 }) {
     const [error, setError] = useState('')
-    const { simpleSpawnInfo } = useContext(globalPopupsContext)
+    const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
     const { onCancel, mode, afterSubmit, defaultValues } = props
 
     const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {

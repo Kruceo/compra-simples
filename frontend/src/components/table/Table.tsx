@@ -1,8 +1,8 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import TableItem from "./TableItem";
 import { BackendTableComp } from "../../constants/backend";
-import { globalPopupsContext } from "../../App";
 import TableContextMenu, { ContextMenuButton } from "./TableContextMenu";
+import { GlobalPopupsContext } from "../Contexts/PopupContext";
 
 export interface TableOrderEvent {
     key: string | string[],
@@ -11,8 +11,6 @@ export interface TableOrderEvent {
 
 interface TableAttributes {
     data: BackendTableComp[],
-    // selected: number[],
-    // onSelect?: (ids: number[]) => any,
     tableItemHandler: (item: BackendTableComp, index: number) => React.ReactNode[],
     tableOrderKeys?: (string | string[])[],
     disposition: number[],
@@ -25,15 +23,16 @@ interface TableAttributes {
 export default function Table(props: TableAttributes) {
     let { data, disposition, tableHeader, tableItemHandler, tableOrderKeys, onOrderChange, enableContextMenu } = props
 
-    const { setGlobalPupupsByKey } = useContext(globalPopupsContext)
+    //Usado para o menu de contexto
+    const { setGlobalPopupByKey } = useContext(GlobalPopupsContext)
 
     const orderHandler = onOrderChange ? onOrderChange : () => null
 
-    const removeContextMenu = () => setGlobalPupupsByKey("ContextMenu", null)
+    const removeContextMenu = () => setGlobalPopupByKey("ContextMenu", null)
 
     const spawnContextMenu = (itemID: number, x: number, y: number) => {
         if (enableContextMenu == undefined || enableContextMenu)
-            setGlobalPupupsByKey("ContextMenu",
+            setGlobalPopupByKey("ContextMenu",
                 <TableContextMenu x={x} y={y}>
                     {
                         props.contextMenu.buttons.map(each => {

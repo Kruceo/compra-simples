@@ -4,14 +4,16 @@ import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
 import backend, { BackendTableComp } from "../../../constants/backend";
 import CreationForm from "./FormVendors";
-import { globalPopupsContext } from "../../../App";
+
 import Table, { TableOrderEvent } from "../../table/Table";
 import { bDate } from "../../../constants/dateUtils";
 import TableToolBar from "../../table/TableToolBar";
+import { GlobalPopupsContext } from "../../Contexts/PopupContext";
+import { TableEngineContext } from "../../Contexts/TableEngineContext";
 
 export default function ViewVendors() {
 
-    const { setGlobalPupupsByKey, simpleSpawnInfo } = useContext(globalPopupsContext)
+    const { setGlobalPopupByKey, simpleSpawnInfo } = useContext(GlobalPopupsContext)
 
     const [data, setData] = useState<BackendTableComp[]>([]);
     const [update, setUpdate] = useState(true)
@@ -25,14 +27,9 @@ export default function ViewVendors() {
 
     const table_to_manage = "fornecedor"
 
-    const data_getter = async () => await backend.get(table_to_manage, where)
-
+    const { defaultDataGet,defaultDataDelete } = useContext(TableEngineContext)
     useEffect(() => {
-        (async () => {
-            const d = await data_getter()
-            if (!d.data || !Array.isArray(d.data)) return;
-            setData(d.data)
-        })()
+        defaultDataGet(table_to_manage, where, setData)
     }, [update])
 
 
@@ -50,11 +47,11 @@ export default function ViewVendors() {
 
     // Quando é clicado no botão "criar"
     const createHandler = () => {
-        setGlobalPupupsByKey("CreateForm",
+        setGlobalPopupByKey("CreateForm",
             <CreationForm
                 key={"FormFornecedor"}
                 mode="creation"
-                onCancel={() => setGlobalPupupsByKey("CreateForm", null)}
+                onCancel={() => setGlobalPopupByKey("CreateForm", null)}
                 afterSubmit={() => setUpdate(!update)}
             />
         )
@@ -67,35 +64,20 @@ export default function ViewVendors() {
             return simpleSpawnInfo("Não é possivel selecionar o item escolhido.");
 
         const { nome, preco } = search
-        setGlobalPupupsByKey("EditForm",
+        setGlobalPopupByKey("EditForm",
             <CreationForm
                 key={'editingForm'}
                 mode="editing"
                 defaultValues={{ id, nome, preco }}
-                onCancel={() => setGlobalPupupsByKey("EditForm", null)}
+                onCancel={() => setGlobalPopupByKey("EditForm", null)}
                 afterSubmit={() => setUpdate(!update)}
             />
         )
     }
 
     // Quando é clicado no botão "deletar"
-    const deleteHandler = (id: number) => {
-        const onAcceptHandler = async () => {
-
-            const response = await backend.remove(table_to_manage, id)
-            if (response.error)
-                simpleSpawnInfo(
-                    response.message.includes("violates foreign key constraint")
-                        ? "Existem itens no banco de dados que dependem deste."
-                        : response.message)
-
-
-            setTimeout(() => {
-                setUpdate(!update)
-            }, 200)
-        }
-        simpleSpawnInfo(`Deseja mesmo remover este item?`, onAcceptHandler, () => null)
-    }
+    const deleteHandler = (id: number) => defaultDataDelete(table_to_manage, id)
+        .then(() => setUpdate(!update))
 
     const tableContextMenuButtons = [
         { element: <><i>&#xe905;</i>Editar</>, handler: editHandler },

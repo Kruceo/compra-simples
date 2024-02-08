@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios, { Axios, AxiosResponse } from "axios"
 
 export const api_address = 'localhost'
 export const api_protocol = 'http'
@@ -9,7 +9,7 @@ const backendAxios = axios.create({ withCredentials: true })
 
 async function get(tables: string | "bote" | "produto" | "entrada" | "entrada_item" | "fornecedor",
     where: any,
-    limit?: number): Promise<BackendResponse> {
+    limit?: number): Promise<AxiosResponse<BackendResponse>> {
 
     let whereClause = { ...where }
     if (limit) whereClause['limit'] = limit
@@ -17,42 +17,42 @@ async function get(tables: string | "bote" | "produto" | "entrada" | "entrada_it
     const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}?${obj2URLQuery(whereClause)}`
     try {
         const response = await backendAxios.get(full_address)
-        return response.data
+        return response
     } catch (error: any) {
-        return error.response.data
+        return error.response
     }
 
 }
 
-async function create(tables: string | "botes", data: BackendTableComp | BackendTableComp[]): Promise<BackendResponse> {
+async function create(tables: string | "botes", data: BackendTableComp | BackendTableComp[]): Promise<AxiosResponse<BackendResponse>> {
     const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}`
     try {
         const response = await backendAxios.post(full_address, data)
-        return response.data
+        return response
     } catch (error: any) {
-        return error.response.data
+        return error.response
     }
 }
 
-async function remove(tables: string | "botes", id: number) {
+async function remove(tables: string | "botes", id: number): Promise<AxiosResponse<BackendResponse>> {
     const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}/${id}`
 
     try {
         const response = await backendAxios.delete(full_address)
-        return response.data
+        return response
     } catch (error: any) {
-        return error.response.data
+        return error.response
     }
 }
 
-async function edit(tables: string | "botes", id: number | string, content: BackendTableComp): Promise<BackendResponse> {
+async function edit(tables: string | "botes", id: number | string, content: BackendTableComp): Promise<AxiosResponse<BackendResponse>> {
     const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}/${id}`
 
     try {
         const response = await backendAxios.put(full_address, content)
-        return response.data
+        return response
     } catch (error: any) {
-        return error.response.data
+        return error.response
     }
 
 }
@@ -121,12 +121,6 @@ function filterUsingID(data: BackendTableComp[], id: number) {
     return result[0]
 }
 
-async function getByID(table: string, where: BackendTableComp) {
-    const result = await get(table, where)
-    if (result.error || !result.data || !Array.isArray(result.data) || !result.data[0]) return null
-    return result.data[0]
-}
-
 function removeAttributeFromAll(data: BackendTableComp[], attribute: string): BackendTableComp[] {
     const newData = data.map(each => {
         const item: any = { ...each }
@@ -155,7 +149,7 @@ const utils = {
     removeAttributeFromAll
 }
 
-export { getByID, get, create, remove, edit, utils, auth }
-export default { getByID, get, create, remove, edit, utils, auth }
+export { get, create, remove, edit, utils, auth }
+export default { get, create, remove, edit, utils, auth }
 
 export type { BackendResponse, BackendTableComp }
