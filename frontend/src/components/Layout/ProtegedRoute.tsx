@@ -25,7 +25,7 @@ export function Proteged(props: PropsWithChildren) {
         })()
     }, [])
 
-    // if (authorized === undefined) return <Bar />
+    if (authorized === undefined) return <Bar />
 
     return <>{props.children}</>
 }

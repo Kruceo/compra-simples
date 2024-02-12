@@ -1,5 +1,6 @@
 import jsPDF from "jspdf"
 import backend, { BackendTableComp } from "../../../constants/backend"
+import beautyNumber from "../../../constants/numberUtils"
 
 interface PdfItemBoundings {
     x: number,
@@ -20,16 +21,15 @@ export async function productEntryPriceComparation(date1: Date, date2: Date) {
     )
 
     const d1 = date1
-    d1.setDate(d1.getDate() - 1)
     const d2 = date2
-    // d2.setDate(d2.getDate() + 1)
+    
     const where = {
         createdAt: `>${d1.toISOString()},<${d2.toISOString()}`
     }
 
     const groupedTotalValues = await getGroupedEntryTotalValues(where)
     if (!groupedTotalValues || !groupedTotalValues.tables)
-        return;
+        return console.error("productEntryPriceComparation error");
 
     let lastTableBounding = headerBox
 
@@ -42,13 +42,13 @@ export async function productEntryPriceComparation(date1: Date, date2: Date) {
         lastTableBounding = writeTable(pdf, [], 5, lastTableBounding.y2, tableResult ?? [], [4, 2, 2, 2])
     })
 
-    lastTableBounding = writeTable(pdf, [], 5, lastTableBounding.y2 + 7, ["-", "SUBTOTAL", groupedTotalValues.sumPeso.toLocaleString(undefined, { minimumFractionDigits: 2 }), groupedTotalValues.sumValor.toLocaleString(undefined, { minimumFractionDigits: 2 })], [4, 2, 2, 2])
+    lastTableBounding = writeTable(pdf, [], 5, lastTableBounding.y2 + 7, ["-", "SUBTOTAL", beautyNumber(groupedTotalValues.sumPeso), beautyNumber(groupedTotalValues.sumValor)], [4, 2, 2, 2])
 
     //Pega os valores da parte de descontos, geralmente gelo e sufito 
     const type1Values = await getGroupedTotalsByType(1, where)
     lastTableBounding.y2 += 7
     Object.entries(type1Values).forEach((each: [string, any]) => {
-        lastTableBounding = writeTable(pdf, [], 5, lastTableBounding.y2, ["-", "-", each[0], parseFloat("" + each[1]).toLocaleString(undefined, { minimumFractionDigits: 2 })], [4, 2, 2, 2])
+        lastTableBounding = writeTable(pdf, [], 5, lastTableBounding.y2, ["-", "-", each[0], beautyNumber(each[1])], [4, 2, 2, 2])
     })
 
     //Gera o ultimo 
@@ -59,7 +59,7 @@ export async function productEntryPriceComparation(date1: Date, date2: Date) {
 
     if (entradaType0Sum && entradaType1Sum) {
         const total = entradaType0Sum - entradaType1Sum
-        writeTable(pdf, [], 5, lastTableBounding.y2 + 7, ["-", "-", "TOTAL GERAL", total.toLocaleString(undefined, { minimumFractionDigits: 2 })], [4, 2, 2, 2])
+        writeTable(pdf, [], 5, lastTableBounding.y2 + 7, ["-", "-", "TOTAL GERAL", beautyNumber(total)], [4, 2, 2, 2])
     }
 
     const dadosDoPDF = pdf.output('dataurlstring');
@@ -73,7 +73,7 @@ export async function productEntryPriceComparation(date1: Date, date2: Date) {
 
 async function getGroupedEntryTotalValues(where: any) {
     const response = await backend.get('entrada', { status: 0, include: "entrada_item{produto}", ...where })
-    if ((response.data.error || !response.data.data)) return alert(1);
+    if ((response.data.error || !response.data.data)) return;
 
     if (!Array.isArray(response.data.data)) return alert(2);
     let compraEntradaItens: BackendTableComp[] = []
@@ -110,16 +110,16 @@ async function getGroupedEntryTotalValues(where: any) {
             .sort((a: [string, any], b: [string, any]) => parseFloat(a[0]) - parseFloat(b[0]))
             .forEach((valueData: [string, any]) => {
                 const row: string[] = [produtoData[0]]
-                row.push(parseFloat(valueData[0]).toLocaleString(undefined, { minimumFractionDigits: 2 }))
+                row.push(beautyNumber(parseFloat(valueData[0])))
                 row.push(valueData[1].peso.toLocaleString())
-                row.push(valueData[1].valor.toLocaleString(undefined, { minimumFractionDigits: 2 }))
+                row.push(beautyNumber(valueData[1].valor))
                 table.push(row)
                 sumProdutoValor += valueData[1].valor
                 sumProdutoPeso += valueData[1].peso
             })
         sumValor += sumProdutoValor
         sumPeso += sumProdutoPeso
-        table.push(["-", "TOTAL", sumProdutoPeso.toLocaleString(), sumProdutoValor.toLocaleString(undefined, { minimumFractionDigits: 2 })])
+        table.push(["-", "TOTAL", sumProdutoPeso.toLocaleString(), beautyNumber(sumProdutoValor)])
         tables.push(table)
     })
 

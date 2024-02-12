@@ -5,8 +5,8 @@ import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
 import Table from "../../table/Table";
 import beautyNumber from "../../../constants/numberUtils";
-import { GlobalPopupsContext } from "../../Contexts/PopupContext";
-import { TableEngineContext } from "../../Contexts/TableEngineContext";
+import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
+import { TableEngineContext } from "../../GlobalContexts/TableEngineContext";
 
 export default function DetailsEntry() {
 
@@ -28,12 +28,14 @@ export default function DetailsEntry() {
         <SideBar />
         <Content>
             <h2 className="p-4">Entrada {id}</h2>
-
+            <h3 className="px-4">Observação:</h3>
+            <p className="px-4 mb-4">{data?.obs}</p>
+            <h3 className="px-4">Itens:</h3>
             <Table
                 enableContextMenu={false}
                 contextMenu={{ buttons: [] }}
                 data={data?.entrada_itens ?? []}
-                disposition={[1, 4, 2, 2, 2]}
+                disposition={[0.5, 4, 2, 2, 2]}
                 tableHeader={["ID", "Produto", "Preço", "Peso", "Valor Total"]}
                 tableItemHandler={(item) => [
                     item.id,

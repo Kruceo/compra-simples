@@ -1,6 +1,7 @@
 import Cookies from "js-cookie"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import pkg from '../../../package.json'
 
 export default function Bar() {
 
@@ -21,10 +22,10 @@ export default function Bar() {
     const user = Cookies.get("user")
     return <>
 
-        <header className="bg-bar w-full h-14 fixed left-0 top-0 flex items-center border border-borders z-[51] shadow-sm">
+        <header className="bg-bar w-full h-14 fixed left-0 top-0 flex items-center border-b border-borders z-[51] shadow-sm">
             <div className="ml-auto flex justify-center items-center gap-4 relative">
                 <UserIcon
-                    className="mr-2"
+                    className="mr-2 hover:opacity-75 cursor-pointer"
                     tabIndex={1}
                     onMouseLeave={() => setIsMouseOverIcon(false)}
                     onMouseEnter={() => setIsMouseOverIcon(true)}
@@ -39,9 +40,10 @@ export default function Bar() {
                                 <UserIcon className="mb-2" />
                                 <p className="capitalize font-bold text-current">{user}</p>
                             </div>
-                            <div className="mx-4 pb-4">
+                            <div className="mx-4 pb-4 flex">
+                                <p className="opacity-15 cursor-default">{pkg.version}</p>
                                 <Link to={"/login"} onClick={() => Cookies.set("token", "undefined")} title="Sair" className="w-fit ml-auto flex items-center justify-end gap-2 text-red-500">
-                                    <i>&#xea14;</i>
+                                    Sair{/* <i>&#xea14;</i> */}
                                 </Link>
                             </div>
                         </div>
@@ -54,7 +56,7 @@ export default function Bar() {
 }
 
 function UserIcon(props: React.HtmlHTMLAttributes<HTMLDivElement>) {
-    return <div {...props} className={props.className + " bg-current w-10 h-10 relative flex justify-center items-center rounded-full overflow-hidden"}>
+    return <div {...props} className={props.className + " bg-current w-10 h-10 relative flex justify-center items-center rounded-full overflow-hidden transition-[opacity]"}>
         <i className='text-4xl text-subpanel absolute top-[0.29rem]'>&#xe971;</i>
     </div>
 } 

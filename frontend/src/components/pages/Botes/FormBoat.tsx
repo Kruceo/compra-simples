@@ -3,7 +3,7 @@ import backend, { BackendTableComp } from "../../../constants/backend";
 import OverPageForm, { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import FormInput from "../../OverPageForm/FormInput";
 import FormSelection from "../../OverPageForm/FormSelection";
-import { GlobalPopupsContext } from "../../Contexts/PopupContext";
+import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
 
 export default function BoatCreationForm(props: {
     onCancel: Function,

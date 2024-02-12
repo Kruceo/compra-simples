@@ -18,15 +18,10 @@ export default function ErrorHandler(props: PropsWithChildren) {
     const navigate = useNavigate()
     function pageErrorHandler(axiosResponse: AxiosResponse<any>) {
 
-        switch (axiosResponse.status) {
-            case statusCodes.Unauthorized:
-                navigate('/login')
-                break;
-
-            default:
-                break;
-        }
-        simpleSpawnInfo(axiosResponse.statusText)
+        if (axiosResponse.status === statusCodes.Unauthorized)
+            return navigate('/login')
+        let message = axiosResponse.data.message ?? axiosResponse.statusText
+        simpleSpawnInfo(message)
     }
 
     return <>

@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import TableItem from "./TableItem";
 import { BackendTableComp } from "../../constants/backend";
 import TableContextMenu, { ContextMenuButton } from "./TableContextMenu";
-import { GlobalPopupsContext } from "../Contexts/PopupContext";
+import { GlobalPopupsContext } from "../GlobalContexts/PopupContext";
 
 export interface TableOrderEvent {
     key: string | string[],

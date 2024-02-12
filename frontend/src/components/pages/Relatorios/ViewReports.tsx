@@ -2,7 +2,7 @@ import SideBar from "../../Layout/SideBar";
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import FormInput from "../../OverPageForm/FormInput";
-import { productEntryPriceComparation } from "./internals";
+import { productEntryPriceComparation } from "./libraryReports";
 import { ToolBarButton } from "../../Layout/SubTopBar";
 import { useState } from "react";
 

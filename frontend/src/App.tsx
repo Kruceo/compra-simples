@@ -10,9 +10,9 @@ import DetailsEntry from './components/pages/Entrada/DetailsEntry'
 import LoginScreen from './components/pages/Login/LoginScreen'
 import ViewDashboard from './components/pages/Dashboard/ViewDashboard'
 import { Proteged } from './components/Layout/ProtegedRoute'
-import PopupContext from './components/Contexts/PopupContext'
-import ErrorHandler from './components/Contexts/ErrorHandlerContext'
-import TableEngine from './components/Contexts/TableEngineContext'
+import PopupContext from './components/GlobalContexts/PopupContext'
+import ErrorHandler from './components/GlobalContexts/ErrorHandlerContext'
+import TableEngine from './components/GlobalContexts/TableEngineContext'
 import View404 from './components/pages/404/View404'
 
 

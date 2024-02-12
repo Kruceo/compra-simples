@@ -4,7 +4,7 @@ import OverPageForm, { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import FormInput from "../../OverPageForm/FormInput";
 
 import OverPageInfo from "../../Layout/OverPageInfo";
-import { GlobalPopupsContext } from "../../Contexts/PopupContext";
+import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
 
 export default function ProductCreationForm(props: {
     onCancel: Function,

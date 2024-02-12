@@ -10,8 +10,8 @@ import { bDate } from "../../../constants/dateUtils";
 import SubTopBar, { ToolBarButton } from "../../Layout/SubTopBar";
 import { changeEntryStatus } from "./internal";
 import beautyNumber from "../../../constants/numberUtils";
-import { GlobalPopupsContext } from "../../Contexts/PopupContext";
-import { TableEngineContext } from "../../Contexts/TableEngineContext";
+import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
+import { TableEngineContext } from "../../GlobalContexts/TableEngineContext";
 
 export default function ViewEntry() {
 

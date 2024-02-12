@@ -29,8 +29,8 @@ export default function LoginScreen() {
         }
     }
 
-    return <div className="flex justify-center items-center h-screen w-screen bg-gray-900">
-        <form onSubmit={submitHandler} className="flex flex-col w-80 bg-subpanel p-4 border-borders border shadow-xl">
+    return <div className="flex justify-center items-center h-screen w-screen" style={{backgroundImage:"url(https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE4wqI8?ver=3f68)"}}>
+        <form onSubmit={submitHandler} className="flex flex-col w-80 bg-subpanel p-4 border-borders border shadow-xl bg-cover bg-no-repeat">
             <h2>Login</h2>
             <RequiredLabel>Usuário</RequiredLabel>
             <FormInput placeholder="Insira seu usuário" name="user" type="text" errored={error == "user"} />

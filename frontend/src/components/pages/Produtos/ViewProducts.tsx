@@ -8,8 +8,8 @@ import CreationForm from "./FormProducts";
 import Table, { TableOrderEvent } from "../../table/Table";
 import { bDate } from "../../../constants/dateUtils";
 import TableToolBar from "../../table/TableToolBar";
-import { GlobalPopupsContext } from "../../Contexts/PopupContext";
-import { TableEngineContext } from "../../Contexts/TableEngineContext";
+import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
+import { TableEngineContext } from "../../GlobalContexts/TableEngineContext";
 import beautyNumber from "../../../constants/numberUtils";
 
 export default function ViewProducts() {

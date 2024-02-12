@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import backend, { BackendTableComp } from "../../../constants/backend";
 import OverPageForm, { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import FormInput from "../../OverPageForm/FormInput";
-import { GlobalPopupsContext } from "../../Contexts/PopupContext";
+import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
 
 export default function VendorCreationForm(props: {
     onCancel: Function,

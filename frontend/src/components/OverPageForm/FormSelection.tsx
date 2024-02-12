@@ -1,5 +1,5 @@
 import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react"
-import { TableEngineContext } from "../Contexts/TableEngineContext"
+import { TableEngineContext } from "../GlobalContexts/TableEngineContext"
 import backend, { BackendTableComp } from "../../constants/backend"
 
 interface FormSelectionAttributes extends React.HTMLAttributes<HTMLSelectElement> {

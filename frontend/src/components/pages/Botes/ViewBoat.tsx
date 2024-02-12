@@ -8,9 +8,9 @@ import CreationForm from "./FormBoat";
 import Table, { TableOrderEvent } from "../../table/Table";
 import { bDate } from "../../../constants/dateUtils";
 import TableToolBar from "../../table/TableToolBar";
-import { GlobalPopupsContext } from "../../Contexts/PopupContext";
-import { ErrorHandlerContext } from "../../Contexts/ErrorHandlerContext";
-import { TableEngineContext } from "../../Contexts/TableEngineContext";
+import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
+import { ErrorHandlerContext } from "../../GlobalContexts/ErrorHandlerContext";
+import { TableEngineContext } from "../../GlobalContexts/TableEngineContext";
 
 
 export default function ViewBoat() {
