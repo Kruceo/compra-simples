@@ -1,6 +1,6 @@
 import axios, { Axios, AxiosResponse } from "axios"
 
-export const api_address = 'localhost'
+export const api_address = '192.168.0.62'
 export const api_protocol = 'http'
 export const api_port = 8080
 export const api_v = "v1"

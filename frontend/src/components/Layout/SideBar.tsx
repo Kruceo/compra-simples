@@ -17,6 +17,7 @@ export default function SideBar() {
                 title="Entradas"
                 dropDownContent={<>
                     <PanelLink href="/create/entrada">Nova Entrada</PanelLink>
+                    {/* <PanelLink href="/create/entrada?tipo=1">Nova Saída</PanelLink> */}
                     <PanelLink href="/view/entrada">Listagem</PanelLink>
                 </>}>
                 <i>&#xe935;</i> Entrada

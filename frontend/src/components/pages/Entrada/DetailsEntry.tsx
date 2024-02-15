@@ -29,17 +29,18 @@ export default function DetailsEntry() {
         <Content>
             <h2 className="p-4">Entrada {id}</h2>
             <h3 className="px-4">Observação:</h3>
-            <p className="px-4 mb-4">{data?.obs}</p>
+            <p className="px-4 mb-4 border-borders border mx-4 mt-2 p-4 rounded-sm opacity-50">{data?.obs}</p>
             <h3 className="px-4">Itens:</h3>
             <Table
                 enableContextMenu={false}
                 contextMenu={{ buttons: [] }}
                 data={data?.entrada_itens ?? []}
-                disposition={[0.5, 4, 2, 2, 2]}
-                tableHeader={["ID", "Produto", "Preço", "Peso", "Valor Total"]}
+                disposition={[0.5, 3, 1, 2, 2, 2]}
+                tableHeader={["ID", "Produto", "Tipo", "Preço", "Peso", "Valor Total"]}
                 tableItemHandler={(item) => [
                     item.id,
                     item.produto?.nome,
+                    <div className="w-full">{item.tipo ? "Venda" : "Compra"}</div>,
                     <div className="w-full text-right">{beautyNumber(item.preco ?? -1)}</div>,
                     <div className="w-full text-right">{beautyNumber(item.peso ?? -1)}</div>,
                     <div className="w-full text-right">{beautyNumber(item.valor_total ?? -1)}</div>

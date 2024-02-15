@@ -14,15 +14,19 @@ interface PdfItemBoundings {
 
 export async function productEntryPriceComparation(date1: Date, date2: Date) {
     const pdf = new jsPDF()
+    pdf.setFont(pdf.getFont().fontName,"","bold")
+    pdf.setFontSize(39)
+    pdf.setTextColor("#bbb")
+    pdf.text("VALORES FICTÍCIOS",pdf.internal.pageSize.width/1.65,pdf.internal.pageSize.height/1.65,{angle:45,align:'center'})
+    pdf.setTextColor("#000")
+    const d1 = date1
+    const d2 = date2    
 
     const headerBox = writeHeader(pdf,
         (new Date()).toLocaleDateString().slice(0, 5),
-        date1, date2
+        d1, d2
     )
 
-    const d1 = date1
-    const d2 = date2
-    
     const where = {
         createdAt: `>${d1.toISOString()},<${d2.toISOString()}`
     }

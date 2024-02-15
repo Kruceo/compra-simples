@@ -79,11 +79,12 @@ export default function Table(props: TableAttributes) {
                     onClick={removeContextMenu}
                     disposition={disposition}
                     key={index}
-                    // className={index/2 != Math.round(index/2)?"bg-[#00000019]":""}
+                // className={index/2 != Math.round(index/2)?"bg-[#00000019]":""}
                 >
                     {
-                        tableItemHandler(item, index)
-                            .map((attr, attrIndex) => <p key={attrIndex}>{attr}</p>)
+                        tableItemHandler(item, index).map((attr, attrIndex) => <div className={enableContextMenu == false ? "" : "cursor-context-menu"} key={attrIndex}>
+                            {attr}
+                        </div>)
                     }
                 </TableItem>
             })

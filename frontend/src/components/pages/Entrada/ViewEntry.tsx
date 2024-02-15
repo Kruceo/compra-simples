@@ -16,12 +16,12 @@ import { TableEngineContext } from "../../GlobalContexts/TableEngineContext";
 export default function ViewEntry() {
 
     const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
-    const {defaultDataGet} = useContext(TableEngineContext)
+    const { defaultDataGet } = useContext(TableEngineContext)
     const navigate = useNavigate()
 
     const [data, setData] = useState<BackendTableComp[]>([]);
     const [update, setUpdate] = useState(true)
-    const [where, setWhere] = useState<any>({ include: "bote,usuario", status: 0 })
+    const [where, setWhere] = useState<any>({ include: "bote,usuario", status: 0, order: "updatedAt,DESC" })
 
     const setWhereKey = (key: string, value: string) => {
         const mockup = { ...where }

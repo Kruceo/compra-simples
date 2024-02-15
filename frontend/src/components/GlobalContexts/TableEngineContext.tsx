@@ -18,7 +18,6 @@ export default function TableEngine(props: PropsWithChildren) {
     const { pageErrorHandler } = useContext(ErrorHandlerContext)
     const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
 
-
     async function defaultDataGet(table: string, where: any, setter: Function) {
         console.log(table + '-' + where + '-' + setter)
 
