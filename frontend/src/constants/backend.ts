@@ -71,30 +71,27 @@ interface BackendTableComp {
     bote_id?: number,
     integracao_id?: number,
 
-    //Entrada
+    //Transacao
     obs?: string,
     status?: number,
     fornecedor_id?: number,
     usuario_id?: number,
-    valor_compra?: number
-    peso_compra?: number
-    valor_venda?: number
-    peso_venda?: number
+    valor?:number,
+    tipo?: number,
 
-    //Entrada Item
+    //Transacao Item
     produto_id?: number,
     valor_total?: number,
-    tipo?: number,
     peso?: number,
-    entrada_id?: number,
+    transacao_id?: number,
     fornecedores?: BackendTableComp[],
     fornecedor?: BackendTableComp,
     botes?: BackendTableComp[],
     bote?: BackendTableComp,
-    entradas?: BackendTableComp[],
-    entrada?: BackendTableComp,
-    entrada_itens?: BackendTableComp[],
-    entrada_item?: BackendTableComp,
+    transacoes?: BackendTableComp[],
+    transacao?: BackendTableComp,
+    transacao_itens?: BackendTableComp[],
+    transacao_item?: BackendTableComp,
     usuarios?: BackendTableComp[],
     usuario?: BackendTableComp,
     produtos?: BackendTableComp[],

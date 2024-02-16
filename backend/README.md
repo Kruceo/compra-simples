@@ -25,11 +25,14 @@ Leia [**CONFIG**](https://github.com/Kruceo/compra-simples/tree/main/backend/doc
 
 ## **ENDPOINTS**
 
-Leia [**WEBAUTH**](https://github.com/Kruceo/compra-simples/tree/main/backend/docs/WEBAUTH.md) caso queira uma melhor explicação sobre como autenticar seu cliente.
+
+
+Leia [**ENDPOINTS**](https://github.com/Kruceo/compra-simples/tree/main/backend/docs/ENDPOINTS.md) caso queira uma melhor explicação sobre como usar a API responsável pelas tabelas.
+
 
 ## **AUTENTICAÇÃO**
 
-Leia [**ENDPOINTS**](https://github.com/Kruceo/compra-simples/tree/main/backend/docs/ENDPOINTS.md) caso queira uma melhor explicação sobre como usar a API responsável pelas tabelas.
+Leia [**WEBAUTH**](https://github.com/Kruceo/compra-simples/tree/main/backend/docs/WEBAUTH.md) caso queira uma melhor explicação sobre como autenticar seu cliente.
 
 ## AUTOR
 

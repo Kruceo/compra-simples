@@ -14,13 +14,13 @@ export default function SideBar() {
                 <i>&#xe905;</i> Registro
             </DropButton>
             <DropButton
-                title="Entradas"
+                title="Transação"
                 dropDownContent={<>
                     <PanelLink href="/create/entrada">Nova Entrada</PanelLink>
-                    {/* <PanelLink href="/create/entrada?tipo=1">Nova Saída</PanelLink> */}
-                    <PanelLink href="/view/entrada">Listagem</PanelLink>
+                    <PanelLink href="/create/saida">Nova Saída</PanelLink>
+                    <PanelLink href="/view/transacao">Listagem</PanelLink>
                 </>}>
-                <i>&#xe935;</i> Entrada
+                <i>&#xe935;</i> Transação
             </DropButton>
             <DropButton
                 title="Relatórios"

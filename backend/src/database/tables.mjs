@@ -76,7 +76,7 @@ const Produto = dbserver.define("produto", {
     }
 })
 
-const Entrada = dbserver.define("entrada", {
+const Transacao = dbserver.define("transacao", {
     id: _ID,
     bote_id: {
         type: DataTypes.INTEGER,
@@ -88,20 +88,11 @@ const Entrada = dbserver.define("entrada", {
         allowNull: false,
         references: { model: Usuario, key: 'id' }
     },
-    valor_compra: {
+    valor: {
         type: DataTypes.FLOAT,
         allowNull: true
     },
-    peso_compra: {
-        type: DataTypes.FLOAT,
-        allowNull: true
-    },
-
-    valor_venda: {
-        type: DataTypes.FLOAT,
-        allowNull: true
-    },
-    peso_venda: {
+    peso: {
         type: DataTypes.FLOAT,
         allowNull: true
     },
@@ -109,31 +100,35 @@ const Entrada = dbserver.define("entrada", {
         type: DataTypes.STRING,
         allowNull: true
     },
+    tipo: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
     status: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0
     }
 }, {
-    tableName: "entradas",
+    tableName: "transacoes",
     freezeTableName: true,
     name: {
-        plural: "entradas",
-        singular: "entrada"
+        plural: "transacoes",
+        singular: "transacao"
     }
 })
 
-const Entrada_item = dbserver.define("entrada_item", {
+const Transacao_item = dbserver.define("transacao_item", {
     id: _ID,
     produto_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: { model: Produto, key: "id" }
     },
-    entrada_id: {
+    transacao_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: Entrada, key: "id" }
+        references: { model: Transacao, key: "id" }
     },
     peso: {
         type: DataTypes.FLOAT,
@@ -146,17 +141,14 @@ const Entrada_item = dbserver.define("entrada_item", {
     valor_total: {
         type: DataTypes.FLOAT,
         allowNull: true
-    },
-    tipo: {
-        type: DataTypes.BOOLEAN
     }
 }, {
-    tableName: "entrada_items",
+    tableName: "transacao_itens",
     freezeTableName: true,
     timestamps: false,
     name: {
-        plural: "entrada_itens",
-        singular: "entrada_item"
+        plural: "transacao_itens",
+        singular: "transacao_item"
     }
 })
 await Produto.sync({ force: false })
@@ -165,8 +157,8 @@ await Fornecedor.sync({ force: false })
 
 
 await Bote.sync({ force: false })
-await Entrada.sync({ force: false })
-await Entrada_item.sync({ force: false })
+await Transacao.sync({ force: false })
+await Transacao_item.sync({ force: false })
 
 
 /** Setup relations */
@@ -176,21 +168,21 @@ Bote.belongsTo(Fornecedor, { foreignKey: 'fornecedor_id' })
 //tem muitos do direito com uma chave de fornecedor_id
 Fornecedor.hasMany(Bote, { foreignKey: 'fornecedor_id' })
 
-Entrada_item.belongsTo(Entrada, { foreignKey: 'entrada_id' })
-Entrada.hasMany(Entrada_item, { foreignKey: 'entrada_id' })
+Transacao_item.belongsTo(Transacao, { foreignKey: 'transacao_id' })
+Transacao.hasMany       (Transacao_item, { foreignKey: 'transacao_id' })
 
-Entrada_item.belongsTo(Produto, { foreignKey: 'produto_id' })
-Produto.hasMany(Entrada_item, { foreignKey: 'produto_id' })
+Transacao_item.belongsTo(Produto, { foreignKey: 'produto_id' })
+Produto.hasMany(Transacao_item, { foreignKey: 'produto_id' })
 
 // Entrada.belongsTo(Fornecedor, { foreignKey: "fornecedor_id" })
 // Fornecedor.hasMany(Entrada, { foreignKey: 'fornecedor_id' })
 
 
-Entrada.belongsTo(Bote, { foreignKey: "bote_id" })
-Bote.hasMany(Entrada, { foreignKey:   'bote_id' })
+Transacao.belongsTo(Bote, { foreignKey: "bote_id" })
+Bote.hasMany(Transacao, { foreignKey: 'bote_id' })
 
-Entrada.belongsTo(Usuario, { foreignKey: "usuario_id" })
-Usuario.hasMany(Entrada, { foreignKey: 'usuario_id' })
+Transacao.belongsTo(Usuario, { foreignKey: "usuario_id" })
+Usuario.hasMany(Transacao, { foreignKey: 'usuario_id' })
 
 // Sync relations
 
@@ -198,12 +190,12 @@ await Produto.sync({ alter: true })
 await Usuario.sync({ alter: true })
 await Bote.sync({ alter: true })
 await Fornecedor.sync({ alter: true })
-await Entrada.sync({ alter: true })
-await Entrada_item.sync({ alter: true })
+await Transacao.sync({ alter: true })
+await Transacao_item.sync({ alter: true })
 
 export default {
-    Bote, Fornecedor, Produto, Entrada, Entrada_item, Usuario
+    Bote, Fornecedor, Produto, Transacao, Transacao_item, Usuario
 }
 export {
-    Bote, Fornecedor, Produto, Entrada, Entrada_item, Usuario
+    Bote, Fornecedor, Produto, Transacao, Transacao_item, Usuario
 }

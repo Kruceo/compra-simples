@@ -1,6 +1,7 @@
 import jsPDF from "jspdf"
 import backend, { BackendTableComp } from "../../../constants/backend"
 import beautyNumber from "../../../constants/numberUtils"
+import { data } from "autoprefixer"
 
 interface PdfItemBoundings {
     x: number,
@@ -14,13 +15,13 @@ interface PdfItemBoundings {
 
 export async function productEntryPriceComparation(date1: Date, date2: Date) {
     const pdf = new jsPDF()
-    pdf.setFont(pdf.getFont().fontName,"","bold")
+    pdf.setFont(pdf.getFont().fontName, "", "bold")
     pdf.setFontSize(39)
     pdf.setTextColor("#bbb")
-    pdf.text("VALORES FICTÍCIOS",pdf.internal.pageSize.width/1.65,pdf.internal.pageSize.height/1.65,{angle:45,align:'center'})
+    pdf.text("VALORES FICTÍCIOS", pdf.internal.pageSize.width / 1.65, pdf.internal.pageSize.height / 1.65, { angle: 45, align: 'center' })
     pdf.setTextColor("#000")
     const d1 = date1
-    const d2 = date2    
+    const d2 = date2
 
     const headerBox = writeHeader(pdf,
         (new Date()).toLocaleDateString().slice(0, 5),
@@ -31,14 +32,16 @@ export async function productEntryPriceComparation(date1: Date, date2: Date) {
         createdAt: `>${d1.toISOString()},<${d2.toISOString()}`
     }
 
-    const groupedTotalValues = await getGroupedEntryTotalValues(where)
-    if (!groupedTotalValues || !groupedTotalValues.tables)
+    const groupedTotalValues = await getPriceGroupedEntryTotalValues({ ...where, tipo: 0 })
+    if (!groupedTotalValues)
         return console.error("productEntryPriceComparation error");
 
+    const tables = groupedEntry2Table(groupedTotalValues)
+    console.log(tables)
     let lastTableBounding = headerBox
 
     //Gerar todas as tabelas usando o local Y da ultima tabela 
-    groupedTotalValues.tables.forEach(table => {
+    tables.forEach(table => {
         const tableResult = table.pop()
         //escreve a tabela
         lastTableBounding = writeTable(pdf, table, 5, lastTableBounding.y2 + 7, ["ESPÉCIE", "PREÇO", "PESO (KG)", "VALOR"], [4, 2, 2, 2])
@@ -46,23 +49,26 @@ export async function productEntryPriceComparation(date1: Date, date2: Date) {
         lastTableBounding = writeTable(pdf, [], 5, lastTableBounding.y2, tableResult ?? [], [4, 2, 2, 2])
     })
 
-    lastTableBounding = writeTable(pdf, [], 5, lastTableBounding.y2 + 7, ["-", "SUBTOTAL", beautyNumber(groupedTotalValues.sumPeso), beautyNumber(groupedTotalValues.sumValor)], [4, 2, 2, 2])
+    let sellTables = groupedEntry2Table(await getPriceGroupedEntryTotalValues({ ...where, tipo: 1 }))
 
-    //Pega os valores da parte de descontos, geralmente gelo e sufito 
-    const type1Values = await getGroupedTotalsByType(1, where)
-    lastTableBounding.y2 += 7
-    Object.entries(type1Values).forEach((each: [string, any]) => {
-        lastTableBounding = writeTable(pdf, [], 5, lastTableBounding.y2, ["-", "-", each[0], beautyNumber(each[1])], [4, 2, 2, 2])
-    })
-
-    //Gera o ultimo 
     //soma das Compras
-    const entradaType0Sum = await getSumOfType(0, "valor_total", where)
+    const entradaType0ValueSum = await getSumOf("valor_total", { ...where, tipo: 0 })
+    const entradaType0WeightSum = await getSumOf("peso", { ...where, tipo: 0 })
     //Soma das vendas
-    const entradaType1Sum = await getSumOfType(1, "valor_total", where)
+    const entradaType1ValueSum = await getSumOf("valor_total", { ...where, tipo: 1 })
 
-    if (entradaType0Sum && entradaType1Sum) {
-        const total = entradaType0Sum - entradaType1Sum
+    lastTableBounding = writeTable(pdf, [], 5, lastTableBounding.y2 + 7, ["-", "SUBTOTAL", beautyNumber(entradaType0WeightSum ?? -1), beautyNumber(entradaType0ValueSum ?? -1)], [4, 2, 2, 2])
+
+    // Diminui o tamanho da tabela, ficando mais minimalista
+    let parsedSellTables: string[][] = sellTables.reduce((acum, next) => {
+        const lastRow = next[next.length - 1]
+        return [...acum, ["-", "-", next[0][0], lastRow[lastRow.length - 1]]]
+    }, [] as any[])
+
+    lastTableBounding = writeTable(pdf, parsedSellTables, 5, lastTableBounding.y2, [], [4, 2, 2, 2])
+
+    if (entradaType0ValueSum && entradaType1ValueSum) {
+        const total = entradaType0ValueSum - entradaType1ValueSum
         writeTable(pdf, [], 5, lastTableBounding.y2 + 7, ["-", "-", "TOTAL GERAL", beautyNumber(total)], [4, 2, 2, 2])
     }
 
@@ -75,63 +81,64 @@ export async function productEntryPriceComparation(date1: Date, date2: Date) {
 
 }
 
-async function getGroupedEntryTotalValues(where: any) {
-    const response = await backend.get('entrada', { status: 0, include: "entrada_item{produto}", ...where })
+async function getPriceGroupedEntryTotalValues(where: any) {
+    const response = await backend.get('transacao', { status: 0, include: "transacao_item{produto}", ...where })
     if ((response.data.error || !response.data.data)) return;
+    if (!Array.isArray(response.data.data)) return;
 
-    if (!Array.isArray(response.data.data)) return alert(2);
-    let compraEntradaItens: BackendTableComp[] = []
-    response.data.data.forEach(each => compraEntradaItens.push(...each.entrada_itens ?? []))
-    //FILTRA PELO TIPO, APENAS ITENS DO TIPO COMPRA
-    compraEntradaItens = compraEntradaItens.filter(each => !each.tipo)
+    const fdata = response.data.data
 
-    const values: any = {}
-    let sumValor = 0
-    let sumPeso = 0
-    compraEntradaItens.forEach(each => {
-        if (!each.produto || !each.produto.nome) return;
+    const itens = fdata.reduce((acum, next) => {
+        return [...acum, ...(next.transacao_itens ?? [])]
+    }, [] as BackendTableComp[])
 
-        if (!values[each.produto.nome]) {
-            values[each.produto.nome] = {}
-        }
-        if (!values[each.produto.nome]["" + each.preco]) {
-            values[each.produto.nome]["" + each.preco] = {
-                valor: each.valor_total,
-                peso: each.peso
+    const obj: any = {}
+
+    itens.forEach(each => {
+        const productName = (each.produto?.nome) ?? "Undefined"
+        const productPrice = (each.preco ?? -1)
+        if (!obj[productName])
+            obj[productName] = {
+
+            }
+        if (obj[productName]) {
+            if (!obj[productName][productPrice]) {
+                obj[productName][productPrice] = { value: each.valor_total, weight: each.peso }
+            }
+            else {
+                obj[productName][productPrice].value += each.valor_total
+                obj[productName][productPrice].weight += each.peso
             }
         }
-        else {
-            values[each.produto.nome]["" + each.preco].peso += each.peso
-            values[each.produto.nome]["" + each.preco].valor += each.valor_total
-        }
+
     })
+    console.log(obj)
+    return obj
+}
+
+function groupedEntry2Table(obj: any) {
     const tables: string[][][] = []
-    Object.entries(values).forEach((produtoData: [string, any]) => {
-        let sumProdutoValor = 0
-        let sumProdutoPeso = 0
-        const table = []
-        Object.entries(produtoData[1])
-            .sort((a: [string, any], b: [string, any]) => parseFloat(a[0]) - parseFloat(b[0]))
-            .forEach((valueData: [string, any]) => {
-                const row: string[] = [produtoData[0]]
-                row.push(beautyNumber(parseFloat(valueData[0])))
-                row.push(valueData[1].peso.toLocaleString())
-                row.push(beautyNumber(valueData[1].valor))
-                table.push(row)
-                sumProdutoValor += valueData[1].valor
-                sumProdutoPeso += valueData[1].peso
-            })
-        sumValor += sumProdutoValor
-        sumPeso += sumProdutoPeso
-        table.push(["-", "TOTAL", sumProdutoPeso.toLocaleString(), beautyNumber(sumProdutoValor)])
+
+    Object.entries(obj).forEach(([especie, especieData]: [string, any]) => {
+        let totalProductWeight = 0
+        let totalProductValue = 0
+        const table: string[][] = []
+        Object.entries(especieData).forEach(([price, priceData]: [string, any]) => {
+            const tableRow = []
+            tableRow.push(especie, beautyNumber(parseFloat(price)), beautyNumber(priceData.weight), beautyNumber(priceData.value))
+            table.push(tableRow)
+            totalProductValue += priceData.value
+            totalProductWeight += priceData.weight
+        })
+        table.push(["-", "TOTAL", beautyNumber(totalProductWeight), beautyNumber(totalProductValue)])
         tables.push(table)
     })
-
-    return { tables, sumPeso, sumValor }
+    console.log(tables[0])
+    return tables
 }
 
 async function getGroupedTotalsByType(type: number, where: any) {
-    const response = await backend.get('entrada', { status: 0, include: "entrada_item{produto}", ...where })
+    const response = await backend.get('entrada', { status: 0, tipo: type, include: "transacao_item{produto}", ...where })
     if ((!response.data || response.data.error || !response.data.data)) return null
 
     if (!Array.isArray(response.data.data)) return;
@@ -139,14 +146,14 @@ async function getGroupedTotalsByType(type: number, where: any) {
     let values: any = {}
 
     response.data.data.forEach(entrada => {
-        entrada.entrada_itens?.forEach(entrada_item => {
-            const produto = entrada_item.produto
+        entrada.transacao_itens?.forEach(transacao_item => {
+            const produto = transacao_item.produto
 
-            if (entrada_item.tipo == type && produto && produto.nome) {
-                console.log(entrada_item.id, entrada_item.produto_id)
+            if (produto && produto.nome) {
+                console.log(transacao_item.id, transacao_item.produto_id)
                 if (!values[produto.nome])
-                    values[produto.nome] = entrada_item.valor_total ?? 0
-                else values[produto.nome] += entrada_item.valor_total ?? 0
+                    values[produto.nome] = transacao_item.valor_total ?? 0
+                else values[produto.nome] += transacao_item.valor_total ?? 0
             }
         })
     })
@@ -154,21 +161,20 @@ async function getGroupedTotalsByType(type: number, where: any) {
     return values
 }
 
-export async function getSumOfType(type: number, attrToSum: "peso" | "valor_total", where: any) {
-    const response = await backend.get('entrada', { status: 0, include: "entrada_item{produto}", ...where })
+export async function getSumOf(attrToSum: "peso" | "valor_total", where: any) {
+    const response = await backend.get('transacao', { status: 0, include: "transacao_item{produto}", ...where })
     if ((response.data.error || !response.data.data)) return null
 
     if (!Array.isArray(response.data.data)) return;
     let sum = 0
     response.data.data.forEach(entrada => {
-        if (!entrada.entrada_itens) return;
-        entrada.entrada_itens.forEach(entrada_item => {
-            if (entrada_item.tipo == type) {
-                if (entrada_item[attrToSum])
-                    sum += entrada_item[attrToSum] ?? 0
-                else alert("Ocorreu um erro na geração do relatório.")
-            }
-        })
+        if (!entrada.transacao_itens) return;
+        entrada.transacao_itens.forEach(entrada_item => {
+            if (entrada_item[attrToSum])
+                sum += entrada_item[attrToSum] ?? 0
+            else alert("Ocorreu um erro na geração do relatório.")
+        }
+        )
     })
     return sum
 }

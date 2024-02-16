@@ -2,19 +2,19 @@ import { Bote, Fornecedor, Produto } from "../src/database/tables.mjs";
 
 await Fornecedor.bulkCreate([
     {
-        nome: "Vasco da Gama"
+        nome: "CRVG"
     },
     {
-        nome: "Fluminense"
+        nome: "Oppenhaimer"
     },
     {
-        nome: "Portuguesa"
+        nome: "Toninho"
     },
     {
-        nome: "Botafogo"
+        nome: "Pensilvania"
     },
     {
-        nome: "Flamengo"
+        nome: "Pablo Vegetti"
     }])
 
 
@@ -27,8 +27,8 @@ await Produto.bulkCreate([{
     preco: 21.75
 },
 {
-    nome: "Polvo",
-    preco: 8
+    nome: "Camarão Rosa",
+    preco: 22
 },
 {
     nome: "Lagosta",
@@ -36,7 +36,11 @@ await Produto.bulkCreate([{
 },
 {
     nome: "Gelo",
-    preco: 6.5
+    preco: 2.5
+},
+{
+    nome: "Sulfito",
+    preco: 7.5
 }
 ])
 

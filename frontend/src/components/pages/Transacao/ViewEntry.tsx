@@ -29,7 +29,7 @@ export default function ViewEntry() {
         setWhere(mockup)
     }
 
-    const table_to_manage = "entrada"
+    const table_to_manage = "transacao"
 
     useEffect(() => {
         defaultDataGet(table_to_manage, where, setData)
@@ -53,7 +53,7 @@ export default function ViewEntry() {
     }
 
     const tableContextMenuButtons = [
-        { element: <><i>&#xe922;</i>Detalhes</>, handler: (id: number) => navigate(`/details/entrada?id=${id}`) },
+        { element: <><i>&#xe922;</i>Detalhes</>, handler: (id: number) => navigate(`/details/transacao?id=${id}`) },
         { element: <><i>&#xe9ac;</i>Invalidar</>, handler: invalidEntries }
     ]
 
@@ -68,20 +68,19 @@ export default function ViewEntry() {
                 <Table
                     onOrderChange={orderHandler}
                     data={data}
-                    disposition={[1, 2, 2, 2, 2, 2, 2]}
+                    disposition={[1, 2, 2, 2, 2,2]}
                     tableItemHandler={(item) => [
                         item.id,
                         item.bote?.nome,
-                        <div className="text-right">{beautyNumber(item.valor_compra ?? -1)}</div>,
-                        <div className="text-right">{beautyNumber(item.peso_compra ?? -1)} </div>,
-                        <div className="text-right">{beautyNumber(item.valor_venda ?? -1)} </div>,
-                        <div className="text-right">{beautyNumber(item.peso_venda ?? -1)}  </div>,
+                        item.tipo == 0?"Entrada":"Saída",
+                        <div className="text-right">{beautyNumber(item.peso ?? -1)}</div>,
+                        <div className="text-right">{beautyNumber(item.valor ?? -1)} </div>,
                         // item.status==0?<i title="Válido">&#xea10;</i>:<i title="Cancelado">&#xea0d;</i>,
                         bDate(item.updatedAt)
                     ]}
-                    tableOrderKeys={["id", ["Bote", "nome"], "valor_compra", "peso_compra", "valor_venda", "peso_venda", "updatedAt"]}
+                    tableOrderKeys={["id", ["Bote", "nome"],"tipo", "peso", "valor", "updatedAt"]}
                     tableHeader={[
-                        "ID", "Bote", "Valor da Compra", "Peso da Compra", "Valor da Venda", "Peso da Venda", "Ultima Atualização"
+                        "ID", "Bote","Tipo", "Peso (KG)", "Valor", "Ultima Atualização"
                     ]}
                     contextMenu={{ buttons: tableContextMenuButtons }}
                 />
