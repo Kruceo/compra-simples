@@ -9,7 +9,7 @@ interface GlobalPopupsContextType {
     globalPopups: PopupContent;
     setGlobalPopups: Dispatch<SetStateAction<PopupContent>>;
     setGlobalPopupByKey: (key: string, content: ReactElement | null) => void;
-    simpleSpawnInfo: (content: string,onAccept?:Function,onCancel?:Function) => void;
+    simpleSpawnInfo: (content: string, onAccept?: Function, onCancel?: Function) => void;
 }
 
 const initialPopups: PopupContent = {};
@@ -49,10 +49,10 @@ export default function PopupContext(props: PropsWithChildren) {
     }
 
     return <>
-        <GlobalPopupsContext.Provider value={{ globalPopups, setGlobalPopups, simpleSpawnInfo,setGlobalPopupByKey }}>
+        <GlobalPopupsContext.Provider value={{ globalPopups, setGlobalPopups, simpleSpawnInfo, setGlobalPopupByKey }}>
             {
                 Object.entries(globalPopups)
-                    .map((each: [string, React.ReactElement | null]) => <div key={each[0]}>
+                    .map((each: [string, React.ReactElement | null], index) => <div key={each[0] + index}>
                         {each[1]}
                     </div>)
             }

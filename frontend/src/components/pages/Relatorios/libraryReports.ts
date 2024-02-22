@@ -15,11 +15,11 @@ interface PdfItemBoundings {
 
 export async function productEntryPriceComparation(date1: Date, date2: Date) {
     const pdf = new jsPDF()
-    pdf.setFont(pdf.getFont().fontName, "", "bold")
-    pdf.setFontSize(39)
-    pdf.setTextColor("#bbb")
-    pdf.text("VALORES FICTÍCIOS", pdf.internal.pageSize.width / 1.65, pdf.internal.pageSize.height / 1.65, { angle: 45, align: 'center' })
-    pdf.setTextColor("#000")
+    // pdf.setFont(pdf.getFont().fontName, "", "bold")
+    // pdf.setFontSize(39)
+    // pdf.setTextColor("#bbb")
+    // pdf.text("VALORES FICTÍCIOS", pdf.internal.pageSize.width / 1.65, pdf.internal.pageSize.height / 1.65, { angle: 45, align: 'center' })
+    // pdf.setTextColor("#000")
     const d1 = date1
     const d2 = date2
 
@@ -272,7 +272,7 @@ export function writeHeader(pdf: jsPDF, identification: string, date1: Date, dat
 
     pdf.setFont(pdf.getFont().fontName, "", "bold")
     pdf.setFontSize(20)
-    pdf.text(`N ${identification}`, dateBox.centerX, 15, { align: "center" })
+    pdf.text(`${identification}`, dateBox.centerX, 15, { align: "center" })
 
     const totalW = headerBox.w + dateBox.w
 

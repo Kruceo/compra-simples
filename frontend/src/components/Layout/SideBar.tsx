@@ -37,8 +37,8 @@ export default function SideBar() {
 
 interface DropButtonAttributes extends React.HTMLAttributes<HTMLButtonElement> {
     dropDownContent: React.ReactNode | React.ReactNode[],
-    dropDownContainerLeft?: number|string
-    dropDownContainerTop?: number|string
+    dropDownContainerLeft?: number | string
+    dropDownContainerTop?: number | string
 }
 
 export function DropButton(props: DropButtonAttributes) {
@@ -74,5 +74,5 @@ export function DropButton(props: DropButtonAttributes) {
 }
 
 function PanelLink(props: React.HTMLAttributes<HTMLAnchorElement> & { href: string }) {
-    return <Link className="transition-colors hover:bg-hovers text-default-text text-left h-14 flex items-center px-4" to={props.href}>{props.children}</Link>
+    return <Link className="transition-colors hover:bg-hovers text-default-text text-left h-14 flex items-center px-4 gap-2" to={props.href}>{props.children}</Link>
 }

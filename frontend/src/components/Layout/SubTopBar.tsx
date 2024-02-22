@@ -28,7 +28,7 @@ export function ToolBarButton(props: ToolBarButtonAttributes) {
     const e = (enabled == undefined) ? true : enabled
     return <button {...restProps}
         onClick={e ? props.onClick : undefined}
-        className={props.className + " text-base font-bold flex items-center gap-2 px-4 py-2 rounded-sm hover:opacity-50" + (e ? "" : "opacity-30")}>
+        className={props.className + " text-base font-bold flex items-center gap-2 px-4 py-2 rounded-sm hover:bg-hovers" + (e ? "" : "opacity-30")}>
         {props.children}
     </button>
 }

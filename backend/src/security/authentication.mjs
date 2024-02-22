@@ -2,16 +2,19 @@ import jwt from 'jsonwebtoken'
 import cfg from "../../config/config.json" assert { type: "json" }
 import { Usuario } from '../database/tables.mjs'
 import statusCodes from '../utils/statusCode.mjs'
+import { compare } from './encrypt.mjs'
 
 async function authenticateUser(user, password) {
 
     const finder = await Usuario.findOne({
         where: {
-            nome: user, senha: password
+            nome: user
         }
     })
 
     if (!finder) return null
+
+    if (!compare(password, finder.dataValues.senha)) return null
 
     const token = jwt.sign({ user, id: finder.dataValues.id }, cfg.security.secret, {
         expiresIn: cfg.security.tokenExpireTime
@@ -39,9 +42,12 @@ async function authenticationMiddleware(req, res, next) {
     if (!req.cookies || !req.cookies.token) return res.status(statusCodes.Unauthorized)
         .json({ error: true, message: "Autorização inválida ou inexistente." })
     const validadtion = await authenticateToken(req.cookies.token)
+
+    //Provide the user to other services can use 
+    req.auth = { user: validadtion }
     
-    if(!validadtion)return res.status(statusCodes.Unauthorized).json({
-        error:true,message:"Autorização inválida."
+    if (!validadtion) return res.status(statusCodes.Unauthorized).json({
+        error: true, message: "Autorização inválida."
     })
     next()
 }

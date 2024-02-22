@@ -21,7 +21,7 @@ export default function TableToolBar(props: TableToolBarAttributes) {
                 onKeyDown={(e) => e.key == "Enter" ? searchHandler(search) : null}
             />
             <button title="Pesquisar" onClick={() => searchHandler(search)}>
-                <i className="text-default-text hover:text-inherit">&#xe986;</i>
+                <i className="text-default-text">&#xe986;</i>
             </button>
         </div>}
     >

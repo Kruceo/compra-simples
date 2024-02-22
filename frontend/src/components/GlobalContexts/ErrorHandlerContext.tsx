@@ -14,12 +14,16 @@ export const ErrorHandlerContext = createContext<ErrorHandlerContextType>({
 })
 
 export default function ErrorHandler(props: PropsWithChildren) {
-    const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
+    const { simpleSpawnInfo,setGlobalPopups } = useContext(GlobalPopupsContext)
     const navigate = useNavigate()
     function pageErrorHandler(axiosResponse: AxiosResponse<any>) {
 
-        if (axiosResponse.status === statusCodes.Unauthorized)
-            return navigate('/login')
+        if (axiosResponse.status === statusCodes.Unauthorized){
+            window.location.assign("/login")
+            return 
+        }
+
+            
         let message = axiosResponse.data.message ?? axiosResponse.statusText
         simpleSpawnInfo(message)
     }

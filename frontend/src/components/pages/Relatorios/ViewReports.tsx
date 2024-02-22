@@ -32,10 +32,9 @@ export default function ViewReports() {
         <Bar />
         <SideBar />
         <Content>
-            {
-                /* <p>{date1.toLocaleDateString() + ' ' + date1.toLocaleTimeString() + ' ### ' + date1.toISOString()}</p>
-                <p>{date2.toLocaleDateString() + ' ' + date2.toLocaleTimeString() + ' ### ' + date2.toISOString()}</p> */
-            }
+
+            {/* <p>{date1.toLocaleDateString() + ' ' + date1.toLocaleTimeString() + ' ### ' + date1.toISOString() + ' $$$ ' + date2input(date1)}</p> */}
+            {/* <p>{date2.toLocaleDateString() + ' ' + date2.toLocaleTimeString() + ' ### ' + date2.toISOString() + ' $$$ ' + date2input(date2)}</p> */}
 
             <h2 className="p-4">Relatório - Comparativo de Preços</h2>
             <div className="p-4 flex justify-center items-center">
@@ -58,7 +57,7 @@ export default function ViewReports() {
 function date2input(date: Date) {
     const [y, m, d] = [
         date.getFullYear().toString().padStart(4, '0'),
-        date.getMonth().toString().padStart(2, '0'),
+        (date.getMonth() + 1).toString().padStart(2, '0'),
         date.getDate().toString().padStart(2, '0')
     ]
     console.log(date, y, m, d)

@@ -14,14 +14,17 @@ import PopupContext from './components/GlobalContexts/PopupContext'
 import ErrorHandler from './components/GlobalContexts/ErrorHandlerContext'
 import TableEngine from './components/GlobalContexts/TableEngineContext'
 import View404 from './components/pages/404/View404'
+import Teste from './components/pages/Teste'
 
 function App() {
 
   return (
     <>
-      <PopupContext>
-        <ErrorHandler>
-          <TableEngine>
+      <ErrorHandler>
+        <TableEngine>
+          <PopupContext>
+
+
             <Routes>
               <Route path='/' element={<Proteged>{<ViewDashboard />}</Proteged>} />
               <Route path='/view/bote' element={<Proteged>{<ViewBotes />}</Proteged>} />
@@ -35,12 +38,16 @@ function App() {
               <Route path='/relatorio' element={<Proteged>{<ViewReports />}</Proteged>} />
 
               <Route path='/login' element={<LoginScreen />} />
+              <Route path='/teste' element={<Teste />} />
 
               <Route path='/*' element={<View404 />} />
             </Routes>
-          </TableEngine>
-        </ErrorHandler>
-      </PopupContext>
+
+
+          </PopupContext>
+
+        </TableEngine>
+      </ErrorHandler>
     </>
   )
 }

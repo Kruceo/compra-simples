@@ -12,7 +12,10 @@ import { getOnlyNecessaryAttributes } from "../../utils/tableUtils.mjs";
 export default async function postRequestHandler(req, res) {
     const tableName = upperCaseLetter(req.params.table, 0)
     let body = req.body
-    body.usuario_id = 1
+
+    //get the auth provided user, and put to body (/src/security/authentication.mjs ~ authMiddleware)
+    body.usuario_id = req.auth.user.id
+
     const table = tables[tableName]
     if (!table) return;
     const tableNecessaryAttributes = getOnlyNecessaryAttributes(table)
@@ -20,8 +23,8 @@ export default async function postRequestHandler(req, res) {
     if (!Array.isArray(body)) {
         body = [req.body]
     }
-    //Check the attributes
 
+    //Check the attributes
     for (const item of body) {
         if (!checkAttributes(item, tableNecessaryAttributes))
             return res.status(statusCodes.BadRequest)
@@ -51,6 +54,12 @@ export default async function postRequestHandler(req, res) {
     }
 }
 
+/**
+ * Checks if the item obj provided have all attibutes in the array provided.
+ * @param {Object} item 
+ * @param {string[]} tableAttributes 
+ * @returns {boolean}
+ */
 function checkAttributes(item, tableAttributes) {
     for (const attr of tableAttributes) {
         if (item[attr] == undefined || item[attr] == null) {
@@ -61,6 +70,13 @@ function checkAttributes(item, tableAttributes) {
     return true
 }
 
+
+/**
+ * Removes any attribute that not appears in the original Model attributes.
+ * @param {Object} item 
+ * @param {ModelCtor<Model<any, any>>} table 
+ * @returns {Object}
+ */
 function wipeNoTableAttributes(item, table) {
     const allAttrs = Object.keys(table.getAttributes())
     const newItem = {}

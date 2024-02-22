@@ -30,7 +30,7 @@ module.exports = {
         background: "#171717",
         "default-text": "#c0c0c0",
         borders: "#262626",
-        hovers: "#0001",
+        hovers: "#aaa1",
 
       },
     },

@@ -14,7 +14,7 @@
         }
     },
     "security":{
-        "secret":"a",
-        "tokenExpireTime":"20m"
+        "secret":"abc",
+        "tokenExpireTime":"30m"
     }
 }

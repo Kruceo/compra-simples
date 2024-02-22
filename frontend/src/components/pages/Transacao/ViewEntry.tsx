@@ -68,19 +68,19 @@ export default function ViewEntry() {
                 <Table
                     onOrderChange={orderHandler}
                     data={data}
-                    disposition={[1, 2, 2, 2, 2,2]}
+                    disposition={[1, 2, 2, 2, 2, 2]}
                     tableItemHandler={(item) => [
                         item.id,
                         item.bote?.nome,
-                        item.tipo == 0?"Entrada":"Saída",
                         <div className="text-right">{beautyNumber(item.peso ?? -1)}</div>,
                         <div className="text-right">{beautyNumber(item.valor ?? -1)} </div>,
+                        item.tipo == 0 ? "Entrada" : "Saída",
                         // item.status==0?<i title="Válido">&#xea10;</i>:<i title="Cancelado">&#xea0d;</i>,
                         bDate(item.updatedAt)
                     ]}
-                    tableOrderKeys={["id", ["Bote", "nome"],"tipo", "peso", "valor", "updatedAt"]}
+                    tableOrderKeys={["id", ["Bote", "nome"], "peso", "valor", "tipo", "updatedAt"]}
                     tableHeader={[
-                        "ID", "Bote","Tipo", "Peso (KG)", "Valor", "Ultima Atualização"
+                        "ID", "Bote","Peso (KG)", "Valor","Tipo",  "Ultima Atualização"
                     ]}
                     contextMenu={{ buttons: tableContextMenuButtons }}
                 />

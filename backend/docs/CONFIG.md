@@ -5,6 +5,7 @@
 - [**DATABASE**](#database)
 - [**SERVER**](#server)
 - [**SECURITY**](#security)
+- [**FERRAMENTAS**](#ferramentas)
   
   
 
@@ -63,3 +64,24 @@ O arquivo de configuração fica localizado em `./config/config.json`.
 }
 
 ```
+
+## **FERRAMENTAS**
+
+Todas as ferramentas estão localizadas em `./tools`.
+
+Todos os arquivos `.mjs` são utilizados com `node`
+
+Ex: ```node arquivo.mjs```
+
+### getAllTables.mjs (Linux)
+
+Salva na área de trabalo um arquivo CSV com todos as tabelas registradas. 
+
+### regenerateDatabase.mjs
+
+Regenera todo o banco de dados, é como começar com o banco de dados em branco e com todas as mudanças escritas na API aplicadas.
+
+### userManager.mjs
+
+Registra ou edita usuários no banco de dados.
+
