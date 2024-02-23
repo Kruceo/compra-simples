@@ -13,6 +13,9 @@
   - [Limitação do número de resultados](#limitação-do-número-de-resultados)
   - [Inclusão de tabelas relacionadas](#inclusão-de-tabelas-relacionadas)
   - [Inclusão de cadeia de tabelas relacionadas](#inclusão-de-cadeia-de-tabelas-relacionadas)
+  - [Inclusão de tabelas com atributos limitados](#inclusão-de-tabelas-com-atributos-limitados)
+  - [Colunas personalizadas](#colunas-personalizadas)
+  - [Agrupamento, funções e inclusão](#agrupamento-funções-e-inclusão)
 - [**METODO POST - CRIAR**](#metodo-post---criar)
   - [Criação de um novo item](#criação-de-um-novo-item)
   - [Criação de varios itens](#criação-de-varios-itens)
@@ -21,8 +24,6 @@
 - [**METODO DELETE - REMOVER**](#metodo-delete---remover)
   - [Remoção de um item](#remoção-de-um-item)
 - [**RESPOSTAS DA API**](#respostas-da-api)
-
-
 ## **METODO GET - OBTER**
 
 ### Obtendo Todos
@@ -116,6 +117,30 @@ Recupera os resultados incluindo os fornecedores ligados a cada item.
 
 Recupera os resultados incluindo uma cadeia de várias outras tabelas ligadas.
 
+<br/>
+
+### Inclusão de tabelas com atributos limitados
+
+```GET /:table?include=table1[attr1,attr2]{table2[attr3]}```
+
+Recupera os resultados incluindo suas tabelas mas apenas com os atributos desejados.
+
+<br/>
+
+### Colunas personalizadas
+
+```GET /:table?attributes=attr1,attr2```
+
+Recupera os resultados incluindo apenas os atributos desejados.
+Pesquisas envolvendo _attributes_ sempre serão retornados em modo **RAW**.
+
+<br/>
+
+### Agrupamento, funções e inclusão
+
+```GET /:table?attributes=attr1.preco,(sum)attr.child.valor&include=child&group=preco```
+
+Recupera os resultados agrupando e somando valores de acordo com a query.
 
 <br/>
 

@@ -4,6 +4,7 @@ import postRequestHandler from "./post.mjs";
 import deleteRequestHandler from "./delete.mjs";
 import putRequestHandler from "./put.mjs";
 import getRequestHandler from "./get.mjs";
+import reportRequestHandler from "./report.mjs";
 
 /**
  * @type {Router}
@@ -30,5 +31,7 @@ universalRouter.post(`/:table`, postRequestHandler)
 universalRouter.delete(`/:table/:id`, deleteRequestHandler)
 
 universalRouter.put(`/:table/:id`, putRequestHandler)
+
+universalRouter.report(`/:table/`, reportRequestHandler)
 
 export default universalRouter

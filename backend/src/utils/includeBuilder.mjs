@@ -38,30 +38,49 @@ const subSpliter = ':'
  * @returns 
  */
 export default function includeBuilder(query) {
-    if (!query) return []
-    //Escondo as virgulas dentro de dos colchetes "{}" trocando as por "%" para que detecte apenas a camada externa de itens, por assim dizer
-    const hiddedQuery = query.replace(/(?<={.*),(?=.*})/, "%")
+    if (!query || query.trim() == '') return []
+    //Escondo as virgulas dentro dos colchetes e chaves "[]{}" trocando as por "%" para que detecte apenas a camada externa de itens, por assim dizer
+    const hiddedQuery = query
+        .replace(/(?<={.*),(?=.*})/, "%")
+        .replace(/(?<=\[.*),(?=.*\])/,"%")
 
     return hiddedQuery.split(',').map(each => {
         let include = []
 
         //retiro o conteudo dentro dos colchetes se necessario e também faço da primeira letra maiuscula
-        const name = upperCaseLetter(each.replace(/{.+}/, ""), 0)
-        //capturo tambem o conteudo de dentro dos colchetes se houver
-        const includeQueryMatch = each.match(/(?<={).+(?=})/)
+        const realname = each.replace(/\[.*?\]/g, "").replace(/{.*?}/g,"")
+        
+        const name = upperCaseLetter(realname, 0)
+        //capturo tambem o conteudo de dentro dos chaves se houver
 
+        //preciso usar o replace para conseguir o primeiro e mais curto padrão [.+] mesmo que tenha, e reponho as virgulas por que se não é impossivel que a tabela tenha o atributo com o % no meio
+        const attrQueryMatch = each.replace("%",',').match(new RegExp(`(?<=${realname}\\[).*?(?=\\])`)) ?? []
+        console.log("#####",attrQueryMatch[0],attrQueryMatch[0] == undefined)
+        const includeQueryMatch = each.match(/(?<={).+(?=})/)
         const model = tables[name]
 
         if (!model) return
 
-        const tableAttributes = Object.keys(model.getAttributes()).filter(each => !blockedAttributes.includes(each))
+        const tableAttributes = Object.keys(model.getAttributes()).filter(attr => {
+            if (blockedAttributes.includes(attr)) {
+                return null
+            }
+            if (attrQueryMatch[0] === undefined) {
+                console.log('added ' + attr + ' because no attrQuery matched ')
+                return attr
+            }
+            else if (attrQueryMatch[0].split(',').includes(attr)) {
+                console.log('added ' + attr + ' from ' + attrQueryMatch[0].split(','))
+                return attr
+            }
+        })
 
         if (each.includes("{") && includeQueryMatch) {
             //troco todos os "%" por "," novamente para que eu possa chamar a funcção de forma recursiva
             const includeQuery = includeQueryMatch[0].replace("%", ",")
             include = includeBuilder(includeQuery)
         }
-        return { model, include, attributes: tableAttributes }
+        return { model, __model_name: name, include, attributes: tableAttributes }
     })
 }
 

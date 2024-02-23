@@ -1,4 +1,6 @@
 import tables from "../../database/tables.mjs"
+import attributeBuilder from "../../utils/attributeBuilder.mjs"
+import groupBuilder from "../../utils/groupBuilder.mjs"
 import includeBuilder from "../../utils/includeBuilder.mjs"
 import opBuilder from "../../utils/operatorBuilder.mjs"
 import orderingBuilder from "../../utils/orderingBuilder.mjs"
@@ -14,7 +16,7 @@ import { upperCaseLetter } from "../../utils/stringUtils.mjs"
 export default async function getRequestHandler(req, res) {
 
     const tableName = upperCaseLetter(req.params.table, 0)
-    const { limit, order, include, ...restQuery } = req.query
+    const { limit, order, include, attributes, group, ...restQuery } = req.query
 
     var whereClause = {}
 
@@ -24,16 +26,26 @@ export default async function getRequestHandler(req, res) {
     })
 
     //Ordering clause build, any like ["id","ASC"] or [LiteralTable,"id","DESC"]
-    var orderClause = []
+    let orderClause = []
     if (order) orderClause.push(orderingBuilder(order))
 
+    let groupClause = groupBuilder(group)
+    let attributesClause = attributeBuilder(attributes)
+    let raw = false
+    if(attributes)raw = true;
+    let fullClause = {
+        where: whereClause,
+        attributes: attributesClause,
+        group: groupClause,
+        limit: limit,
+        include: includeBuilder(include),
+        order: orderClause,
+        raw
+    }
+    ;(await import("fs")).writeFileSync("last.json",JSON.stringify(fullClause,null,2))
+
     try {
-        const data = await tables[tableName].findAll({
-            where: whereClause,
-            limit: limit,
-            include: includeBuilder(include),
-            order: orderClause
-        })
+        const data = await tables[tableName].findAll(fullClause)
         res.json({ data })
     } catch (error) {
         return res.status(statusCodes.InternalServerError)
