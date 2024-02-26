@@ -12,6 +12,7 @@ import FormPrevisionInput from "../../OverPageForm/FormPrevisionInput";
 import { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import Table from "../../table/Table";
 import TransitionItemAdder from "./TransitionAdder";
+import Button from "../../Layout/Button";
 
 export default function CreateEntry(props: { type: 0 | 1 }) {
 
@@ -101,7 +102,7 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
                 />
             </div>
             <div className="p-4">
-                <button className="px-4 py-2 rounded-sm bg-submit text-submit-text font-bold hover:brightness-125"
+                <Button
                     onClick={async () => {
                         //Errors
                         if (addedTransitionItensData.length === 0) return simpleSpawnInfo("É necessario adicionar algum item à transação.")
@@ -112,11 +113,11 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
                         if (response.error || !response.data)
                             return simpleSpawnInfo(response.message ?? "Houve um problema desconhecido ao criar uma Transação.")
                         if (!Array.isArray(response.data))
-                            navigate('/print/transacao/' + response.data.transacao_id)
+                            navigate('/print/transacao/?id=' + response.data.transacao_id)
                     }}
                 >
                     <i>&#xe962;</i> Finalizar
-                </button>
+                </Button>
             </div>
         </Content>
     </>

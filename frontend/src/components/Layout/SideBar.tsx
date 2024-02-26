@@ -25,7 +25,8 @@ export default function SideBar() {
             <DropButton
                 title="Relatórios"
                 dropDownContent={<>
-                    <PanelLink href="/relatorio">Comparativo de Preços</PanelLink>
+                    <PanelLink href="/relatorio/1">Comparativo de Preços</PanelLink>
+                    <PanelLink href="/relatorio/2">Comparativo de Botes</PanelLink>
                 </>}>
 
                 <i>&#xe99c;</i> Relatório

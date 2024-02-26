@@ -4,6 +4,7 @@ import beautyNumber from "../../../constants/numberUtils"
 import FormInput from "../../OverPageForm/FormInput"
 import FormPrevisionInput from "../../OverPageForm/FormPrevisionInput"
 import { RequiredLabel } from "../../OverPageForm/OverPageForm"
+import Button from "../../Layout/Button"
 
 export default function TransitionItemAdder(props: { onSubmit: (item: BackendTableComp) => void }) {
     const [product, setProduct] = useState<BackendTableComp>()
@@ -60,7 +61,7 @@ export default function TransitionItemAdder(props: { onSubmit: (item: BackendTab
 
         <p className="col-span-4">Total:  {productPrice && productWeight ? beautyNumber(productPrice * productWeight) : "0,00"}</p>
         <div className="col-span-4">
-            <button className="bg-submit text-submit-text font-bold rounded-sm py-2 px-4 box-border"
+            <Button
                 onClick={() => {
                     if (!productWeight)
                         return setError('weight')
@@ -101,7 +102,7 @@ export default function TransitionItemAdder(props: { onSubmit: (item: BackendTab
 
                 }
 
-                } ><i>&#xe93a;</i> Adicionar</button>
+                } ><i>&#xe93a;</i> Adicionar</Button>
         </div>
     </div>
 }

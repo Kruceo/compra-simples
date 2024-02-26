@@ -1,7 +1,6 @@
 import jsPDF from "jspdf"
 import backend, { BackendTableComp } from "../../../constants/backend"
 import beautyNumber from "../../../constants/numberUtils"
-import { data } from "autoprefixer"
 
 interface PdfItemBoundings {
     x: number,
@@ -13,75 +12,7 @@ interface PdfItemBoundings {
     centerX: number
 }
 
-export async function productEntryPriceComparation(date1: Date, date2: Date) {
-    const pdf = new jsPDF()
-    // pdf.setFont(pdf.getFont().fontName, "", "bold")
-    // pdf.setFontSize(39)
-    // pdf.setTextColor("#bbb")
-    // pdf.text("VALORES FICTÍCIOS", pdf.internal.pageSize.width / 1.65, pdf.internal.pageSize.height / 1.65, { angle: 45, align: 'center' })
-    // pdf.setTextColor("#000")
-    const d1 = date1
-    const d2 = date2
-
-    const headerBox = writeHeader(pdf,
-        (new Date()).toLocaleDateString().slice(0, 5),
-        d1, d2
-    )
-
-    const where = {
-        createdAt: `>${d1.toISOString()},<${d2.toISOString()}`
-    }
-
-    const groupedTotalValues = await getPriceGroupedEntryTotalValues({ ...where, tipo: 0 })
-    if (!groupedTotalValues)
-        return console.error("productEntryPriceComparation error");
-
-    const tables = groupedEntry2Table(groupedTotalValues)
-    console.log(tables)
-    let lastTableBounding = headerBox
-
-    //Gerar todas as tabelas usando o local Y da ultima tabela 
-    tables.forEach(table => {
-        const tableResult = table.pop()
-        //escreve a tabela
-        lastTableBounding = writeTable(pdf, table, 5, lastTableBounding.y2 + 7, ["ESPÉCIE", "PREÇO", "PESO (KG)", "VALOR"], [4, 2, 2, 2])
-        //escreve a parte de baixo com o total de peso e valor
-        lastTableBounding = writeTable(pdf, [], 5, lastTableBounding.y2, tableResult ?? [], [4, 2, 2, 2])
-    })
-
-    let sellTables = groupedEntry2Table(await getPriceGroupedEntryTotalValues({ ...where, tipo: 1 }))
-
-    //soma das Compras
-    const entradaType0ValueSum = await getSumOf("valor_total", { ...where, tipo: 0 })
-    const entradaType0WeightSum = await getSumOf("peso", { ...where, tipo: 0 })
-    //Soma das vendas
-    const entradaType1ValueSum = await getSumOf("valor_total", { ...where, tipo: 1 })
-
-    lastTableBounding = writeTable(pdf, [], 5, lastTableBounding.y2 + 7, ["-", "SUBTOTAL", beautyNumber(entradaType0WeightSum ?? -1), beautyNumber(entradaType0ValueSum ?? -1)], [4, 2, 2, 2])
-
-    // Diminui o tamanho da tabela, ficando mais minimalista
-    let parsedSellTables: string[][] = sellTables.reduce((acum, next) => {
-        const lastRow = next[next.length - 1]
-        return [...acum, ["-", "-", next[0][0], lastRow[lastRow.length - 1]]]
-    }, [] as any[])
-
-    lastTableBounding = writeTable(pdf, parsedSellTables, 5, lastTableBounding.y2, [], [4, 2, 2, 2])
-
-    if (entradaType0ValueSum && entradaType1ValueSum) {
-        const total = entradaType0ValueSum - entradaType1ValueSum
-        writeTable(pdf, [], 5, lastTableBounding.y2 + 7, ["-", "-", "TOTAL GERAL", beautyNumber(total)], [4, 2, 2, 2])
-    }
-
-    const dadosDoPDF = pdf.output('dataurlstring');
-
-    // Cria uma nova janela ou guia do navegador e abre o PDF
-    const novaJanela = window.open();
-    if (novaJanela)
-        novaJanela.document.write('<iframe width="100%" height="100%" src="' + dadosDoPDF + '"></iframe>');
-
-}
-
-async function getPriceGroupedEntryTotalValues(where: any) {
+export async function getPriceGroupedEntryTotalValues(where: any) {
     const response = await backend.get('transacao', { status: 0, include: "transacao_item{produto}", ...where })
     if ((response.data.error || !response.data.data)) return;
     if (!Array.isArray(response.data.data)) return;
@@ -116,7 +47,7 @@ async function getPriceGroupedEntryTotalValues(where: any) {
     return obj
 }
 
-function groupedEntry2Table(obj: any) {
+export function groupedEntry2Table(obj: any) {
     const tables: string[][][] = []
 
     Object.entries(obj).forEach(([especie, especieData]: [string, any]) => {
@@ -137,7 +68,7 @@ function groupedEntry2Table(obj: any) {
     return tables
 }
 
-async function getGroupedTotalsByType(type: number, where: any) {
+export async function getGroupedValueTotalsByType(type: number, where: any) {
     const response = await backend.get('entrada', { status: 0, tipo: type, include: "transacao_item{produto}", ...where })
     if ((!response.data || response.data.error || !response.data.data)) return null
 
@@ -179,7 +110,7 @@ export async function getSumOf(attrToSum: "peso" | "valor_total", where: any) {
     return sum
 }
 
-export function writeTable(pdf: jsPDF, data: string[][], startX: number, startY: number, header: string[], dispositionOfData?: number[]): PdfItemBoundings {
+export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: number, startY: number, header: string[], dispositionOfData?: number[]): PdfItemBoundings {
 
     let sX = startX
     let sY = startY
@@ -208,7 +139,7 @@ export function writeTable(pdf: jsPDF, data: string[][], startX: number, startY:
         let colXSum = 0
         row.forEach((column, columnIndex) => {
             const cellW = cellFraction * disposition[columnIndex]
-
+            if (typeof (column) == 'number') column = beautyNumber(column)
             if (column == "-") { colXSum += cellW; return; }
 
 
@@ -277,4 +208,13 @@ export function writeHeader(pdf: jsPDF, identification: string, date1: Date, dat
     const totalW = headerBox.w + dateBox.w
 
     return { x: startX, y: startY, h: height, w: totalW, x2: startX + totalW, y2: startY + height, centerX: startX + totalW / 2 }
+}
+
+export function openPDF(pdf: jsPDF) {
+    const dadosDoPDF = pdf.output('dataurlstring');
+
+    // Cria uma nova janela ou guia do navegador e abre o PDF
+    const novaJanela = window.open();
+    if (novaJanela)
+        novaJanela.document.write('<iframe width="100%" height="100%" src="' + dadosDoPDF + '"></iframe>');
 }

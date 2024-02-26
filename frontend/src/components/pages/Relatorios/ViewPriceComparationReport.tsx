@@ -1,12 +1,12 @@
+import {priceComparation} from "./priceComparation";
 import SideBar from "../../Layout/SideBar";
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import FormInput from "../../OverPageForm/FormInput";
-import { productEntryPriceComparation } from "./libraryReports";
 import { ToolBarButton } from "../../Layout/SubTopBar";
 import { useState } from "react";
 
-export default function ViewReports() {
+export default function BoatEntryComparationReport() {
 
     const nowDate = new Date()
     const defaultLastWeek = new Date(nowDate.getTime() - (7 * 24 * 60 * 60 * 1000))
@@ -46,7 +46,7 @@ export default function ViewReports() {
                     defaultValue={date2input(nowDate)}
                     onChange={(e) => dateSetter(e.target.value, 47, 59, 59, setDate2)} />
                 <ToolBarButton className="hover:bg-green-100 mx-2"
-                    onClick={() => productEntryPriceComparation(date1, date2)}>
+                    onClick={() => priceComparation(date1, date2)}>
                     <i>&#xe926;</i> Pronto
                 </ToolBarButton>
             </div>
