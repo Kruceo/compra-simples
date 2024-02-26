@@ -1,0 +1,52 @@
+{
+  "where": {
+    "id": "34"
+  },
+  "include": [
+    {
+      "__model_name": "Bote",
+      "include": [
+        {
+          "__model_name": "Fornecedor",
+          "include": [],
+          "attributes": [
+            "id",
+            "nome",
+            "integracao_id",
+            "createdAt",
+            "updatedAt"
+          ]
+        }
+      ],
+      "attributes": [
+        "id",
+        "fornecedor_id",
+        "nome",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    {
+      "__model_name": "Transacao_item",
+      "include": [
+        {
+          "__model_name": "Produto",
+          "include": [],
+          "attributes": [
+            "nome"
+          ]
+        }
+      ],
+      "attributes": [
+        "id",
+        "produto_id",
+        "transacao_id",
+        "peso",
+        "preco",
+        "valor_total"
+      ]
+    }
+  ],
+  "order": [],
+  "raw": false
+}

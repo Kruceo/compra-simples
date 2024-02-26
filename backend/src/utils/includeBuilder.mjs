@@ -2,7 +2,7 @@ import tables from "../database/tables.mjs";
 import { upperCaseLetter } from "./stringUtils.mjs";
 import { getAssociatedModels } from "./tableUtils.mjs";
 
-const blockedAttributes = ['senha', 'password', 'pass', 'pwd', "obs"]
+const blockedAttributes = ['senha', 'password', 'pass', 'pwd']
 
 /**
  * Automatic create a include clause with all references included
@@ -40,22 +40,32 @@ const subSpliter = ':'
 export default function includeBuilder(query) {
     if (!query || query.trim() == '') return []
     //Escondo as virgulas dentro dos colchetes e chaves "[]{}" trocando as por "%" para que detecte apenas a camada externa de itens, por assim dizer
-    const hiddedQuery = query
-        .replace(/(?<={.*),(?=.*})/, "%")
-        .replace(/(?<=\[.*),(?=.*\])/,"%")
+    //sou obrigado a usar replace nos {} que estão dentro de outros {}, embora não seja o objetivo
+    let hiddedQuery = query
+        .replace(/{[^{}]*}/g, (s) => s.replace(/,/g, "%").replace(/{/g, "$1").replace(/}/g, "$2"))
+        .replace(/{[^{}]*}/g, (s) => s.replace(",", "%"))
+        .replace(/(?<=\[.*),(?=.*\])/, "%")
+
+    while (hiddedQuery.includes("{")) {
+        hiddedQuery = hiddedQuery
+            .replace(/{[^{}]*}/g, (s) => s.replace(/,/g, "%").replace(/{/g, "$1").replace(/}/g, "$2"))
+            .replace(/{[^{}]*}/g, (s) => s.replace(",", "%"))
+    }
+    // replace all $1 and $2 to {} again
+    hiddedQuery = hiddedQuery.replace(/\$1/g, '{').replace(/\$2/g, "}")
 
     return hiddedQuery.split(',').map(each => {
         let include = []
 
         //retiro o conteudo dentro dos colchetes se necessario e também faço da primeira letra maiuscula
-        const realname = each.replace(/\[.*?\]/g, "").replace(/{.*?}/g,"")
-        
+        const realname = each.replace(/\[.*?\]/g, "").replace(/{.*?}/g, "")
+        console.log(realname)
         const name = upperCaseLetter(realname, 0)
         //capturo tambem o conteudo de dentro dos chaves se houver
 
         //preciso usar o replace para conseguir o primeiro e mais curto padrão [.+] mesmo que tenha, e reponho as virgulas por que se não é impossivel que a tabela tenha o atributo com o % no meio
-        const attrQueryMatch = each.replace("%",',').match(new RegExp(`(?<=${realname}\\[).*?(?=\\])`)) ?? []
-        console.log("#####",attrQueryMatch[0],attrQueryMatch[0] == undefined)
+        const attrQueryMatch = each.replace("%", ',').match(new RegExp(`(?<=${realname}\\[).*?(?=\\])`)) ?? []
+        console.log("#####", attrQueryMatch[0], attrQueryMatch[0] == undefined)
         const includeQueryMatch = each.match(/(?<={).+(?=})/)
         const model = tables[name]
 
@@ -66,11 +76,9 @@ export default function includeBuilder(query) {
                 return null
             }
             if (attrQueryMatch[0] === undefined) {
-                console.log('added ' + attr + ' because no attrQuery matched ')
                 return attr
             }
             else if (attrQueryMatch[0].split(',').includes(attr)) {
-                console.log('added ' + attr + ' from ' + attrQueryMatch[0].split(','))
                 return attr
             }
         })
