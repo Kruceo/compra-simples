@@ -64,7 +64,7 @@ export default function ProductCreationForm(props: {
             onSubmit={submitHandler}
         >
             <RequiredLabel htmlFor="nome">Nome</RequiredLabel>
-            <FormInput name="nome" type="text" placeholder="E.g Dourado" defaultValue={defaultValues ? defaultValues.nome : undefined} errored={(error == "nome")} />
+            <FormInput name="nome" type="text" placeholder="Insira um nome" autoFocus defaultValue={defaultValues ? defaultValues.nome : undefined} errored={(error == "nome")} />
 
             <RequiredLabel htmlFor="preco">Preço</RequiredLabel>
             <FormInput name="preco" type="number" step={0.01} placeholder="Insira o preço" defaultValue={defaultValues ? defaultValues.preco : undefined} errored={(error == "preco")} />

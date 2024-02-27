@@ -1,8 +1,30 @@
+import { useEffect } from "react";
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
+import { useNavigate } from "react-router-dom";
 
 export default function ViewDashboard() {
+
+    const navigate = useNavigate()
+    const keyListenerHandler = (e: KeyboardEvent) => {
+        switch (e.key) {
+            case "F8":
+                navigate('/create/entrada')
+                window.removeEventListener('keyup', keyListenerHandler)
+                break;
+            case "F9":
+                navigate('/create/saida')
+                window.removeEventListener('keyup', keyListenerHandler)
+                break;
+
+            default:
+                break;
+        }
+    }
+    useEffect(() => {
+        window.addEventListener("keyup", keyListenerHandler)
+    }, [])
     return <>
         <Bar />
         <SideBar />

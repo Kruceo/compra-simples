@@ -9,7 +9,8 @@ export async function priceComparation(d1: Date, d2: Date) {
         attributes: "transacao_itens.produto.nome,transacao_itens.preco,(sum)transacao_itens.peso,(sum)transacao_itens.valor_total",
         group: "transacao_itens.produto.nome,transacao_itens.preco",
         tipo: 0,
-        status: 0
+        status: 0,
+        createdAt:">"+d1.toISOString() +',<' + d2.toISOString()
     })
 
     const resExit = await backend.get("transacao", {
@@ -18,6 +19,7 @@ export async function priceComparation(d1: Date, d2: Date) {
         group: "transacao_itens.produto.nome",
         tipo: 1, // exit,
         status: 0,
+        createdAt:">"+d1.toISOString() +',<' + d2.toISOString()
     })
 
     if (resEntry.data.error || resEntry.data.error || !Array.isArray(resEntry.data.data)) return;
@@ -35,8 +37,11 @@ export async function priceComparation(d1: Date, d2: Date) {
     const pdf = new jsPDF()
 
     const today = new Date()
-
+    
     let lastBoundingBox = writeHeader(pdf, today.toLocaleDateString().slice(0,5), d1, d2)
+    
+    pdf.setFontSize(12)
+
     const disposition = [2, 1, 1, 1]
     entryTables.tables.forEach(each => {
         const totals = each[0]

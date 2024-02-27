@@ -8,6 +8,7 @@ interface FormPrevisionInputAttributes {
     errored?: boolean,
     name?: string
     searchInTable: string,
+    autoFocus?:boolean,
     where: Object,
     onChange?: (item: BackendTableComp | null) => void
     onSubmit: () => void,
@@ -17,7 +18,7 @@ interface FormPrevisionInputAttributes {
 export default function FormPrevisionInput(props: FormPrevisionInputAttributes) {
     const { defaultDataGet } = useContext(TableEngineContext)
     const visibleInputRef = useRef<HTMLInputElement>(null)
-    let { where, searchInTable, errored, placeholder, name, onChange, itemHandler, onSubmit, className } = props
+    let { where, searchInTable, errored, placeholder,autoFocus ,name, onChange, itemHandler, onSubmit, className } = props
 
 
 
@@ -81,6 +82,8 @@ export default function FormPrevisionInput(props: FormPrevisionInputAttributes) 
                 placeholder={placeholder}
                 type="text"
                 autoComplete="off"
+                autoCorrect="off"
+                autoFocus={autoFocus}
             />
             <p className={"w-full"}
                 style={{ display: inputVisible ? "none" : "block" }}

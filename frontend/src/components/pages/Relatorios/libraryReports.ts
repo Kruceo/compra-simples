@@ -12,110 +12,12 @@ interface PdfItemBoundings {
     centerX: number
 }
 
-export async function getPriceGroupedEntryTotalValues(where: any) {
-    const response = await backend.get('transacao', { status: 0, include: "transacao_item{produto}", ...where })
-    if ((response.data.error || !response.data.data)) return;
-    if (!Array.isArray(response.data.data)) return;
-
-    const fdata = response.data.data
-
-    const itens = fdata.reduce((acum, next) => {
-        return [...acum, ...(next.transacao_itens ?? [])]
-    }, [] as BackendTableComp[])
-
-    const obj: any = {}
-
-    itens.forEach(each => {
-        const productName = (each.produto?.nome) ?? "Undefined"
-        const productPrice = (each.preco ?? -1)
-        if (!obj[productName])
-            obj[productName] = {
-
-            }
-        if (obj[productName]) {
-            if (!obj[productName][productPrice]) {
-                obj[productName][productPrice] = { value: each.valor_total, weight: each.peso }
-            }
-            else {
-                obj[productName][productPrice].value += each.valor_total
-                obj[productName][productPrice].weight += each.peso
-            }
-        }
-
-    })
-    console.log(obj)
-    return obj
-}
-
-export function groupedEntry2Table(obj: any) {
-    const tables: string[][][] = []
-
-    Object.entries(obj).forEach(([especie, especieData]: [string, any]) => {
-        let totalProductWeight = 0
-        let totalProductValue = 0
-        const table: string[][] = []
-        Object.entries(especieData).forEach(([price, priceData]: [string, any]) => {
-            const tableRow = []
-            tableRow.push(especie, beautyNumber(parseFloat(price)), beautyNumber(priceData.weight), beautyNumber(priceData.value))
-            table.push(tableRow)
-            totalProductValue += priceData.value
-            totalProductWeight += priceData.weight
-        })
-        table.push(["-", "TOTAL", beautyNumber(totalProductWeight), beautyNumber(totalProductValue)])
-        tables.push(table)
-    })
-    console.log(tables[0])
-    return tables
-}
-
-export async function getGroupedValueTotalsByType(type: number, where: any) {
-    const response = await backend.get('entrada', { status: 0, tipo: type, include: "transacao_item{produto}", ...where })
-    if ((!response.data || response.data.error || !response.data.data)) return null
-
-    if (!Array.isArray(response.data.data)) return;
-
-    let values: any = {}
-
-    response.data.data.forEach(entrada => {
-        entrada.transacao_itens?.forEach(transacao_item => {
-            const produto = transacao_item.produto
-
-            if (produto && produto.nome) {
-                console.log(transacao_item.id, transacao_item.produto_id)
-                if (!values[produto.nome])
-                    values[produto.nome] = transacao_item.valor_total ?? 0
-                else values[produto.nome] += transacao_item.valor_total ?? 0
-            }
-        })
-    })
-
-    return values
-}
-
-export async function getSumOf(attrToSum: "peso" | "valor_total", where: any) {
-    const response = await backend.get('transacao', { status: 0, include: "transacao_item{produto}", ...where })
-    if ((response.data.error || !response.data.data)) return null
-
-    if (!Array.isArray(response.data.data)) return;
-    let sum = 0
-    response.data.data.forEach(entrada => {
-        if (!entrada.transacao_itens) return;
-        entrada.transacao_itens.forEach(entrada_item => {
-            if (entrada_item[attrToSum])
-                sum += entrada_item[attrToSum] ?? 0
-            else alert("Ocorreu um erro na geração do relatório.")
-        }
-        )
-    })
-    return sum
-}
-
-export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: number, startY: number, header: string[], dispositionOfData?: number[]): PdfItemBoundings {
+export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: number, startY: number, header: string[], dispositionOfData?: number[], dispositionOfStyle?: string[]): PdfItemBoundings {
 
     let sX = startX
     let sY = startY
 
-    const disposition = dispositionOfData ?? data[0].map(() => 1)
+    let disposition = (data[0]??header).map((each, index) => dispositionOfData ? (dispositionOfData[index] ?? 1) : 1)
     const dispositionSum = disposition.reduce((acum, next) => acum + next, 0)
 
     const fullW = pdf.internal.pageSize.width
@@ -131,17 +33,15 @@ export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: numb
         pdf.setPage(pdf.internal.pages.length)
         sY = 5
     }
-
+   
     dataWithHeader.forEach((row, rowIndex) => {
         const y = sY + (rowIndex * rowH)
 
-        pdf.setFontSize(12)
         let colXSum = 0
         row.forEach((column, columnIndex) => {
             const cellW = cellFraction * disposition[columnIndex]
             if (typeof (column) == 'number') column = beautyNumber(column)
             if (column == "-") { colXSum += cellW; return; }
-
 
             //Case is first index
             if (rowIndex == 0) {
@@ -153,6 +53,12 @@ export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: numb
                 pdf.setLineWidth(0.25)
             }
 
+            if (dispositionOfStyle) {
+                if (dispositionOfStyle[columnIndex] == 'bold') {
+                    pdf.setFont(pdf.getFont().fontName, 'bold')
+                }
+            }
+
             const x = sX + colXSum
             const box = writeBox(pdf, x, y, cellW, rowH)
 
@@ -160,7 +66,7 @@ export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: numb
             let textX = box.x + 1
 
             //Case is number
-            if (/^(\d|,|\.)+$/.test(column)) {
+            if (/^(\d|,|\.|-)+$/.test(column)) {
                 align = "right"
                 textX = box.x2 - 1
             }

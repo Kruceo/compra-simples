@@ -9,12 +9,12 @@ import Button from "../../Layout/Button";
 export default function PrintEntry() {
     const url = new URL(window.location.href)
     const id = url.search.replace("?", "").split('=')[1]
-    const sessionID = Math.random()
+
     if(!id)return "Essa página funciona com a referência de um ID. (?id=10)"
     const printHandler = async () => {
+        if(localStorage.getItem("printerSessionLocker"))return
+        localStorage.setItem("printerSessionLocker","true")
         const width: number = (await thermalPrinter.getWidth()).data.width
-        if (localStorage.getItem('used' + sessionID) == 'true') return
-        localStorage.setItem('used' + sessionID, 'true')
 
         let d = await backend.get('transacao', { include: "bote{fornecedor},transacao_item{produto[nome]}", id })
         if (d.data.error || !d.data.data || !Array.isArray(d.data.data)) return;
@@ -26,6 +26,7 @@ export default function PrintEntry() {
         queries.push(['left'])
         queries.push(['println', '-'.repeat(width)])
 
+        queries.push(['println', `Tipo: ${!item.tipo?"Entrada":"Saída"}`])
         queries.push(['println', `Bote: ${item.bote?.nome}`])
         queries.push(['println', `Fornecedor: ${item.bote?.fornecedor?.nome}`])
         queries.push(['println', ""])
@@ -50,6 +51,7 @@ export default function PrintEntry() {
         queries.push(['cut'])
         // setQ(queries)
         thermalPrinter.print(queries)
+        localStorage.removeItem("printerSessionLocker")
     }
 
     useEffect(() => {

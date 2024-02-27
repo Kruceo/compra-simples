@@ -20,13 +20,7 @@ export default function BoatEntryComparationReport() {
     const [date1, setDate1] = useState(defaultLastWeek)
     const [date2, setDate2] = useState(nowDate)
 
-    const dateSetter = (strDate: string, hours: number, minutes: number, seconds: number, setter: Function) => {
-        const d = new Date(strDate)
-        d.setHours(hours)
-        d.setMinutes(minutes)
-        d.setSeconds(seconds)
-        setter(d)
-    }
+    
 
     return <>
         <Bar />
@@ -54,7 +48,7 @@ export default function BoatEntryComparationReport() {
     </>
 }
 
-function date2input(date: Date) {
+export function date2input(date: Date) {
     const [y, m, d] = [
         date.getFullYear().toString().padStart(4, '0'),
         (date.getMonth() + 1).toString().padStart(2, '0'),
@@ -63,4 +57,12 @@ function date2input(date: Date) {
     console.log(date, y, m, d)
     return `${y}-${m}-${d}`
     // return date.toISOString()
+}
+
+export function dateSetter(strDate: string, hours: number, minutes: number, seconds: number, setter: Function) {
+    const d = new Date(strDate)
+    d.setHours(hours)
+    d.setMinutes(minutes)
+    d.setSeconds(seconds)
+    setter(d)
 }

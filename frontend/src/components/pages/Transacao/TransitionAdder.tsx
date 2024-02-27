@@ -13,7 +13,7 @@ export default function TransitionItemAdder(props: { onSubmit: (item: BackendTab
     const [error, setError] = useState("")
     return <div className="p-4 min-h-44 grid grid-cols-4 gap-3">
         <div className="box-border col-span-4 mb-4">
-            <RequiredLabel>Produto</RequiredLabel>
+            <RequiredLabel className="col-span-4">Produto</RequiredLabel>
             <FormPrevisionInput
                 errored={error == "product"}
                 placeholder="Insira o codigo do produto"
@@ -38,6 +38,7 @@ export default function TransitionItemAdder(props: { onSubmit: (item: BackendTab
         <div className="box-border col-span-4 mb-4">
             <RequiredLabel>Preço</RequiredLabel>
             <FormInput
+            className="w-full"
                 errored={error == "price"}
                 name="price"
                 placeholder="Insira o preço do produto"
@@ -50,6 +51,7 @@ export default function TransitionItemAdder(props: { onSubmit: (item: BackendTab
         <div className="box-border col-span-4">
             <RequiredLabel>Peso</RequiredLabel>
             <FormInput
+            className="w-full"
                 errored={error == "weight"}
                 name="weight"
                 type="number"

@@ -46,8 +46,8 @@ export default function BoatCreationForm(props: {
             })
         }
         // Tratamento de erro
-        if (response && response.error && response.message) {
-            simpleSpawnInfo(response.message)
+        if (response && response.data.error && response.data.message) {
+            simpleSpawnInfo(response.data.message)
         }
         // EXIT if exists
         afterSubmit ? afterSubmit() : null
@@ -61,7 +61,7 @@ export default function BoatCreationForm(props: {
             onSubmit={submitHandler}
         >
             <RequiredLabel htmlFor="nome">Nome</RequiredLabel>
-            <FormInput name="nome" type="text" placeholder="E.g Barco Penha" defaultValue={defaultValues ? defaultValues.nome : undefined} errored={(error == "nome")} />
+            <FormInput name="nome" type="text" placeholder="E.g Barco Penha" autoFocus defaultValue={defaultValues ? defaultValues.nome : undefined} errored={(error == "nome")} />
 
             <RequiredLabel>Fornecedor</RequiredLabel>
 

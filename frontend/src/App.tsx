@@ -21,9 +21,11 @@ function App() {
 
   return (
     <>
-      <ErrorHandler>
-        <TableEngine>
-          <PopupContext>
+      
+        <PopupContext>
+        <ErrorHandler>
+          <TableEngine>
+
 
 
             <Routes>
@@ -46,11 +48,12 @@ function App() {
               <Route path='/*' element={<View404 />} />
             </Routes>
 
+          </TableEngine>
+          </ErrorHandler>
+        </PopupContext>
 
-          </PopupContext>
 
-        </TableEngine>
-      </ErrorHandler>
+      
     </>
   )
 }

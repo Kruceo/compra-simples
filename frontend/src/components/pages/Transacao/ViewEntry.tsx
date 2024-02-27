@@ -21,7 +21,7 @@ export default function ViewEntry() {
 
     const [data, setData] = useState<BackendTableComp[]>([]);
     const [update, setUpdate] = useState(true)
-    const [where, setWhere] = useState<any>({ include: "bote,usuario", status: 0, order: "updatedAt,DESC" })
+    const [where, setWhere] = useState<any>({ include: "bote{fornecedor},usuario", status: 0, order: "updatedAt,DESC" })
 
     const setWhereKey = (key: string, value: string) => {
         const mockup = { ...where }
@@ -69,19 +69,20 @@ export default function ViewEntry() {
                 <Table
                     onOrderChange={orderHandler}
                     data={data}
-                    disposition={[1, 2, 2, 2, 2, 2]}
+                    disposition={[1, 3,3 ,2, 2, 2, 2]}
                     tableItemHandler={(item) => [
                         item.id,
                         item.bote?.nome,
+                        item.bote?.fornecedor?.nome,
                         <div className="text-right">{beautyNumber(item.peso ?? -1)}</div>,
                         <div className="text-right">{beautyNumber(item.valor ?? -1)} </div>,
                         item.tipo == 0 ? "Entrada" : "Saída",
                         // item.status==0?<i title="Válido">&#xea10;</i>:<i title="Cancelado">&#xea0d;</i>,
                         bDate(item.updatedAt)
                     ]}
-                    tableOrderKeys={["id", ["Bote", "nome"], "peso", "valor", "tipo", "updatedAt"]}
+                    tableOrderKeys={["id", ["Bote", "nome"],["Bote","Fornecedor","nome"], "peso", "valor", "tipo", "updatedAt"]}
                     tableHeader={[
-                        "ID", "Bote","Peso (KG)", "Valor","Tipo",  "Ultima Atualização"
+                        "ID", "Bote","Fornecedor","Peso (KG)", "Valor","Tipo",  "Ultima Atualização"
                     ]}
                     contextMenu={{ buttons: tableContextMenuButtons }}
                 />

@@ -52,9 +52,9 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
                         <FormPrevisionInput
                             placeholder="Insira o codigo do bote"
                             onChange={(value) => {
-                                if (value)
-                                    setTransitionBoat(value)
+                                setTransitionBoat(value ?? undefined)
                             }}
+                            autoFocus={true}
                             searchInTable="bote"
                             where={{ include: 'fornecedor' }}
                             itemHandler={(item) => `${item.id} - ${item.nome} | ${item.fornecedor?.nome}`}
@@ -105,8 +105,8 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
                 <Button
                     onClick={async () => {
                         //Errors
-                        if (addedTransitionItensData.length === 0) return simpleSpawnInfo("É necessario adicionar algum item à transação.")
                         if (!transitionBoat || !transitionBoat.id) return simpleSpawnInfo("É necessario selecionar um bote.")
+                        if (addedTransitionItensData.length === 0) return simpleSpawnInfo("É necessario adicionar algum item à transação.")
 
                         const response = await saveEntryStack(transitionBoat.id, obs, sumValor(), sumPeso(), props.type, backend.utils.removeAttributeFromAll(addedTransitionItensData, "id"))
 

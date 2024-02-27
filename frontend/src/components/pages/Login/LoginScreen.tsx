@@ -33,7 +33,7 @@ export default function LoginScreen() {
         <form onSubmit={submitHandler} className="flex flex-col w-80 bg-subpanel p-4 border-borders border shadow-xl bg-cover bg-no-repeat">
             <h2>Login</h2>
             <RequiredLabel>Usuário</RequiredLabel>
-            <FormInput placeholder="Insira seu usuário" name="user" type="text" errored={error == "user"} />
+            <FormInput placeholder="Insira seu usuário" name="user" type="text" errored={error == "user"} autoFocus/>
             <RequiredLabel>Senha</RequiredLabel>
             <FormInput placeholder="Insira sua senha" name="password" type="password" errored={error == "password"} />
             <FormInput type="submit" value={"Entrar"} />
