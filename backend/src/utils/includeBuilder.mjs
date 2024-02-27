@@ -43,8 +43,7 @@ export default function includeBuilder(query) {
     //sou obrigado a usar replace nos {} que estão dentro de outros {}, embora não seja o objetivo
     let hiddedQuery = query
         .replace(/{[^{}]*}/g, (s) => s.replace(/,/g, "%").replace(/{/g, "$1").replace(/}/g, "$2"))
-        .replace(/{[^{}]*}/g, (s) => s.replace(",", "%"))
-        .replace(/(?<=\[.*),(?=.*\])/, "%")
+        .replace(/\[[^\[\]]*\]*/, (s)=> s.replace(',','%'))
 
     while (hiddedQuery.includes("{")) {
         hiddedQuery = hiddedQuery
@@ -54,18 +53,18 @@ export default function includeBuilder(query) {
     // replace all $1 and $2 to {} again
     hiddedQuery = hiddedQuery.replace(/\$1/g, '{').replace(/\$2/g, "}")
 
+    console.log(hiddedQuery)
+
     return hiddedQuery.split(',').map(each => {
         let include = []
 
         //retiro o conteudo dentro dos colchetes se necessario e também faço da primeira letra maiuscula
         const realname = each.replace(/\[.*?\]/g, "").replace(/{.*?}/g, "")
-        console.log(realname)
         const name = upperCaseLetter(realname, 0)
         //capturo tambem o conteudo de dentro dos chaves se houver
 
         //preciso usar o replace para conseguir o primeiro e mais curto padrão [.+] mesmo que tenha, e reponho as virgulas por que se não é impossivel que a tabela tenha o atributo com o % no meio
         const attrQueryMatch = each.replace("%", ',').match(new RegExp(`(?<=${realname}\\[).*?(?=\\])`)) ?? []
-        console.log("#####", attrQueryMatch[0], attrQueryMatch[0] == undefined)
         const includeQueryMatch = each.match(/(?<={).+(?=})/)
         const model = tables[name]
 

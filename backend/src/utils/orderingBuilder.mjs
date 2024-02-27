@@ -13,6 +13,14 @@ export default function orderingBuilder(query) {
         if (!key || !order) return undefined
         return [table, key, order]
     }
+    if (splited.length === 4) {
+        table = tables[splited[0]]
+        let table2 = tables[splited[1]]
+        key = splited[2]
+        order = splited[3]
+        if (!key || !order) return undefined
+        return [table,table2, key, order]
+    }
     else {
         key = splited[0]
         order = splited[1]

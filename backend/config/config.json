@@ -15,6 +15,7 @@
     },
     "security":{
         "secret":"abc",
-        "tokenExpireTime":"30m"
+        "tokenExpireTime":"30m",
+        "prefixLength":6
     }
 }

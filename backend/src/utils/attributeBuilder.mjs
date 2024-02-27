@@ -9,41 +9,43 @@ export default function attributeBuilder(text) {
     let attr = splited.map(each => {
         let parsedName = each.replace(/\(\w+?\)/g, '')
         let shortName = parsedName.replace(/\w+?\./g, '')
+        let nick = (parsedName.match(/\w+\.\w+$/)??[shortName])[0].replace(".","_")
+        console.log(nick)
         const fn = each.match(/(?<=\()\w+(?=\))/) ?? []
        
         switch (fn[0]) {
             case "sum":
                 return [
                     sequelize.fn("SUM", sequelize.col(parsedName)),
-                    shortName
+                    nick
                 ]
                 break;
             case "count":
                 return [
                     sequelize.fn("COUNT", sequelize.col(parsedName)),
-                    shortName
+                    nick
                 ]
                 break;
             case "min":
                 return [
                     sequelize.fn("MIN", sequelize.col(parsedName)),
-                    shortName
+                    nick
                 ]
                 break;
             case "max":
                 return [
                     sequelize.fn("MAX", sequelize.col(parsedName)),
-                    shortName
+                    nick
                 ]
                 break;
             case "avg":
                 return [
                     sequelize.fn("AVG", sequelize.col(parsedName)),
-                    shortName
+                    nick
                 ]
                 break;
             default:
-                return [sequelize.col(parsedName),shortName]                
+                return [sequelize.col(parsedName),nick]                
                 break;
         }
 

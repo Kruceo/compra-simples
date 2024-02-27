@@ -28,7 +28,12 @@ export default function ViewDashboard() {
     return <>
         <Bar />
         <SideBar />
-        <Content>
+        <Content className="flex">
+            <div className="p-4 bg-subpanel border-borders border flex flex-col relative m-4 ml-auto">
+                <h2>Atalhos</h2>
+                <p>F8 - Criação de entradas</p>
+                <p>F9 - Criação de saídas</p>
+            </div>
             <img src="/icon.png" alt="icon" className="w-80 opacity-20 absolute ml-20 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2" />
         </Content>
     </>
