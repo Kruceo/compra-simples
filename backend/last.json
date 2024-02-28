@@ -1,6 +1,6 @@
 {
   "where": {
-    "id": "50"
+    "status": "0"
   },
   "include": [
     {
@@ -27,26 +27,21 @@
       ]
     },
     {
-      "__model_name": "Transacao_item",
-      "include": [
-        {
-          "__model_name": "Produto",
-          "include": [],
-          "attributes": [
-            "nome"
-          ]
-        }
-      ],
+      "__model_name": "Usuario",
+      "include": [],
       "attributes": [
         "id",
-        "produto_id",
-        "transacao_id",
-        "peso",
-        "preco",
-        "valor_total"
+        "nome",
+        "createdAt",
+        "updatedAt"
       ]
     }
   ],
-  "order": [],
+  "order": [
+    [
+      "updatedAt",
+      "DESC"
+    ]
+  ],
   "raw": false
 }

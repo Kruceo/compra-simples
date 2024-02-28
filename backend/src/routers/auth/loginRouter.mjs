@@ -7,7 +7,31 @@ import { authenticateToken, authenticateUser } from "../../security/authenticati
  */
 const authRouter = new Router()
 
+let hosts = new Map()
+
 authRouter.post("/auth/login", async (req, res) => {
+
+    const hostValue = hosts.get(req.hostname)
+   
+    if (!hostValue) hosts.set(req.hostname, new Date().getTime() + 500+',1')
+
+    else {
+        let [hostTime,lvl] = hostValue.split(",").map(each=>parseInt(each))
+        const today = new Date()
+        const hostDate = new Date(hostTime)
+
+        if(today.getTime() < hostDate.getTime()){
+            res.status(statusCodes.Unauthorized).json({
+                error:true,
+                message:"Blocked"
+            })
+            const newLvl = lvl<120?lvl+1:lvl
+            hosts.set(req.hostname,hostDate.getTime() + (200 * newLvl)+","+(newLvl))
+            return;
+        }
+        hosts.delete(req.hostname)
+    }
+
     const { user, password } = req.body
     if (!user || !password) return res.status(statusCodes.BadRequest)
         .json({ error: true, message: "Falta de informação na requisição." })
