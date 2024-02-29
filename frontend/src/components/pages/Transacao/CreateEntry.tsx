@@ -13,15 +13,19 @@ import { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import Table from "../../table/Table";
 import TransitionItemAdder from "./TransitionAdder";
 import Button from "../../Layout/Button";
+import { printSingleEntry } from "./PrintEntry";
 
 export default function CreateEntry(props: { type: 0 | 1 }) {
 
     const navigate = useNavigate()
     const { setGlobalPopupByKey, simpleSpawnInfo } = useContext(GlobalPopupsContext)
 
+    const [clear, setClear] = useState(false)
+
     const [addedTransitionItensData, setAddedTransitionItensData] = useState<BackendTableComp[]>([])
     const [transitionBoat, setTransitionBoat] = useState<BackendTableComp>()
     const [obs, setObs] = useState("")
+
     const addTransitionItem = (Transação_item: BackendTableComp) => setAddedTransitionItensData([...addedTransitionItensData, { ...Transação_item, id: addedTransitionItensData.length + 1 }])
     const removeTransitionItem = (...Transação_item_ids: number[]) => setAddedTransitionItensData(addedTransitionItensData.filter(each => !Transação_item_ids.includes(each.id ?? -1)))
 
@@ -41,10 +45,9 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
     return <>
         <Bar />
         <SideBar />
-
         <Content>
             <div className="px-4 py-8 flex flex-col border-b border-borders min-h-44">
-                <h2>Criação de {props.type == 0 ? "Entrada" : "Saída"}</h2>
+                <h2>Nova {props.type == 0 ? "Entrada" : "Saída"}</h2>
                 <div className="grid grid-cols-2">
                     <div className="w-full">
                         <RequiredLabel>Bote</RequiredLabel>
@@ -59,6 +62,7 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
                             where={{ include: 'fornecedor' }}
                             itemHandler={(item) => `${item.id} - ${item.nome} | ${item.fornecedor?.nome}`}
                             onSubmit={() => null}
+                            next="input[name=product]"
                         />
                     </div>
                 </div>
@@ -99,10 +103,12 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
                     placeholder="Insira uma observação"
                     onChange={(e) => setObs(e.currentTarget.value)
                     }
+                    next="#submitTransaction"
                 />
             </div>
             <div className="p-4">
                 <Button
+                    id="submitTransaction"
                     onClick={async () => {
                         //Errors
                         if (!transitionBoat || !transitionBoat.id) return simpleSpawnInfo("É necessario selecionar um bote.")
@@ -112,8 +118,14 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
 
                         if (response.error || !response.data)
                             return simpleSpawnInfo(response.message ?? "Houve um problema desconhecido ao criar uma Transação.")
-                        if (!Array.isArray(response.data))
+                        if (!Array.isArray(response.data)) {
+                            // printSingleEntry(response.data.transacao_id ?? -1)
                             navigate('/print/transacao/?id=' + response.data.transacao_id)
+                            setTimeout(() => {
+                                navigate("/create/entrada")     
+                            }, 300);
+                           
+                        }
                     }}
                 >
                     <i>&#xe962;</i> Finalizar

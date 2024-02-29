@@ -11,14 +11,14 @@ export async function boatEntryComparation(d1: Date, d2: Date) {
         attributes: 'bote.nome,bote.fornecedor.nome,transacao_itens.produto.nome,(sum)transacao_itens.valor_total,tipo',
         group: 'bote.nome,bote.fornecedor.nome,transacao_itens.produto.nome,tipo',
         status: 0,
-        createdAt: ">" + d1.toISOString()+",<"+d2.toISOString(),
+        createdAt: ">" + d1.toISOString() + ",<" + d2.toISOString(),
         order: 'bote_nome,ASC'
     })
 
     const resTransacaoTotals = await backend.get("transacao", {
         include: 'transacao_item[]{produto[]},bote[]',
-        attributes: 'bote.nome,tipo,(sum)transacao_itens.valor_total',
-        group: 'bote.nome,tipo',
+        attributes: 'bote.nome,(sum)tipo,(sum)transacao_itens.valor_total',
+        group: 'bote.nome',
         status: 0
     })
 
@@ -48,11 +48,12 @@ export async function boatEntryComparation(d1: Date, d2: Date) {
 
         if (!mo[boatKey]['Total'])
             mo[boatKey]['Total'] = 0
-        mo[boatKey]['Total'] += next.tipo == 0 ? next.transacao_itens_valor_total : 0
+        console.log(next)
+        mo[boatKey]['Total'] += next.tipo == false ? next.transacao_itens_valor_total : 0
 
         if (!mo[boatKey]['Total Geral'])
             mo[boatKey]['Total Geral'] = 0
-        mo[boatKey]['Total Geral'] += next.tipo == 0 ? next.transacao_itens_valor_total : -next.transacao_itens_valor_total
+        mo[boatKey]['Total Geral'] += next.tipo == false ? next.transacao_itens_valor_total : -next.transacao_itens_valor_total
         return mo
     }, {} as any)
 
@@ -60,13 +61,13 @@ export async function boatEntryComparation(d1: Date, d2: Date) {
 
     const today = new Date()
 
-    let lastBoundingBox = writeHeader(pdf, today.toLocaleDateString().slice(0,5), d1, d2)
+    let lastBoundingBox = writeHeader(pdf, today.toLocaleDateString().slice(0, 5), d1, d2)
 
     pdf.setFontSize(10)
 
     let tableDispositionOfStyle = ['bold']
     tableDispositionOfStyle[table[0].length - 1] = 'bold'
-    tableDispositionOfStyle[products.length-3] = 'bold'
+    tableDispositionOfStyle[products.length - 3] = 'bold'
 
     writeTable(pdf, table, lastBoundingBox.x, lastBoundingBox.y2 + 7, ["Bote", ...getSigles(products)], [2], tableDispositionOfStyle)
 

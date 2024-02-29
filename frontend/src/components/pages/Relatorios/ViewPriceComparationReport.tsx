@@ -3,8 +3,8 @@ import SideBar from "../../Layout/SideBar";
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import FormInput from "../../OverPageForm/FormInput";
-import { ToolBarButton } from "../../Layout/SubTopBar";
 import { useState } from "react";
+import Button from "../../Layout/Button";
 
 export default function BoatEntryComparationReport() {
 
@@ -39,10 +39,10 @@ export default function BoatEntryComparationReport() {
                 <FormInput type="date"
                     defaultValue={date2input(nowDate)}
                     onChange={(e) => dateSetter(e.target.value, 47, 59, 59, setDate2)} />
-                <ToolBarButton className="hover:bg-green-100 mx-2"
+                <Button className="hover:bg-green-100 mx-2"
                     onClick={() => priceComparation(date1, date2)}>
                     <i>&#xe926;</i> Pronto
-                </ToolBarButton>
+                </Button>
             </div>
         </Content>
     </>

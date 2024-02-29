@@ -21,7 +21,7 @@ export default function ViewEntry() {
 
     const [data, setData] = useState<BackendTableComp[]>([]);
     const [update, setUpdate] = useState(true)
-    const [where, setWhere] = useState<any>({ include: "bote{fornecedor},usuario", status: 0, order: "updatedAt,DESC" })
+    const [where, setWhere] = useState<any>({ include: "bote{fornecedor},usuario", status: 0, order: "updatedAt,DESC", limit: "25" })
 
     const setWhereKey = (key: string, value: string) => {
         const mockup = { ...where }
@@ -30,10 +30,16 @@ export default function ViewEntry() {
     }
 
     const table_to_manage = "transacao"
-
     useEffect(() => {
         defaultDataGet(table_to_manage, where, setData)
-    }, [update])
+        window.addEventListener("scrollend", () => {
+            console.log(window.scrollY + window.innerHeight, document.body.scrollHeight)
+            if (window.scrollY + window.innerHeight > document.body.scrollHeight) {
+                const limit = parseInt(where.limit) + 25
+                setWhereKey("limit", limit.toString())
+            }
+        })
+    }, [update,where])
 
     // Quando é alterado a ordem
     const orderHandler = (e: TableOrderEvent) => {
@@ -69,7 +75,7 @@ export default function ViewEntry() {
                 <Table
                     onOrderChange={orderHandler}
                     data={data}
-                    disposition={[1, 3,3 ,2, 2, 2, 2]}
+                    disposition={[1, 3, 3, 2, 2, 2, 2]}
                     tableItemHandler={(item) => [
                         item.id,
                         item.bote?.nome,
@@ -80,9 +86,9 @@ export default function ViewEntry() {
                         // item.status==0?<i title="Válido">&#xea10;</i>:<i title="Cancelado">&#xea0d;</i>,
                         bDate(item.updatedAt)
                     ]}
-                    tableOrderKeys={["id", ["Bote", "nome"],["Bote","Fornecedor","nome"], "peso", "valor", "tipo", "updatedAt"]}
+                    tableOrderKeys={["id", ["Bote", "nome"], ["Bote", "Fornecedor", "nome"], "peso", "valor", "tipo", "updatedAt"]}
                     tableHeader={[
-                        "ID", "Bote","Fornecedor","Peso (KG)", "Valor","Tipo",  "Ultima Atualização"
+                        "ID", "Bote", "Fornecedor", "Peso (KG)", "Valor", "Tipo", "Ultima Atualização"
                     ]}
                     contextMenu={{ buttons: tableContextMenuButtons }}
                 />

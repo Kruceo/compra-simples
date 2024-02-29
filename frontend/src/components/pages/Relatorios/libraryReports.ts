@@ -28,17 +28,20 @@ export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: numb
     const dataWithHeader = [[...header], ...data]
     const sumH = dataWithHeader.length * rowH
 
-    if (startY + sumH + 7 > fullH - 5) {
-        pdf.addPage()
-        pdf.setPage(pdf.internal.pages.length)
-        sY = 5
-    }
+    
    
     dataWithHeader.forEach((row, rowIndex) => {
-        const y = sY + (rowIndex * rowH)
-
+        let y = sY + (rowIndex * rowH)
+        
         let colXSum = 0
         row.forEach((column, columnIndex) => {
+
+            if (y + 7 > fullH - 7) {
+                pdf.addPage()
+                pdf.setPage(pdf.internal.pages.length)
+                y = 5
+            }
+
             const cellW = cellFraction * disposition[columnIndex]
             if (typeof (column) == 'number') column = beautyNumber(column)
             if (column == "-") { colXSum += cellW; return; }
@@ -61,7 +64,7 @@ export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: numb
 
             const x = sX + colXSum
             const box = writeBox(pdf, x, y, cellW, rowH)
-
+            
             let align: "left" | "right" | "center" = 'left'
             let textX = box.x + 1
 

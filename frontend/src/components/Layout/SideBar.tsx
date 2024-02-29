@@ -27,6 +27,7 @@ export default function SideBar() {
                 dropDownContent={<>
                     <PanelLink href="/relatorio/1">Comparativo de Preços</PanelLink>
                     <PanelLink href="/relatorio/2">Comparativo de Botes</PanelLink>
+                    <PanelLink href="/relatorio/3">Comparativo por Mês</PanelLink>
                 </>}>
 
                 <i>&#xe99c;</i> Relatório

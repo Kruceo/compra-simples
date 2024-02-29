@@ -32,13 +32,16 @@ export default function TransitionItemAdder(props: { onSubmit: (item: BackendTab
                 where={{}}
                 itemHandler={(item) => `${item.id} - ${item.nome}`}
                 onSubmit={() => null}
+                next="#priceInput"
             />
         </div>
 
         <div className="box-border col-span-4 mb-4">
             <RequiredLabel>Preço</RequiredLabel>
-            <FormInput
-            className="w-full"
+            <FormInput 
+                next="#weightInput"
+                id="priceInput"
+                className="w-full"
                 errored={error == "price"}
                 name="price"
                 placeholder="Insira o preço do produto"
@@ -51,19 +54,21 @@ export default function TransitionItemAdder(props: { onSubmit: (item: BackendTab
         <div className="box-border col-span-4">
             <RequiredLabel>Peso</RequiredLabel>
             <FormInput
-            className="w-full"
+                id="weightInput"
+                className="w-full"
                 errored={error == "weight"}
                 name="weight"
                 type="number"
                 step={0.01}
                 onChange={(e) => setProductWeight(e.currentTarget.valueAsNumber)}
                 placeholder="Insira o peso"
+                next="#adderSubmit"
             />
         </div>
 
         <p className="col-span-4">Total:  {productPrice && productWeight ? beautyNumber(productPrice * productWeight) : "0,00"}</p>
         <div className="col-span-4">
-            <Button
+            <Button id="adderSubmit"
                 onClick={() => {
                     if (!productWeight)
                         return setError('weight')
@@ -96,7 +101,7 @@ export default function TransitionItemAdder(props: { onSubmit: (item: BackendTab
 
                         setTimeout(() => {
                             productEl?.focus()
-                        }, 0)
+                        }, 200)
 
 
                     }

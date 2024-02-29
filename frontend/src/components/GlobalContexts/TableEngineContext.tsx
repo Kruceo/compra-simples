@@ -19,8 +19,6 @@ export default function TableEngine(props: PropsWithChildren) {
     const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
 
     async function defaultDataGet(table: string, where: any, setter: Function) {
-        console.log(table + '-' + where + '-' + setter)
-
         const response = await backend.get(table, where)
 
         if (response.data && response.data.error && response.data.message)
@@ -28,8 +26,6 @@ export default function TableEngine(props: PropsWithChildren) {
         if (!response.data.data || !Array.isArray(response.data.data))
             return
 
-        console.log("AQUIsss")
-        console.log(response.data)
         setter(response.data.data)
     }
 

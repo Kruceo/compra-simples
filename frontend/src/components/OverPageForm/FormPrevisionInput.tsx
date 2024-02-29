@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from "react"
 import { BackendTableComp } from "../../constants/backend"
 import { TableEngineContext } from "../GlobalContexts/TableEngineContext"
+import { DefaultFormInput, defaultKeyUpHandler } from "./FormInput"
 
-interface FormPrevisionInputAttributes {
+interface FormPrevisionInputAttributes extends DefaultFormInput {
     placeholder?: string,
     className?: string,
     errored?: boolean,
@@ -18,9 +19,7 @@ interface FormPrevisionInputAttributes {
 export default function FormPrevisionInput(props: FormPrevisionInputAttributes) {
     const { defaultDataGet } = useContext(TableEngineContext)
     const visibleInputRef = useRef<HTMLInputElement>(null)
-    let { where, searchInTable, errored, placeholder,autoFocus ,name, onChange, itemHandler, onSubmit, className } = props
-
-
+    let { where, searchInTable, errored,next, placeholder,autoFocus ,name, onChange, itemHandler, onSubmit, className } = props
 
     const onBlurHandler: EventListener = (e: unknown) => {
         const t = e as React.FocusEvent<HTMLInputElement>
@@ -84,6 +83,7 @@ export default function FormPrevisionInput(props: FormPrevisionInputAttributes) 
                 autoComplete="off"
                 autoCorrect="off"
                 autoFocus={autoFocus}
+                onKeyUp={(e) => defaultKeyUpHandler(e, next)}
             />
             <p className={"w-full"}
                 style={{ display: inputVisible ? "none" : "block" }}

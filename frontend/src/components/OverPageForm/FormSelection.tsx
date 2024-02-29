@@ -3,8 +3,9 @@ import { TableEngineContext } from "../GlobalContexts/TableEngineContext"
 import backend, { BackendTableComp } from "../../constants/backend"
 import { ErrorHandlerContext } from "../GlobalContexts/ErrorHandlerContext"
 import PopupContext from "../GlobalContexts/PopupContext"
+import { DefaultFormInput, defaultKeyUpHandler } from "./FormInput"
 
-interface FormSelectionAttributes extends React.HTMLAttributes<HTMLSelectElement> {
+interface FormSelectionAttributes extends DefaultFormInput, React.HTMLAttributes<HTMLSelectElement> {
     useTable?: string,
     errored?: boolean,
     name?: string
@@ -15,12 +16,11 @@ export default function FormSelection(props: FormSelectionAttributes) {
     const { pageErrorHandler } = useContext(ErrorHandlerContext)
     // const { pageErrorHandler } = useContext(PopupContext)
 
-    const { errored, useTable, defaultValue, ...restProps } = props
+    const { errored, useTable, defaultValue,next, ...restProps } = props
     const [data, setData] = useState<BackendTableComp[]>([])
     const ref = useRef<HTMLSelectElement>(null)
 
     useInsertionEffect(() => {
-
         (async () => {
             if (!useTable) return;
             let res = await backend.get(useTable, {})
@@ -56,6 +56,7 @@ export default function FormSelection(props: FormSelectionAttributes) {
         }
         {
             data.map((item) => <option className="bg-background"
+                onKeyUp={(e)=>defaultKeyUpHandler(e)}
                 key={item.id}
                 // selected={item.id == defaultValue}
                 data-item={JSON.stringify(item)}

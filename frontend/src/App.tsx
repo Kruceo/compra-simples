@@ -16,6 +16,7 @@ import TableEngine from './components/GlobalContexts/TableEngineContext'
 import View404 from './components/pages/404/View404'
 import Teste from './components/pages/Teste'
 import ViewBoatEntryComparationReport from './components/pages/Relatorios/ViewBoatEntryComparationReport'
+import ViewTransComparationReport from './components/pages/Relatorios/ViewTransComparationReport'
 
 function App() {
 
@@ -41,6 +42,7 @@ function App() {
               <Route path='/relatorio/1' element={<Proteged>{<ViewReports />}</Proteged>} />
 
               <Route path='/relatorio/2' element={<Proteged>{<ViewBoatEntryComparationReport />}</Proteged>} />
+              <Route path='/relatorio/3' element={<Proteged>{<ViewTransComparationReport />}</Proteged>} />
 
               <Route path='/login' element={<LoginScreen />} />
               <Route path='/teste' element={<Teste />} />
