@@ -22,17 +22,23 @@ export default async function getRequestHandler(req, res) {
 
     // Operator clause build , any like the symbol ">2" turns to [Op.gt]:2
     Object.keys(restQuery).forEach(each => {
-        whereClause[each] = opBuilder(restQuery[each])
+        let newKey = each
+        if (each.includes(".")) newKey = `$${each}$`
+        whereClause[newKey] = opBuilder(restQuery[each])
     })
 
     //Ordering clause build, any like ["id","ASC"] or [LiteralTable,"id","DESC"]
     let orderClause = []
     if (order) orderClause.push(orderingBuilder(order))
 
+    //group is like: ['car.name','car.price']
     let groupClause = groupBuilder(group)
+
+    //attributes uses fn.col or fn.sum //url example:  attributes=teste.nome,(sum)teste.price
     let attributesClause = attributeBuilder(attributes)
+
     let raw = false
-    if(attributes)raw = true;
+    if (attributes) raw = true;
     let fullClause = {
         where: whereClause,
         attributes: attributesClause,
@@ -42,10 +48,10 @@ export default async function getRequestHandler(req, res) {
         order: orderClause,
         raw
     }
-    ;(await import("fs")).writeFileSync("last.json",JSON.stringify(fullClause,null,2))
+        ; (await import("fs")).writeFileSync("last.json", JSON.stringify(fullClause, null, 2))
 
     try {
-        const data = await tables[tableName].findAll(fullClause)
+        const data = await tables[tableName].findAll({ ...fullClause, })
         res.json({ data })
     } catch (error) {
         return res.status(statusCodes.InternalServerError)

@@ -22,13 +22,9 @@ function App() {
 
   return (
     <>
-      
-        <PopupContext>
+      <PopupContext>
         <ErrorHandler>
           <TableEngine>
-
-
-
             <Routes>
               <Route path='/' element={<Proteged>{<ViewDashboard />}</Proteged>} />
               <Route path='/view/bote' element={<Proteged>{<ViewBotes />}</Proteged>} />
@@ -39,10 +35,9 @@ function App() {
               <Route path='/view/transacao/' element={<Proteged>{<ViewEntry />}</Proteged>} />
               <Route path='/details/transacao/' element={<Proteged>{<DetailsEntry />}</Proteged>} />
               <Route path='/print/transacao/' element={<Proteged>{<PrintEntry />}</Proteged>} />
-              <Route path='/relatorio/1' element={<Proteged>{<ViewReports />}</Proteged>} />
-
-              <Route path='/relatorio/2' element={<Proteged>{<ViewBoatEntryComparationReport />}</Proteged>} />
-              <Route path='/relatorio/3' element={<Proteged>{<ViewTransComparationReport />}</Proteged>} />
+              <Route path='/report/1' element={<Proteged>{<ViewReports />}</Proteged>} />
+              <Route path='/report/2' element={<Proteged>{<ViewBoatEntryComparationReport />}</Proteged>} />
+              <Route path='/report/3' element={<Proteged>{<ViewTransComparationReport />}</Proteged>} />
 
               <Route path='/login' element={<LoginScreen />} />
               <Route path='/teste' element={<Teste />} />
@@ -51,11 +46,11 @@ function App() {
             </Routes>
 
           </TableEngine>
-          </ErrorHandler>
-        </PopupContext>
+        </ErrorHandler>
+      </PopupContext>
 
 
-      
+
     </>
   )
 }

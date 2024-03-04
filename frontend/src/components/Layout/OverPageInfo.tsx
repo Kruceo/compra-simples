@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import Button from "./Button";
 
 interface OverPageInfoAttributes {
     children: ReactNode,
@@ -11,22 +12,24 @@ export default function OverPageInfo(props: OverPageInfoAttributes) {
 
     return <div className="bg-notification border-borders border rounded-sm shadow-xl p-8 fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50">
         {props.children}
-        <div className="flex">
-            <button
+        <div className="flex mt-4 gap-4">
+            <Button
+                autoFocus
                 onClick={() => props.onAccept()}
-                className="bg-white bg-opacity-20 mt-6 font-bold ml-auto border-borders border px-4 py-2 hover:bg-opacity-70">
+            >
                 Continuar
-            </button>
+            </Button>
             {
                 props.onRecuse ?
-                    <button
+                    <Button
+                        className="bg-red-400"
+                        autoFocus
                         onClick={() => props.onRecuse ? props.onRecuse() : null}
-                        className="bg-white bg-opacity-20 mt-6 font-bold ml-4 border-borders border px-4 py-2 hover:bg-opacity-70">
+                    >
                         Cancelar
-                    </button>
+                    </Button>
                     : null
             }
-
         </div>
     </div>
 }

@@ -25,7 +25,7 @@ export default function MonthTransComparationReport() {
         <Bar />
         <SideBar />
         <Content>
-            <h2 className="p-4">Relatório - Comparativo de Preços</h2>
+            <h2 className="p-4">Relatório - Comparativo por Mês</h2>
             <div className="p-4 flex justify-center items-center">
                 <FormInput type="date"
                     defaultValue={date2input(defaultLastWeek)}

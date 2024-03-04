@@ -1,11 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import backend, { BackendTableComp } from "../../../constants/backend";
+import { BackendTableComp } from "../../../constants/backend";
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
 import Table from "../../table/Table";
 import beautyNumber from "../../../constants/numberUtils";
-import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
 import { TableEngineContext } from "../../GlobalContexts/TableEngineContext";
 
 export default function DetailsEntry() {

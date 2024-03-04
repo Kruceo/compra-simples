@@ -54,7 +54,6 @@ export function date2input(date: Date) {
         (date.getMonth() + 1).toString().padStart(2, '0'),
         date.getDate().toString().padStart(2, '0')
     ]
-    console.log(date, y, m, d)
     return `${y}-${m}-${d}`
     // return date.toISOString()
 }

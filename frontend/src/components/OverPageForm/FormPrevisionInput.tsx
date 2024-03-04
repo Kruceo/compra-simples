@@ -19,7 +19,7 @@ interface FormPrevisionInputAttributes extends DefaultFormInput {
 export default function FormPrevisionInput(props: FormPrevisionInputAttributes) {
     const { defaultDataGet } = useContext(TableEngineContext)
     const visibleInputRef = useRef<HTMLInputElement>(null)
-    let { where, searchInTable, errored,next, placeholder,autoFocus ,name, onChange, itemHandler, onSubmit, className } = props
+    let { where, searchInTable, errored,next, placeholder,autoFocus ,name, onChange, itemHandler, className } = props
 
     const onBlurHandler: EventListener = (e: unknown) => {
         const t = e as React.FocusEvent<HTMLInputElement>
@@ -45,7 +45,6 @@ export default function FormPrevisionInput(props: FormPrevisionInputAttributes) 
     const [sugestionData, setSugestionData] = useState<BackendTableComp[]>([])
     const [inputVisible, setInputVisible] = useState(true)
     const [inputFocus, setInputFocus] = useState(true)
-    const [inputValue, setInputValue] = useState("")
 
 
     useEffect(() => {
@@ -102,7 +101,7 @@ function Sugestions(props: { data: BackendTableComp[], itemHandler: (item: Backe
     const [clicked, setClicked] = useState(false)
 
     useEffect(()=>{
-        props.inputRef.current?.addEventListener("focus",(e)=>{
+        props.inputRef.current?.addEventListener("focus",()=>{
             setClicked(false)
         })
     })

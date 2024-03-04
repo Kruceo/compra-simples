@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
@@ -13,14 +13,11 @@ import { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import Table from "../../table/Table";
 import TransitionItemAdder from "./TransitionAdder";
 import Button from "../../Layout/Button";
-import { printSingleEntry } from "./PrintEntry";
 
 export default function CreateEntry(props: { type: 0 | 1 }) {
 
     const navigate = useNavigate()
-    const { setGlobalPopupByKey, simpleSpawnInfo } = useContext(GlobalPopupsContext)
-
-    const [clear, setClear] = useState(false)
+    const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
 
     const [addedTransitionItensData, setAddedTransitionItensData] = useState<BackendTableComp[]>([])
     const [transitionBoat, setTransitionBoat] = useState<BackendTableComp>()
@@ -42,29 +39,53 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
         { element: <><i>&#xe9ac;</i>Remover</>, handler: removeTransitionItem }
     ]
 
+    const keyListenerHandler = (e: KeyboardEvent) => {
+        switch (e.key) {
+            case "F8":
+                // if (window.localStorage.getItem("createEntryKeyLocker")) return;
+                // window.localStorage.setItem("createEntryKeyLocker", "true")
+                const submitButtonEl: HTMLButtonElement | null = document.querySelector("#submitTransaction")
+                submitButtonEl?.focus()
+                // window.localStorage.removeItem("createEntryKeyLocker")
+                break;
+
+            default:
+                break;
+        }
+    }
+    useEffect(() => {
+        window.addEventListener("keyup", keyListenerHandler)
+    }, [])
+
     return <>
         <Bar />
         <SideBar />
         <Content>
-            <div className="px-4 py-8 flex flex-col border-b border-borders min-h-44">
-                <h2>Nova {props.type == 0 ? "Entrada" : "Saída"}</h2>
-                <div className="grid grid-cols-2">
-                    <div className="w-full">
-                        <RequiredLabel>Bote</RequiredLabel>
+            <div className="px-4 py-8 flex border-b border-borders min-h-44">
+                <div>
+                    <h2>Nova {props.type == 0 ? "Entrada" : "Saída"}</h2>
+                    <div className="grid grid-cols-2">
+                        <div className="w-full">
+                            <RequiredLabel>Bote</RequiredLabel>
 
-                        <FormPrevisionInput
-                            placeholder="Insira o codigo do bote"
-                            onChange={(value) => {
-                                setTransitionBoat(value ?? undefined)
-                            }}
-                            autoFocus={true}
-                            searchInTable="bote"
-                            where={{ include: 'fornecedor' }}
-                            itemHandler={(item) => `${item.id} - ${item.nome} | ${item.fornecedor?.nome}`}
-                            onSubmit={() => null}
-                            next="input[name=product]"
-                        />
+                            <FormPrevisionInput
+                                placeholder="Insira o codigo do bote"
+                                onChange={(value) => {
+                                    setTransitionBoat(value ?? undefined)
+                                }}
+                                autoFocus={true}
+                                searchInTable="bote"
+                                where={{ include: 'fornecedor' }}
+                                itemHandler={(item) => `${item.id} - ${item.nome} | ${item.fornecedor?.nome}`}
+                                onSubmit={() => null}
+                                next="input[name=product]"
+                            />
+                        </div>
                     </div>
+                </div>
+                <div className="p-4 bg-subpanel border-borders border flex flex-col relative m-4 ml-auto">
+                    <h2>Atalhos</h2>
+                    <p>F8 - Finalizar transação</p>
                 </div>
             </div>
             <div className="grid grid-cols-3">
@@ -122,9 +143,8 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
                             // printSingleEntry(response.data.transacao_id ?? -1)
                             navigate('/print/transacao/?id=' + response.data.transacao_id)
                             setTimeout(() => {
-                                navigate("/create/entrada")     
+                                navigate("/create/entrada")
                             }, 300);
-                           
                         }
                     }}
                 >

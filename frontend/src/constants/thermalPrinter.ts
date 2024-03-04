@@ -1,4 +1,4 @@
-import axios, { Axios, AxiosResponse } from "axios"
+import axios, { AxiosResponse } from "axios"
 
 const api_protocol = 'http'
 const api_address = '192.168.0.62'

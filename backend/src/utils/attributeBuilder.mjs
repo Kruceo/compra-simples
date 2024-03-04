@@ -9,10 +9,10 @@ export default function attributeBuilder(text) {
     let attr = splited.map(each => {
         let parsedName = each.replace(/\(\w+?\)/g, '')
         let shortName = parsedName.replace(/\w+?\./g, '')
-        let nick = (parsedName.match(/\w+\.\w+$/)??[shortName])[0].replace(".","_")
+        let nick = (parsedName.match(/\w+\.\w+$/) ?? [shortName])[0].replace(".", "_")
         console.log(nick)
         const fn = each.match(/(?<=\()\w+(?=\))/) ?? []
-       
+
         switch (fn[0]) {
             case "sum":
                 return [
@@ -43,9 +43,30 @@ export default function attributeBuilder(text) {
                     sequelize.fn("AVG", sequelize.col(parsedName)),
                     nick
                 ]
+            case "day":
+                return [
+                    sequelize.fn(
+                        'extract', sequelize.literal('day FROM "createdAt"')
+                    ),
+                    nick + '_day'
+                ]
+            case "month":
+                return [
+                    sequelize.fn(
+                        'extract', sequelize.literal('month FROM "createdAt"')
+                    ),
+                    nick + '_month'
+                ]
+            case "year":
+                return [
+                    sequelize.fn(
+                        'extract', sequelize.literal('year FROM "createdAt"')
+                    ),
+                    nick + '_year'
+                ]
                 break;
             default:
-                return [sequelize.col(parsedName),nick]                
+                return [sequelize.col(parsedName), nick]
                 break;
         }
 

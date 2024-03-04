@@ -1,8 +1,6 @@
-import { useContext, useEffect, useInsertionEffect, useLayoutEffect, useRef, useState } from "react"
-import { TableEngineContext } from "../GlobalContexts/TableEngineContext"
+import React, { useContext, useInsertionEffect, useRef, useState } from "react"
 import backend, { BackendTableComp } from "../../constants/backend"
 import { ErrorHandlerContext } from "../GlobalContexts/ErrorHandlerContext"
-import PopupContext from "../GlobalContexts/PopupContext"
 import { DefaultFormInput, defaultKeyUpHandler } from "./FormInput"
 
 interface FormSelectionAttributes extends DefaultFormInput, React.HTMLAttributes<HTMLSelectElement> {

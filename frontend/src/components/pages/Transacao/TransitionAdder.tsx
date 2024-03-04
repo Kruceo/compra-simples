@@ -38,7 +38,7 @@ export default function TransitionItemAdder(props: { onSubmit: (item: BackendTab
 
         <div className="box-border col-span-4 mb-4">
             <RequiredLabel>Preço</RequiredLabel>
-            <FormInput 
+            <FormInput
                 next="#weightInput"
                 id="priceInput"
                 className="w-full"
@@ -70,12 +70,22 @@ export default function TransitionItemAdder(props: { onSubmit: (item: BackendTab
         <div className="col-span-4">
             <Button id="adderSubmit"
                 onClick={() => {
-                    if (!productWeight)
+                    const weightEl: HTMLInputElement | null = document.querySelector("input[name=weight]")
+                    const priceEl: HTMLInputElement | null = document.querySelector("input[name=price]")
+                    const productEl: HTMLInputElement | null = document.querySelector("input[name=product]")
+
+                    if (!productWeight) {
+                        setTimeout(()=>weightEl?.focus(), 200)
                         return setError('weight')
-                    if (!productPrice)
+                    }
+                    if (!productPrice) {
+                        setTimeout(()=>priceEl?.focus(), 200)
                         return setError('price')
-                    if (!product)
+                    }
+                    if (!product) {
+                        setTimeout(()=>productEl?.focus(), 200)
                         return setError('product')
+                    }
                     setError("")
                     props.onSubmit(
                         {
@@ -89,9 +99,7 @@ export default function TransitionItemAdder(props: { onSubmit: (item: BackendTab
                     setProduct(undefined)
                     setProductPrice(undefined)
                     setProductWeight(undefined)
-                    const weightEl: HTMLInputElement | null = document.querySelector("input[name=weight]")
-                    const priceEl: HTMLInputElement | null = document.querySelector("input[name=price]")
-                    const productEl: HTMLInputElement | null = document.querySelector("input[name=product]")
+
 
                     if (weightEl && priceEl && productEl) {
                         weightEl.value = ''
@@ -100,7 +108,9 @@ export default function TransitionItemAdder(props: { onSubmit: (item: BackendTab
                         productEl.dispatchEvent(new Event("blur"))
 
                         setTimeout(() => {
-                            productEl?.focus()
+                            productEl?.focus({ preventScroll: false })
+                            window.scrollBy({ top: productEl.clientTop })
+
                         }, 200)
 
 

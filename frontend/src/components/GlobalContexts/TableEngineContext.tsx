@@ -1,7 +1,7 @@
 import { PropsWithChildren, createContext, useContext } from "react"
 import backend from "../../constants/backend"
 import { ErrorHandlerContext } from "./ErrorHandlerContext";
-import PopupContext, { GlobalPopupsContext } from "./PopupContext";
+import { GlobalPopupsContext } from "./PopupContext";
 
 interface ErrorHandlerContextType {
     defaultDataGet: (table: string, where: any, setter: Function) => Promise<void>;

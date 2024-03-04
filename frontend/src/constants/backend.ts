@@ -1,4 +1,4 @@
-import axios, { Axios, AxiosResponse } from "axios"
+import axios, { AxiosResponse } from "axios"
 
 export const api_address = '192.168.0.62'
 export const api_protocol = 'http'

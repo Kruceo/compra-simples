@@ -35,5 +35,6 @@ export function defaultKeyUpHandler(e: React.KeyboardEvent<HTMLInputElement|HTML
     if (e.key == 'Enter' && next) {
         const el: HTMLInputElement | null = document.querySelector(next)
         el?.focus()
+        window.scrollBy({top:el?.clientTop})
     }
 }

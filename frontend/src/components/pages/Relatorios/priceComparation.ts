@@ -1,5 +1,5 @@
 import jsPDF from "jspdf";
-import backend, { BackendResponse, BackendTableComp } from "../../../constants/backend";
+import backend, { BackendTableComp } from "../../../constants/backend";
 import { openPDF, writeHeader, writeTable } from "./libraryReports";
 import beautyNumber from "../../../constants/numberUtils";
 
@@ -71,7 +71,7 @@ function processInfo(data: BackendTableComp[]) {
     table.forEach(each => {
         if (!tables[each[0]]) tables[each[0]] = [["-", "TOTAL", 0, 0]]
         tables[each[0]].push(each)
-        const [n, p, w, v] = each
+        const [, , w, v] = each
         tables[each[0]][0][2] += w
         tables[each[0]][0][3] += v
         totalValue += v

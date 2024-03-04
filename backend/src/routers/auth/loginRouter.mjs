@@ -12,22 +12,23 @@ let hosts = new Map()
 authRouter.post("/auth/login", async (req, res) => {
 
     const hostValue = hosts.get(req.hostname)
-   
-    if (!hostValue) hosts.set(req.hostname, new Date().getTime() + 500+',1')
+
+    if (!hostValue) hosts.set(req.hostname, new Date().getTime() + 500 + ',1')
 
     else {
-        let [hostTime,lvl] = hostValue.split(",").map(each=>parseInt(each))
+        let [hostTime, lvl] = hostValue.split(",").map(each => parseInt(each))
         const today = new Date()
         const hostDate = new Date(hostTime)
 
-        if(today.getTime() < hostDate.getTime()){
-            res.status(statusCodes.Unauthorized).json({
-                error:true,
-                message:"Blocked"
-            })
-            const newLvl = lvl<120?lvl+1:lvl
-            hosts.set(req.hostname,hostDate.getTime() + (200 * newLvl)+","+(newLvl))
-            return;
+        if (today.getTime() < hostDate.getTime()) {
+            // res.status(statusCodes.Unauthorized).json({
+            //     error: true,
+            //     message: "Blocked"
+            // })
+            console.log(hostDate.getTime())
+            const newLvl = lvl < 120 ? lvl + 1 : lvl
+            hosts.set(req.hostname, hostDate.getTime() + (200 * newLvl) + "," + (newLvl))
+            return res.status(statusCodes.Unauthorized).json({error:true,message:"Address blocked."});
         }
         hosts.delete(req.hostname)
     }

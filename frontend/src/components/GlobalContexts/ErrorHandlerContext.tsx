@@ -1,7 +1,6 @@
-import React, { createContext, useState, ReactElement, Dispatch, SetStateAction, PropsWithChildren, useContext } from 'react';
+import  { createContext, PropsWithChildren, useContext } from 'react';
 import { GlobalPopupsContext } from './PopupContext';
 import { AxiosResponse } from 'axios';
-import { useNavigate } from 'react-router-dom';
 import statusCodes from '../../constants/statusCodes';
 
 
@@ -14,8 +13,7 @@ export const ErrorHandlerContext = createContext<ErrorHandlerContextType>({
 })
 
 export default function ErrorHandler(props: PropsWithChildren) {
-    const { simpleSpawnInfo,setGlobalPopups } = useContext(GlobalPopupsContext)
-    const navigate = useNavigate()
+    const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
     function pageErrorHandler(axiosResponse: AxiosResponse<any>) {
 
         if (axiosResponse.status === statusCodes.Unauthorized){

@@ -15,15 +15,6 @@ export async function boatEntryComparation(d1: Date, d2: Date) {
         order: 'bote_nome,ASC'
     })
 
-    const resTransacaoTotals = await backend.get("transacao", {
-        include: 'transacao_item[]{produto[]},bote[]',
-        attributes: 'bote.nome,(sum)tipo,(sum)transacao_itens.valor_total',
-        group: 'bote.nome',
-        status: 0
-    })
-
-    console.log(resTransicao)
-    console.log(resTransacaoTotals)
     if (resTransicao.data.error || !resTransicao.data.data || !Array.isArray(resTransicao.data.data)) return alert('error 001 /boatEntryComparation')
 
     let prd = resTransicao.data.data.map((each: any) => { return { tipo: each.tipo, produto: each.produto_nome } })
@@ -48,7 +39,6 @@ export async function boatEntryComparation(d1: Date, d2: Date) {
 
         if (!mo[boatKey]['Total'])
             mo[boatKey]['Total'] = 0
-        console.log(next)
         mo[boatKey]['Total'] += next.tipo == false ? next.transacao_itens_valor_total : 0
 
         if (!mo[boatKey]['Total Geral'])

@@ -1,5 +1,4 @@
 import jsPDF from "jspdf"
-import backend, { BackendTableComp } from "../../../constants/backend"
 import beautyNumber from "../../../constants/numberUtils"
 
 interface PdfItemBoundings {
@@ -17,7 +16,7 @@ export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: numb
     let sX = startX
     let sY = startY
 
-    let disposition = (data[0]??header).map((each, index) => dispositionOfData ? (dispositionOfData[index] ?? 1) : 1)
+    let disposition = (data[0]??header).map((_, index) => dispositionOfData ? (dispositionOfData[index] ?? 1) : 1)
     const dispositionSum = disposition.reduce((acum, next) => acum + next, 0)
 
     const fullW = pdf.internal.pageSize.width
@@ -96,7 +95,7 @@ export function writeHeader(pdf: jsPDF, identification: string, date1: Date, dat
     const startX = 5
     const height = 15
     const pageW = pdf.internal.pageSize.width
-    const pageH = pdf.internal.pageSize.height
+    // const pageH = pdf.internal.pageSize.height
 
     pdf.setLineWidth(0.75);
     const headerBox = writeBox(pdf, startX, startY, pageW - 45, height)

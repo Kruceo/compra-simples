@@ -1,36 +1,35 @@
-import { Op, where } from "sequelize";
+import { Op } from "sequelize";
 
 function opBuilder(query) {
 
-    if (!/(>)|(\^)|(<)|(=)|(!)|(\|)/.test(query)) return query
-
-    var whereClause = {}
+    var clause = {}
 
     const splited = query.split(",")
-    splited.forEach((eac) => {
-        let value = eac.slice(1)
-
+    splited.forEach((fullString) => {
+        let operator = fullString.slice(0, 1)
+        let value = fullString.slice(1)
         //Verificação se é um valor do tipo data (data do calendario), caso for, converte para Date
         if (/\d\d\d\d\-\d\d\-\d\dT\d\d:\d\d:\d\d\.\d+Z/.test(value)) value = new Date(value)
 
-        switch (eac.slice(0, 1)) {
+        switch (operator) {
             case "<":
-                whereClause = { ...whereClause, [Op.lt]: value }
+                clause = { ...clause, [Op.lt]: value }
                 break;
             case ">":
-                whereClause = { ...whereClause, [Op.gt]: value }
+                clause = { ...clause, [Op.gt]: value }
                 break;
             case "^":
-                whereClause = { ...whereClause, [Op.iLike]: "%" + eac.substring(1) + '%' }
+                clause = { ...clause, [Op.iLike]: "%" + value.substring(1) + '%' }
                 break;
 
             default:
+                clause = { ...clause, [Op.eq]: fullString }
                 break;
         }
 
     })
 
-    return whereClause
+    return clause
 }
 
 export default opBuilder

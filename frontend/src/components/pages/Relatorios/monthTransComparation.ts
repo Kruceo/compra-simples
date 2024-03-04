@@ -1,6 +1,5 @@
 import jsPDF from "jspdf";
 import { openPDF, writeHeader, writeTable } from "./libraryReports";
-import { useEffect } from "react";
 import backend from "../../../constants/backend";
 export default async function monthTransComparation(date1:Date,date2:Date){
     const pdf = new jsPDF()
@@ -21,8 +20,6 @@ export default async function monthTransComparation(date1:Date,date2:Date){
         const junction = `${createdAt_month}/${createdAt_year}`.padStart(7,'0')
         return [junction,...Object.values(rest)]
     }) as string[][]
-
-    console.log(table)
 
     let lastBoundingBox = writeHeader(pdf,new Date().toLocaleDateString().slice(0,5),date1,date2)
     pdf.setFontSize(12)

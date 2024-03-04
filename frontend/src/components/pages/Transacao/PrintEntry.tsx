@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import backend from "../../../constants/backend";
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
@@ -11,8 +11,9 @@ export default function PrintEntry() {
     const id = url.search.replace("?", "").split('=')[1]
 
     if (!id) return "Essa página funciona com a referência de um ID. (?id=10)"
-   
+    localStorage.removeItem('printerSessionLocker')
     useEffect(() => {
+        
         printSingleEntry(id)
     }, [])
 
@@ -37,7 +38,7 @@ export async function printSingleEntry(id:number|string) {
     const width: number = (await thermalPrinter.getWidth()).data.width
 
     let d = await backend.get('transacao', { include: "bote{fornecedor},transacao_item{produto[nome]}", id })
-    if (d.data.error || !d.data.data || !Array.isArray(d.data.data)) return;
+    if (d.data.error || !d.data.data || !Array.isArray(d.data.data)) return console.error(d.data.message);
 
     let queries: string[][] = []
     const item = d.data.data[0]
@@ -49,6 +50,7 @@ export async function printSingleEntry(id:number|string) {
     queries.push(['println', `Tipo: ${!item.tipo ? "Entrada" : "Saída"}`])
     queries.push(['println', `Bote: ${item.bote?.nome}`])
     queries.push(['println', `Fornecedor: ${item.bote?.fornecedor?.nome}`])
+    queries.push(['println', ""])
     queries.push(['println', ""])
 
     queries.push(['println', `${"Produto".padEnd(width / 4 * 2, ' ')} ${"Peso".padEnd(width / 4, ' ')} ${"Total"}`])
@@ -70,6 +72,7 @@ export async function printSingleEntry(id:number|string) {
 
     queries.push(['cut'])
     // setQ(queries)
+    console.log(queries)
     thermalPrinter.print(queries)
     localStorage.removeItem("printerSessionLocker")
 

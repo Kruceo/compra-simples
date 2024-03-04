@@ -100,7 +100,7 @@ function OrderButton(props: OrderButtonAttributes) {
 
     const [currentOrder, setCurrentOrder] = useState(false)
 
-    return <button onClick={(e) => {
+    return <button onClick={() => {
         props.onClick(currentOrder ? "ASC" : "DESC")
         setCurrentOrder(!currentOrder)
     }

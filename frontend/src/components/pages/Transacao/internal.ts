@@ -1,6 +1,4 @@
-import jsPDF from "jspdf";
 import backend, { BackendTableComp } from "../../../constants/backend";
-
 
 export async function saveEntryStack(bote_id: number, obs: string, valor: number, peso: number, tipo: 0 | 1, transacaoItens: BackendTableComp[]) {
 

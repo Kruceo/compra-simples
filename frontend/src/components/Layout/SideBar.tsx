@@ -25,9 +25,9 @@ export default function SideBar() {
             <DropButton
                 title="Relatórios"
                 dropDownContent={<>
-                    <PanelLink href="/relatorio/1">Comparativo de Preços</PanelLink>
-                    <PanelLink href="/relatorio/2">Comparativo de Botes</PanelLink>
-                    <PanelLink href="/relatorio/3">Comparativo por Mês</PanelLink>
+                    <PanelLink href="/report/1">Comparativo de Preços</PanelLink>
+                    <PanelLink href="/report/2">Comparativo de Botes</PanelLink>
+                    <PanelLink href="/report/3">Comparativo por Mês</PanelLink>
                 </>}>
 
                 <i>&#xe99c;</i> Relatório
@@ -45,7 +45,6 @@ interface DropButtonAttributes extends React.HTMLAttributes<HTMLButtonElement> {
 
 export function DropButton(props: DropButtonAttributes) {
     const [focused, setFocused] = useState(false)
-    const [hover, setHover] = useState(false)
     const [isMouseOverSubPanel, setIsMouseOverSubPanel] = useState(false)
 
     const { dropDownContent, dropDownContainerLeft, dropDownContainerTop, ...restProps } = props
@@ -54,8 +53,6 @@ export function DropButton(props: DropButtonAttributes) {
         <button {...restProps} className={props.className + " h-14 relative focus:bg-hovers hover:bg-hovers"}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            onMouseOver={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}
         >
             <div className="gap-2 flex px-4 w-full">
                 {props.children}
