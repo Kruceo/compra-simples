@@ -14,12 +14,12 @@ const randomHash = (length) => {
 }
 
 function encrypt(text) {
-    const hash = randomHash(cfg.security.prefixLength) + bcrypt.hashSync(text, 2) + randomHash(cfg.security.prefixLength)
+    const hash = randomHash(cfg.security.prefixLength) + bcrypt.hashSync(text, 2) + randomHash(cfg.security.sufixLength)
     return hash
 }
 
 function compare(toCompare, trueComparation) {
-    const comparationParsed = trueComparation.slice(cfg.security.prefixLength, trueComparation.length - cfg.security.prefixLength)
+    const comparationParsed = trueComparation.slice(cfg.security.prefixLength, trueComparation.length - cfg.security.sufixLength)
     return bcrypt.compareSync(toCompare, comparationParsed)
 }
 
