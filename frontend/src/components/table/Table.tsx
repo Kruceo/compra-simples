@@ -16,8 +16,11 @@ interface TableAttributes {
     disposition: number[],
     tableHeader: React.ReactNode[],
     onOrderChange?: (event: TableOrderEvent) => any,
-    contextMenu: { buttons: { element: React.ReactNode, handler: (id: number) => any }[] }
-    enableContextMenu?: boolean
+    contextMenu?: { buttons: { element: React.ReactNode, handler: (id: number) => any }[] }
+    enableContextMenu?: boolean,
+
+    selected?: number[],
+    selectedSetter?: (d: number[]) => any
 }
 
 export default function Table(props: TableAttributes) {
@@ -31,6 +34,7 @@ export default function Table(props: TableAttributes) {
     const removeContextMenu = () => setGlobalPopupByKey("ContextMenu", null)
 
     const spawnContextMenu = (itemID: number, x: number, y: number) => {
+        if (!props.contextMenu) return;
         if (enableContextMenu == undefined || enableContextMenu)
             setGlobalPopupByKey("ContextMenu",
                 <TableContextMenu x={x} y={y}>
@@ -71,12 +75,23 @@ export default function Table(props: TableAttributes) {
 
                 const itemID = item.id ?? -1
                 return <TableItem
+                    selected={props.selected?.includes(itemID)}
                     //Acionar o menu de contexto
                     onContextMenu={(e) => {
+                        if (!props.contextMenu) return;
                         e.preventDefault();
                         spawnContextMenu(itemID, e.clientX, e.clientY)
                     }}
-                    onClick={removeContextMenu}
+                    onClick={() => {
+                        removeContextMenu();
+                        if (!props.selected || !props.selectedSetter) return;
+
+                        if (!props.selected.includes(itemID) && props.selectedSetter)
+                            props.selectedSetter([...props.selected, itemID])
+
+                        else props.selectedSetter(props.selected.filter(each=>each!=itemID))
+                    }
+                    }
                     disposition={disposition}
                     key={index}
                 // className={index/2 != Math.round(index/2)?"bg-[#00000019]":""}

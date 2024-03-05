@@ -12,8 +12,8 @@ import beautyNumber from "../../../constants/numberUtils";
 import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
 import { TableEngineContext } from "../../GlobalContexts/TableEngineContext";
 import { BackendTableComp } from "../../../constants/backend";
-import FormInput from "../../OverPageForm/FormInput";
 import FormSelection from "../../OverPageForm/FormSelection";
+import { TRANSACTION_CLOSED, TRANSACTION_INVALID, TRANSACTION_OPEN } from "../../../constants/codes";
 
 export default function ViewEntry() {
 
@@ -23,7 +23,7 @@ export default function ViewEntry() {
 
     const [data, setData] = useState<BackendTableComp[]>([]);
     const [update, setUpdate] = useState(true)
-    const [where, setWhere] = useState<any>({ include: "bote{fornecedor},usuario", status: 0, order: "updatedAt,DESC", limit: Math.round(window.innerHeight / 50) })
+    const [where, setWhere] = useState<any>({ include: "bote{fornecedor},usuario", status: TRANSACTION_OPEN, order: "updatedAt,DESC", limit: Math.round(window.innerHeight / 50) })
 
     const setWhereKey = (key: string, value: string) => {
         const mockup = { ...where }
@@ -53,7 +53,7 @@ export default function ViewEntry() {
     // Quando é clicado no botão "deletar"
     const invalidEntries = (id: number) => {
         const onAcceptHandler = async () => {
-            await changeEntryStatus(id, 1)
+            await changeEntryStatus(id, TRANSACTION_INVALID)
             setTimeout(() => {
                 setUpdate(!update)
             }, 150)
@@ -61,7 +61,7 @@ export default function ViewEntry() {
         simpleSpawnInfo(`Deseja mesmo invalidar este item?`, onAcceptHandler, () => null)
     }
 
-    const defaultFilterHandler = (key:string,e: React.FormEvent<HTMLSelectElement>) => {
+    const defaultFilterHandler = (key: string, e: React.FormEvent<HTMLSelectElement>) => {
         if (e.currentTarget.value == '') return setWhereKey(key, ">-1")
         setWhereKey(key, e.currentTarget.value)
     }
@@ -71,21 +71,27 @@ export default function ViewEntry() {
         { element: <><i>&#xe954;</i>Imprimir</>, handler: (id: number) => navigate(`/print/transacao?id=${id}`) },
         { element: <><i>&#xe9ac;</i>Invalidar</>, handler: invalidEntries }
     ]
-    console.log(data)
+    
     return <>
         <Bar />
         <SideBar />
         <Content>
             <SubTopBar leftContent={<>
-            <i title="filtros">&#xe993;</i>
-                <FormSelection useTable="fornecedor" onChange={(e)=>defaultFilterHandler('bote.fornecedor.id',e)}>
+                <i title="filtros">&#xe993;</i>
+                <FormSelection useTable="fornecedor" onChange={(e) => defaultFilterHandler('bote.fornecedor.id', e)}>
                     <option className="bg-background" value={""}>Qualquer Fornecedor</option>
                 </FormSelection>
-                <FormSelection useTable="bote" onChange={(e)=>defaultFilterHandler('bote.id',e)}>
+                <FormSelection useTable="bote" onChange={(e) => defaultFilterHandler('bote.id', e)}>
                     <option className="bg-background" value={""}>Qualquer Bote</option>
                 </FormSelection>
-                <FormSelection useTable="usuario" onChange={(e)=>defaultFilterHandler('usuario.id',e)}>
+                <FormSelection useTable="usuario" onChange={(e) => defaultFilterHandler('usuario.id', e)}>
                     <option className="bg-background" value={""}>Qualquer Usuário</option>
+                </FormSelection>
+                <FormSelection onChange={(e) => defaultFilterHandler('status', e)}>
+                    <option className="bg-background" value={TRANSACTION_OPEN}>Em Aberto</option>
+                    <option className="bg-background" value={""}>Qualquer Status</option>
+                    <option className="bg-background" value={TRANSACTION_INVALID}>Inválida</option>
+                    <option className="bg-background" value={TRANSACTION_CLOSED}>Fechada</option>
                 </FormSelection>
             </>}>
                 <ToolBarButton className="hover:bg-green-100" onClick={() => navigate("/create/entrada")}><i>&#xea3b;</i> Criar</ToolBarButton>

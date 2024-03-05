@@ -1,76 +1,51 @@
 {
   "where": {
     "status": {},
-    "createdAt": {},
-    "tipo": {}
+    "$bote.fornecedor.id$": {},
+    "$bote.id$": {},
+    "$usuario.id$": {}
   },
-  "attributes": [
-    [
-      {
-        "fn": "MAX",
-        "args": [
-          {
-            "col": "createdAt"
-          }
-        ]
-      },
-      "createdAt"
-    ],
-    [
-      {
-        "fn": "extract",
-        "args": [
-          {
-            "val": "month FROM \"createdAt\""
-          }
-        ]
-      },
-      "createdAt_month"
-    ],
-    [
-      {
-        "fn": "extract",
-        "args": [
-          {
-            "val": "year FROM \"createdAt\""
-          }
-        ]
-      },
-      "createdAt_year"
-    ],
-    [
-      {
-        "fn": "SUM",
-        "args": [
-          {
-            "col": "peso"
-          }
-        ]
-      },
-      "peso"
-    ],
-    [
-      {
-        "fn": "SUM",
-        "args": [
-          {
-            "col": "valor"
-          }
-        ]
-      },
-      "valor"
-    ]
+  "limit": "114",
+  "include": [
+    {
+      "__model_name": "Bote",
+      "include": [
+        {
+          "__model_name": "Fornecedor",
+          "include": [],
+          "attributes": [
+            "id",
+            "nome",
+            "integracao_id",
+            "createdAt",
+            "updatedAt"
+          ]
+        }
+      ],
+      "attributes": [
+        "id",
+        "fornecedor_id",
+        "nome",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    {
+      "__model_name": "Usuario",
+      "include": [],
+      "attributes": [
+        "id",
+        "nome",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
   ],
-  "group": [
-    "createdAt_month",
-    "createdAt_year"
-  ],
-  "include": [],
   "order": [
     [
-      "createdAt",
-      "ASC"
+      "updatedAt",
+      "DESC"
     ]
   ],
-  "raw": true
+  "raw": false
 }

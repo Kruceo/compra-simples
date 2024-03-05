@@ -1,6 +1,7 @@
 import jsPDF from "jspdf";
 import backend from "../../../constants/backend";
 import { openPDF, writeHeader, writeTable } from "./libraryReports";
+import { getSigles } from "../../../constants/stringUtils";
 
 export async function boatEntryComparation(d1: Date, d2: Date) {
 
@@ -64,16 +65,3 @@ export async function boatEntryComparation(d1: Date, d2: Date) {
     openPDF(pdf)
 }
 
-function getSigles(str: string | string[]) {
-    if (Array.isArray(str))
-        return str.map(each => {
-            const sp = each.split(" ")
-            if (sp[1]) return sp[0][0] + ". " + sp[1]
-            return each
-        })
-
-    const sp = str.split(" ")
-    if (sp[1]) return sp[0][0] + ". " + sp[1]
-    return str
-
-}

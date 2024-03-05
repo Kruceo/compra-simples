@@ -25,7 +25,6 @@ authRouter.post("/auth/login", async (req, res) => {
             //     error: true,
             //     message: "Blocked"
             // })
-            console.log(hostDate.getTime())
             const newLvl = lvl < 120 ? lvl + 1 : lvl
             hosts.set(req.hostname, hostDate.getTime() + (200 * newLvl) + "," + (newLvl))
             return res.status(statusCodes.Unauthorized).json({error:true,message:"Address blocked."});

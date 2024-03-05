@@ -31,6 +31,7 @@ module.exports = {
         "default-text": "#c0c0c0",
         borders: "#262626",
         hovers: "#222",
+        selected:"#224"
 
       },
     },

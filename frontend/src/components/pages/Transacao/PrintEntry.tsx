@@ -5,6 +5,8 @@ import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
 import thermalPrinter from "../../../constants/thermalPrinter";
 import Button from "../../Layout/Button";
+import beautyNumber from "../../../constants/numberUtils";
+import { getSigles } from "../../../constants/stringUtils";
 
 export default function PrintEntry() {
     const url = new URL(window.location.href)
@@ -13,7 +15,7 @@ export default function PrintEntry() {
     if (!id) return "Essa página funciona com a referência de um ID. (?id=10)"
     localStorage.removeItem('printerSessionLocker')
     useEffect(() => {
-        
+
         printSingleEntry(id)
     }, [])
 
@@ -23,7 +25,7 @@ export default function PrintEntry() {
         <Content>
             <div className="p-4">
                 <h2 className="my-4">Impressão de transação</h2>
-                <Button onClick={()=>printSingleEntry(id)}><i>&#xe954;</i> Imprimir Cupom </Button>
+                <Button onClick={() => printSingleEntry(id)}><i>&#xe954;</i> Imprimir Cupom </Button>
             </div>
         </Content>
     </>
@@ -31,12 +33,12 @@ export default function PrintEntry() {
 
 
 
-export async function printSingleEntry(id:number|string) {
+export async function printSingleEntry(id: number | string) {
 
     if (localStorage.getItem("printerSessionLocker")) return
     localStorage.setItem("printerSessionLocker", "true")
     const width: number = (await thermalPrinter.getWidth()).data.width
-
+    const chunkSize = width/3
     let d = await backend.get('transacao', { include: "bote{fornecedor},transacao_item{produto[nome]}", id })
     if (d.data.error || !d.data.data || !Array.isArray(d.data.data)) return console.error(d.data.message);
 
@@ -53,21 +55,26 @@ export async function printSingleEntry(id:number|string) {
     queries.push(['println', ""])
     queries.push(['println', ""])
 
-    queries.push(['println', `${"Produto".padEnd(width / 4 * 2, ' ')} ${"Peso".padEnd(width / 4, ' ')} ${"Total"}`])
+    queries.push(['println', `${"Produto".padEnd(chunkSize, ' ')} ${"Peso".padEnd(chunkSize-1, ' ')} ${"Total"}`])
     queries.push(['println', '-'.repeat(width)])
 
-
+    
     console.log(d.data.data)
     item.transacao_itens?.forEach(each => {
         const { produto, peso, valor_total } = each
-
+        
         queries.push([
             'println',
-            `${produto?.nome?.toString().padEnd(width / 4 * 2, ' ')} ${peso?.toString().padEnd(width / 4, ' ')} ${valor_total?.toString()}`
+            `\
+${getSigles(produto?.nome?.toString()??"Não Definido").toString().padEnd(chunkSize, ' ')} \
+${beautyNumber(peso       ??-1) .toString().padStart(chunkSize-1, ' ')} \
+${beautyNumber(valor_total??-1) .toString().padStart(chunkSize-1, ' ')}`
         ])
     })
     queries.push(['println', '-'.repeat(width)])
-    queries.push(['println', `Peso: ${item.peso}`.padEnd(width / 4 * 2 + 1, ' ') + 'Valor: ' + item.valor])
+    queries.push(['println', ''])
+    queries.push(['println', `${" ".repeat(chunkSize * 1.5)}Peso: ` + (beautyNumber( item.peso??-1).padStart(chunkSize*1.5 -6, ' '))])
+    queries.push(['println', `${" ".repeat(chunkSize * 1.5)}Valor: ` + (beautyNumber( item.valor??-1).padStart(chunkSize*1.5 -7, ' '))])
 
 
     queries.push(['cut'])
