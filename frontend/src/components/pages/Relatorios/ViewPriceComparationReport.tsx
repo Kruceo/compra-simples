@@ -1,10 +1,12 @@
-import {priceComparation} from "./priceComparation";
+import { priceComparation } from "./priceComparation";
 import SideBar from "../../Layout/SideBar";
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import FormInput from "../../OverPageForm/FormInput";
 import { useState } from "react";
 import Button from "../../Layout/Button";
+import { TRANSACTION_CLOSED, TRANSACTION_OPEN } from "../../../constants/codes";
+import FormSelection from "../../OverPageForm/FormSelection";
 
 export default function BoatEntryComparationReport() {
 
@@ -19,8 +21,7 @@ export default function BoatEntryComparationReport() {
 
     const [date1, setDate1] = useState(defaultLastWeek)
     const [date2, setDate2] = useState(nowDate)
-
-    
+    const [status, setStatus] = useState(TRANSACTION_OPEN)
 
     return <>
         <Bar />
@@ -31,16 +32,21 @@ export default function BoatEntryComparationReport() {
             {/* <p>{date2.toLocaleDateString() + ' ' + date2.toLocaleTimeString() + ' ### ' + date2.toISOString() + ' $$$ ' + date2input(date2)}</p> */}
 
             <h2 className="p-4">Relatório - Comparativo de Preços</h2>
-            <div className="p-4 flex justify-center items-center">
+            <div className="p-4 flex justify-center items-center gap-4">
                 <FormInput type="date"
                     defaultValue={date2input(defaultLastWeek)}
                     onChange={(e) => dateSetter(e.target.value, 24, 0, 1, setDate1)} />
-                <p className="mx-4">Até</p>
+                <p>Até</p>
                 <FormInput type="date"
                     defaultValue={date2input(nowDate)}
                     onChange={(e) => dateSetter(e.target.value, 47, 59, 59, setDate2)} />
+                <FormSelection
+                    onChange={(e) => setStatus(parseInt(e.currentTarget.value))} >
+                        <option value={TRANSACTION_OPEN}>Abertas</option>
+                        <option value={TRANSACTION_CLOSED}>Fechadas</option>
+                </FormSelection>
                 <Button className="hover:bg-green-100 mx-2"
-                    onClick={() => priceComparation(date1, date2)}>
+                    onClick={() => priceComparation(date1, date2,status)}>
                     <i>&#xe926;</i> Pronto
                 </Button>
             </div>

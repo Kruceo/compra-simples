@@ -16,6 +16,11 @@ i {
   font-family: icomoon, "Poppins", Inter, system-ui, Avenir,Arial, Helvetica, sans-serif;
 }
 
+option{
+  background-color:#171717;
+  color: #c0c0c0;
+}
+
 :root {
   /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; */
   font-family: "Poppins", Inter, system-ui, Avenir,Arial, Helvetica, sans-serif;

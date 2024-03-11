@@ -3,7 +3,7 @@ import backend from "../../../constants/backend";
 import { openPDF, writeHeader, writeTable } from "./libraryReports";
 import { getSigles } from "../../../constants/stringUtils";
 
-export async function boatEntryComparation(d1: Date, d2: Date) {
+export async function boatEntryComparation(d1: Date, d2: Date,status:number) {
 
     const pdf = new jsPDF({ orientation: "landscape" })
 
@@ -11,7 +11,7 @@ export async function boatEntryComparation(d1: Date, d2: Date) {
         include: 'transacao_item[]{produto[]},bote[]{fornecedor[]}',
         attributes: 'bote.nome,bote.fornecedor.nome,transacao_itens.produto.nome,(sum)transacao_itens.valor_total,tipo',
         group: 'bote.nome,bote.fornecedor.nome,transacao_itens.produto.nome,tipo',
-        status: 0,
+        status: status,
         createdAt: ">" + d1.toISOString() + ",<" + d2.toISOString(),
         order: 'bote_nome,ASC'
     })

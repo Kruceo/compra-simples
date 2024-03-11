@@ -1,14 +1,14 @@
 import jsPDF from "jspdf";
 import { openPDF, writeHeader, writeTable } from "./libraryReports";
 import backend from "../../../constants/backend";
-export default async function monthTransComparation(date1:Date,date2:Date){
+export default async function monthTransComparation(date1:Date,date2:Date,status:number){
     const pdf = new jsPDF()
 
     const res = await backend.get('transacao',{
         attributes:"(max)createdAt,(month)createdAt,(year)createdAt,(sum)peso,(sum)valor",
         group:"createdAt_month,createdAt_year",
         order:"createdAt,ASC",
-        status:0,
+        status:status,
         createdAt:">"+date1.toISOString()+',<'+date2.toISOString(),
         tipo:0
     })

@@ -3,22 +3,22 @@ import backend, { BackendTableComp } from "../../../constants/backend";
 import { openPDF, writeHeader, writeTable } from "./libraryReports";
 import beautyNumber from "../../../constants/numberUtils";
 
-export async function priceComparation(d1: Date, d2: Date) {
+export async function priceComparation(d1: Date, d2: Date,status:number) {
     const resEntry = await backend.get("transacao", {
         include: "transacao_item[]{produto[]}",
         attributes: "transacao_itens.produto.nome,transacao_itens.preco,(sum)transacao_itens.peso,(sum)transacao_itens.valor_total",
         group: "transacao_itens.produto.nome,transacao_itens.preco",
         tipo: 0,
-        status: 0,
+        status: status,
         createdAt:">"+d1.toISOString() +',<' + d2.toISOString()
     })
-
+    console.log(resEntry)
     const resExit = await backend.get("transacao", {
         include: "transacao_item[]{produto[]}",
         attributes: "transacao_itens.produto.nome,(sum)transacao_itens.valor_total",
         group: "transacao_itens.produto.nome",
         tipo: 1, // exit,
-        status: 0,
+        status: status,
         createdAt:">"+d1.toISOString() +',<' + d2.toISOString()
     })
 

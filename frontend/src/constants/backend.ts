@@ -76,7 +76,7 @@ interface BackendTableComp {
     status?: number,
     fornecedor_id?: number,
     usuario_id?: number,
-    valor?:number,
+    valor?: number,
     tipo?: number,
 
     //Transacao Item
@@ -108,7 +108,8 @@ function obj2URLQuery(obj: Object) {
     let query = ''
 
     Object.entries(obj).forEach(each => {
-        query += `${each[0]}=${each[1]}&`
+        if (each[1])
+            query += `${each[0]}=${each[1]}&`
     })
     return query.slice(0, query.length - 1)
 }
