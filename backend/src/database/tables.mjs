@@ -15,7 +15,10 @@ const Usuario = dbserver.define("usuario", {
     senha: { type: DataTypes.STRING, allowNull: false }
 }, {
     tableName: "usuarios",
-    freezeTableName: true
+    freezeTableName: true,
+    defaultScope: {
+        attributes: { exclude: ['secreto'] }
+    }
 })
 
 const Fornecedor = dbserver.define("fornecedor", {
@@ -169,10 +172,10 @@ Bote.belongsTo(Fornecedor, { foreignKey: 'fornecedor_id' })
 Fornecedor.hasMany(Bote, { foreignKey: 'fornecedor_id' })
 
 Transacao_item.belongsTo(Transacao, { foreignKey: 'transacao_id' })
-Transacao.hasMany       (Transacao_item, { foreignKey: 'transacao_id' })
+Transacao.hasMany(Transacao_item, { foreignKey: 'transacao_id' })
 
 Transacao_item.belongsTo(Produto, { foreignKey: 'produto_id' })
-Produto.hasMany(Transacao_item, { foreignKey: 'produto_id' }  )
+Produto.hasMany(Transacao_item, { foreignKey: 'produto_id' })
 
 // Entrada.belongsTo(Fornecedor, { foreignKey: "fornecedor_id" })
 // Fornecedor.hasMany(Entrada, { foreignKey: 'fornecedor_id' })

@@ -1,51 +1,8 @@
 {
   "where": {
-    "status": {},
-    "$bote.fornecedor.id$": {},
-    "$bote.id$": {},
-    "$usuario.id$": {}
+    "id": {}
   },
-  "limit": "114",
-  "include": [
-    {
-      "__model_name": "Bote",
-      "include": [
-        {
-          "__model_name": "Fornecedor",
-          "include": [],
-          "attributes": [
-            "id",
-            "nome",
-            "integracao_id",
-            "createdAt",
-            "updatedAt"
-          ]
-        }
-      ],
-      "attributes": [
-        "id",
-        "fornecedor_id",
-        "nome",
-        "createdAt",
-        "updatedAt"
-      ]
-    },
-    {
-      "__model_name": "Usuario",
-      "include": [],
-      "attributes": [
-        "id",
-        "nome",
-        "createdAt",
-        "updatedAt"
-      ]
-    }
-  ],
-  "order": [
-    [
-      "updatedAt",
-      "DESC"
-    ]
-  ],
+  "include": [],
+  "order": [],
   "raw": false
 }

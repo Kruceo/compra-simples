@@ -14,8 +14,10 @@
         }
     },
     "security":{
-        "secret":"abc",
-        "tokenExpireTime":"30m",
+        "jwt":{
+            "secret":"abc",
+            "tokenExpireTime":"24h"
+        },
         "prefixLength":6,
         "sufixLength":10
     }

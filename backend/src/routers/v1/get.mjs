@@ -7,6 +7,8 @@ import orderingBuilder from "../../utils/orderingBuilder.mjs"
 import statusCodes from "../../utils/statusCode.mjs"
 import { upperCaseLetter } from "../../utils/stringUtils.mjs"
 
+const hidden = ["usuarios", "users", "usr"]
+
 /**
  * V1 request handler to be used in Routers 
  * @param {import("express").Request} req 
@@ -16,13 +18,15 @@ import { upperCaseLetter } from "../../utils/stringUtils.mjs"
 export default async function getRequestHandler(req, res) {
 
     const tableName = upperCaseLetter(req.params.table, 0)
-    const { limit, order, include, attributes, group, ...restQuery } = req.query
+
+    let { limit, order, include, attributes, group, ...restQuery } = req.query
 
     var whereClause = {}
 
     // Operator clause build , any like the symbol ">2" turns to [Op.gt]:2
     Object.keys(restQuery).forEach(each => {
         let newKey = each
+        // case includes "." add $attr$, to get and compare attributes of included tables
         if (each.includes(".")) newKey = `$${each}$`
         whereClause[newKey] = opBuilder(restQuery[each])
     })
@@ -51,7 +55,7 @@ export default async function getRequestHandler(req, res) {
         ; (await import("fs")).writeFileSync("last.json", JSON.stringify(fullClause, null, 2))
 
     try {
-        const data = await tables[tableName].findAll({ ...fullClause, })
+        const data = await tables[tableName].findAll(fullClause)
         res.json({ data })
     } catch (error) {
         return res.status(statusCodes.InternalServerError)

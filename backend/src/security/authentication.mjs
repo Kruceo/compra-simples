@@ -16,8 +16,8 @@ async function authenticateUser(user, password) {
 
     if (!compare(password, finder.dataValues.senha)) return null
 
-    const token = jwt.sign({ user, id: finder.dataValues.id }, cfg.security.secret, {
-        expiresIn: cfg.security.tokenExpireTime
+    const token = jwt.sign({ user, id: finder.dataValues.id }, cfg.security.jwt.secret, {
+        expiresIn: cfg.security.jwt.tokenExpireTime
     })
 
     return { token }
@@ -26,7 +26,7 @@ async function authenticateUser(user, password) {
 
 async function authenticateToken(token) {
     try {
-        const verify = jwt.verify(token, cfg.security.secret)
+        const verify = jwt.verify(token, cfg.security.jwt.secret)
         return verify
     } catch (error) {
         return null

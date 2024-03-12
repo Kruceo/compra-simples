@@ -21,6 +21,12 @@ function opBuilder(query) {
             case "^":
                 clause = { ...clause, [Op.iLike]: "%" + value.substring(1) + '%' }
                 break;
+            case "|":
+                clause = { ...clause, [Op.or]: value.split("|") }
+                break;
+            case "!":
+                clause = { ...clause, [Op.not]: value }
+                break;
 
             default:
                 clause = { ...clause, [Op.eq]: fullString }
