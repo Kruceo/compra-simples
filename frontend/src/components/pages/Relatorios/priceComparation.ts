@@ -1,5 +1,5 @@
 import jsPDF from "jspdf";
-import backend, { BackendTableComp } from "../../../constants/backend";
+import backend from "../../../constants/backend/backend";
 import { openPDF, writeHeader, writeTable } from "./libraryReports";
 import beautyNumber from "../../../constants/numberUtils";
 
@@ -61,7 +61,7 @@ export async function priceComparation(d1: Date, d2: Date,status:number) {
 }
 
 
-function processInfo(data: BackendTableComp[]) {
+function processInfo(data: transacaoProps[]) {
     let table = data.map(each => Object.values(each))
 
     let totalWeight = 0

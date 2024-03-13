@@ -1,6 +1,6 @@
 import jsPDF from "jspdf";
 import { openPDF, writeHeader, writeTable } from "./libraryReports";
-import backend from "../../../constants/backend";
+import backend from "../../../constants/backend/backend";
 export default async function monthTransComparation(date1:Date,date2:Date,status:number){
     const pdf = new jsPDF()
 

@@ -1,13 +1,12 @@
 import { useState } from "react"
-import { BackendTableComp } from "../../../constants/backend"
 import beautyNumber from "../../../constants/numberUtils"
 import FormInput from "../../OverPageForm/FormInput"
 import FormPrevisionInput from "../../OverPageForm/FormPrevisionInput"
 import { RequiredLabel } from "../../OverPageForm/OverPageForm"
 import Button from "../../Layout/Button"
 
-export default function TransitionItemAdder(props: { onSubmit: (item: BackendTableComp) => void }) {
-    const [product, setProduct] = useState<BackendTableComp>()
+export default function TransitionItemAdder(props: { onSubmit: (item: transacaoitemProps) => void }) {
+    const [product, setProduct] = useState<produtoProps>()
     const [productPrice, setProductPrice] = useState<number>()
     const [productWeight, setProductWeight] = useState<number>()
     const [error, setError] = useState("")
@@ -75,20 +74,21 @@ export default function TransitionItemAdder(props: { onSubmit: (item: BackendTab
                     const productEl: HTMLInputElement | null = document.querySelector("input[name=product]")
 
                     if (!productWeight) {
-                        setTimeout(()=>weightEl?.focus(), 200)
+                        setTimeout(() => weightEl?.focus(), 200)
                         return setError('weight')
                     }
                     if (!productPrice) {
-                        setTimeout(()=>priceEl?.focus(), 200)
+                        setTimeout(() => priceEl?.focus(), 200)
                         return setError('price')
                     }
                     if (!product) {
-                        setTimeout(()=>productEl?.focus(), 200)
+                        setTimeout(() => productEl?.focus(), 200)
                         return setError('product')
                     }
                     setError("")
                     props.onSubmit(
                         {
+                            transacao_id: -1,
                             id: Math.round(product?.id ?? -1 + Math.random() * 9999),
                             produto_id: product?.id,
                             preco: productPrice,

@@ -1,9 +1,9 @@
 import jsPDF from "jspdf";
-import backend from "../../../constants/backend";
+import backend from "../../../constants/backend/backend";
 import { openPDF, writeHeader, writeTable } from "./libraryReports";
 import { getSigles } from "../../../constants/stringUtils";
 
-export async function boatEntryComparation(d1: Date, d2: Date,status:number) {
+export async function boatEntryComparation(d1: Date, d2: Date, status: number) {
 
     const pdf = new jsPDF({ orientation: "landscape" })
 
@@ -48,17 +48,26 @@ export async function boatEntryComparation(d1: Date, d2: Date,status:number) {
         return mo
     }, {} as any)
 
+    console.log(dataTrasacao )
+
     const table: string[][] = Object.entries(dataTrasacao).map((each: any) => [each[0], ...Object.values(each[1])])
 
     const today = new Date()
 
     let lastBoundingBox = writeHeader(pdf, today.toLocaleDateString().slice(0, 5), d1, d2)
 
-    pdf.setFontSize(10)
-
     let tableDispositionOfStyle = ['bold']
     tableDispositionOfStyle[table[0].length - 1] = 'bold'
     tableDispositionOfStyle[products.length - 3] = 'bold'
+
+
+    console.log(table)
+
+    let fontSize = 100 / products.length
+
+    if (fontSize > 10) fontSize = 10
+
+    pdf.setFontSize(fontSize)
 
     writeTable(pdf, table, lastBoundingBox.x, lastBoundingBox.y2 + 7, ["Bote", ...getSigles(products)], [2], tableDispositionOfStyle)
 

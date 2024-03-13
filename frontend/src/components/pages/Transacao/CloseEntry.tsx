@@ -4,14 +4,12 @@ import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
 import Table from "../../table/Table";
 import { TableEngineContext } from "../../GlobalContexts/TableEngineContext";
-import { BackendTableComp } from "../../../constants/backend";
 import { bDate } from "../../../constants/dateUtils";
 import { TRANSACTION_CLOSED, TRANSACTION_OPEN } from "../../../constants/codes";
 import SubTopBar, { ToolBarButton } from "../../Layout/SubTopBar";
 import beautyNumber from "../../../constants/numberUtils";
 import { changeEntryStatus } from "./internal";
 import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
-import thermalPrinter from "../../../constants/thermalPrinter";
 
 export default function CloseEntry() {
     const { defaultDataGet } = useContext(TableEngineContext)
@@ -19,7 +17,7 @@ export default function CloseEntry() {
     const [where,] = useState<any>({ include: "bote{fornecedor},usuario", status: TRANSACTION_OPEN, order: "updatedAt,DESC" })
     const [selected, setSelected] = useState<number[]>([])
     const [update, setUpdate] = useState(true)
-    const [data, setData] = useState<BackendTableComp[]>([])
+    const [data, setData] = useState<transacaoProps[]>([])
 
     const table_to_manage = "transacao"
     useEffect(() => {
@@ -35,38 +33,6 @@ export default function CloseEntry() {
                 setSelected([])
                 setUpdate(!update)
             }, 250);
-
-            const chunkSize = (await (await thermalPrinter.getWidth()).data.width) / 3
-
-            let printerQuery = [
-                ["center", ""],
-                ["println", "Fechamento " + bDate((new Date()).toISOString())],
-                ["left", ""],
-
-                ["println", "-".repeat(chunkSize * 3)],
-                ["println", ""], ["println", ""],
-                ["println", "Data".padEnd(chunkSize * 1) + "Trans ID".padEnd(chunkSize * 1) + "Valor"],
-                ["println", "-".repeat(chunkSize * 3)],
-            ]
-
-            let totalValue = 0
-            data.forEach(each => {
-                if (!each.id || !each.valor || !selected.includes(each.id)) return;
-
-                totalValue += each.tipo ? -each.valor : each.valor
-                printerQuery.push(["println",
-                    bDate(each.createdAt).padEnd(chunkSize, ' ')
-                    + each.id?.toString().padStart(chunkSize * 0.5, ' ')
-                    + beautyNumber(each.tipo ? -each.valor : each.valor).padStart(chunkSize * 1.5, ' ')
-                ])
-            })
-            printerQuery.push(["println", "-".repeat(chunkSize * 3)])
-            printerQuery.push(["println", ""])
-            printerQuery.push(["println", "Valor Total:" + beautyNumber(totalValue).padStart(3 * chunkSize - 12, ' ')])
-
-            printerQuery.push(["cut"])
-            await thermalPrinter.print(printerQuery)
-
         }, () => null)
     }
 

@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
-import backend, { BackendTableComp } from "../../../constants/backend";
+import backend from "../../../constants/backend/backend";
 import CreationForm from "./FormVendors";
 
 import Table, { TableOrderEvent } from "../../table/Table";
@@ -15,7 +15,7 @@ export default function ViewVendors() {
 
     const { setGlobalPopupByKey, simpleSpawnInfo } = useContext(GlobalPopupsContext)
 
-    const [data, setData] = useState<BackendTableComp[]>([]);
+    const [data, setData] = useState<fornecedorProps[]>([]);
     const [update, setUpdate] = useState(true)
     const [where, setWhere] = useState<any>({})
 
@@ -59,16 +59,16 @@ export default function ViewVendors() {
 
     // Quando é clicado no botão "editar"
     const editHandler = (id: number) => {
-        const search = backend.utils.filterUsingID(data, id)
+        const search = backend.utils.filterUsingID(data, id) as fornecedorProps
         if (!search)
             return simpleSpawnInfo("Não é possivel selecionar o item escolhido.");
 
-        const { nome, preco } = search
+        const { nome } = search
         setGlobalPopupByKey("EditForm",
             <CreationForm
                 key={'editingForm'}
                 mode="editing"
-                defaultValues={{ id, nome, preco }}
+                defaultValues={{ id, nome }}
                 onCancel={() => setGlobalPopupByKey("EditForm", null)}
                 afterSubmit={() => setUpdate(!update)}
             />

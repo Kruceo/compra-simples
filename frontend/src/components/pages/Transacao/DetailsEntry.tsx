@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import { BackendTableComp } from "../../../constants/backend";
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
@@ -14,12 +13,12 @@ export default function DetailsEntry() {
 
     if (!id) return <SideBar />
 
-    const [data, setData] = useState<BackendTableComp>()
+    const [data, setData] = useState<transacaoProps>()
 
     const { defaultDataGet } = useContext(TableEngineContext)
 
     useEffect(() => {
-        defaultDataGet("transacao", { id, include: "transacao_item{produto}" }, (d: BackendTableComp[]) => setData(d[0]))
+        defaultDataGet("transacao", { id, include: "transacao_item{produto}" }, (d: transacaoProps[]) => setData(d[0]))
     }, [])
     console.log(data)
     return <>

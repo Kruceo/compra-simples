@@ -1,9 +1,15 @@
-import backend, { BackendTableComp } from "../../../constants/backend";
+import backend, { BackendResponse } from "../../../constants/backend/backend";
 
-export async function saveEntryStack(bote_id: number, obs: string, valor: number, peso: number, tipo: 0 | 1, transacaoItens: BackendTableComp[]) {
+interface saveEntryStackResponse {
+    error?: boolean,
+    message?: string,
+    data?: Partial<transacaoitemProps>
+}
+
+export async function saveEntryStack(bote_id: number, obs: string, valor: number, peso: number, tipo: 0 | 1, transacaoItens: transacaoitemProps[]): Promise<saveEntryStackResponse> {
 
     const boteResponse = await backend.get('bote', { id: bote_id })
-    if (boteResponse.data.error || !boteResponse.data.data || !Array.isArray(boteResponse.data.data) || !boteResponse.data.data[0]) return boteResponse.data
+    if (boteResponse.data.error || !boteResponse.data.data || !Array.isArray(boteResponse.data.data) || !boteResponse.data.data[0]) return { message: boteResponse.data.message, error: true }
 
     const bote = boteResponse.data.data[0]
     const transacaoResponse = await backend.create('transacao', {
@@ -15,7 +21,7 @@ export async function saveEntryStack(bote_id: number, obs: string, valor: number
         valor: valor,
         peso: peso
     })
-    if (transacaoResponse.data.error || !transacaoResponse.data.data || Array.isArray(transacaoResponse.data.data) || !transacaoResponse.data.data.id) return transacaoResponse.data;
+    if (transacaoResponse.data.error || !transacaoResponse.data.data || Array.isArray(transacaoResponse.data.data) || !transacaoResponse.data.data.id) return { message: transacaoResponse.data.message, error: true };
 
     const transacao_id = transacaoResponse.data.data.id
 
@@ -27,10 +33,10 @@ export async function saveEntryStack(bote_id: number, obs: string, valor: number
     const transacaoItensResponse = await backend.create("transacao_item", parsedTransacaoItens)
 
     if (transacaoItensResponse.data.error) {
-        return transacaoItensResponse.data
+        return { error: true, message: transacaoItensResponse.data.message }
     }
 
-    return { data: { transacao_id } }
+    return { error: false, message: undefined, data: { transacao_id: transacao_id, } }
 
 }
 

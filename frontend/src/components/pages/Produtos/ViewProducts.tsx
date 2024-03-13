@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
-import backend, { BackendTableComp } from "../../../constants/backend";
+import backend from "../../../constants/backend/backend";
 import CreationForm from "./FormProducts";
 
 import Table, { TableOrderEvent } from "../../table/Table";
@@ -17,7 +17,7 @@ export default function ViewProducts() {
     const { setGlobalPopupByKey, simpleSpawnInfo } = useContext(GlobalPopupsContext)
     const { defaultDataGet, defaultDataDelete } = useContext(TableEngineContext)
 
-    const [data, setData] = useState<BackendTableComp[]>([]);
+    const [data, setData] = useState<produtoProps[]>([]);
     const [update, setUpdate] = useState(true)
     const [where, setWhere] = useState<any>({})
 
@@ -60,7 +60,7 @@ export default function ViewProducts() {
 
     // Quando é clicado no botão "editar"
     const editHandler = (id: number) => {
-        const search = backend.utils.filterUsingID(data, id)
+        const search = backend.utils.filterUsingID(data, id) as produtoProps
         if (!search)
             return simpleSpawnInfo("Não é possivel selecionar o item escolhido.");
 

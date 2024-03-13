@@ -18,6 +18,8 @@ import Teste from './components/pages/Teste'
 import ViewBoatEntryComparationReport from './components/pages/Relatorios/ViewBoatEntryComparationReport'
 import ViewTransComparationReport from './components/pages/Relatorios/ViewTransComparationReport'
 import CloseEntry from './components/pages/Transacao/CloseEntry'
+import ViewReceipt from './components/pages/Recibos/ViewOnceReceipt'
+import ViewPerTransReceipt from './components/pages/Recibos/ViewPerTransReceipt'
 
 function App() {
 
@@ -42,6 +44,10 @@ function App() {
               <Route path='/report/3' element={<Proteged>{<ViewTransComparationReport />}</Proteged>} />
 
               <Route path='/login' element={<LoginScreen />} />
+              
+              <Route path='/receipt/once' element={<ViewReceipt />} />
+              <Route path='/receipt/transaction' element={<ViewPerTransReceipt />} />
+
               <Route path='/teste' element={<Teste />} />
 
               <Route path='/*' element={<View404 />} />

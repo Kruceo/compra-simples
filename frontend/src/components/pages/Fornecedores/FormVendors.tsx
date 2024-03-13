@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import backend, { BackendTableComp } from "../../../constants/backend";
+import backend from "../../../constants/backend/backend";
 import OverPageForm, { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import FormInput from "../../OverPageForm/FormInput";
 import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
@@ -8,7 +8,7 @@ export default function VendorCreationForm(props: {
     onCancel: Function,
     mode: "creation" | "editing"
     afterSubmit?: Function,
-    defaultValues?: BackendTableComp
+    defaultValues?: Partial<fornecedorProps>
 }) {
     const [error, setError] = useState('')
     const { simpleSpawnInfo } = useContext(GlobalPopupsContext)

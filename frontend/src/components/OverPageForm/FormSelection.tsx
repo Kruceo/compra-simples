@@ -1,10 +1,11 @@
-import React, { useContext, useInsertionEffect, useRef, useState } from "react"
-import backend, { BackendTableComp } from "../../constants/backend"
+import React, { useContext, useEffect, useRef, useState } from "react"
+import backend from "../../constants/backend/backend"
 import { ErrorHandlerContext } from "../GlobalContexts/ErrorHandlerContext"
 import { DefaultFormInput, defaultKeyUpHandler } from "./FormInput"
 
 interface FormSelectionAttributes extends DefaultFormInput, React.HTMLAttributes<HTMLSelectElement> {
-    useTable?: string,
+    useTable?: allTableNames,
+    useTableWhere?: Object,
     errored?: boolean,
     name?: string
 }
@@ -12,16 +13,16 @@ interface FormSelectionAttributes extends DefaultFormInput, React.HTMLAttributes
 export default function FormSelection(props: FormSelectionAttributes) {
 
     const { pageErrorHandler } = useContext(ErrorHandlerContext)
-    // const { pageErrorHandler } = useContext(PopupContext)
 
-    const { errored, useTable, defaultValue,next, ...restProps } = props
-    const [data, setData] = useState<BackendTableComp[]>([])
+    const { errored, useTable, defaultValue, next, useTableWhere, ...restProps } = props
+    const [data, setData] = useState<{ nome: string, id: number }[]>([])
     const ref = useRef<HTMLSelectElement>(null)
 
-    useInsertionEffect(() => {
+    useEffect(() => {
         (async () => {
             if (!useTable) return;
-            let res = await backend.get(useTable, {})
+            let res = await backend.get(useTable, useTableWhere ?? {})
+            console.log(res)
 
             if (res.data.error) {
                 pageErrorHandler(res)
@@ -41,10 +42,10 @@ export default function FormSelection(props: FormSelectionAttributes) {
         })()
         setTimeout(() => {
             if (ref.current)
-            ref.current.dispatchEvent(new Event("change", { bubbles: true }))
+                ref.current.dispatchEvent(new Event("change", { bubbles: true }))
         }, 100);
-        
-    }, [])
+
+    }, [useTableWhere])
 
     return <select ref={ref} {...restProps}
         // defaultValue={defaultValue}
@@ -54,7 +55,7 @@ export default function FormSelection(props: FormSelectionAttributes) {
         }
         {
             data.map((item) => <option className="bg-background"
-                onKeyUp={(e)=>defaultKeyUpHandler(e)}
+                onKeyUp={(e) => defaultKeyUpHandler(e)}
                 key={item.id}
                 // selected={item.id == defaultValue}
                 data-item={JSON.stringify(item)}

@@ -1,16 +1,13 @@
 import { PropsWithChildren, createContext, useContext } from "react"
-import backend from "../../constants/backend"
+import backend from "../../constants/backend/backend"
 import { ErrorHandlerContext } from "./ErrorHandlerContext";
 import { GlobalPopupsContext } from "./PopupContext";
 
-interface ErrorHandlerContextType {
-    defaultDataGet: (table: string, where: any, setter: Function) => Promise<void>;
-    defaultDataDelete: (table: string, id: number) => Promise<void>;
-}
+type queryClause = allTableTypes & { include?: string, attributes?: string, group?: string, limit?: number, order?: string }
 
-export const TableEngineContext = createContext<ErrorHandlerContextType>({
-    defaultDataGet: async () => Promise.resolve(),
-    defaultDataDelete: async () => Promise.resolve()
+export const TableEngineContext = createContext({
+    defaultDataGet: async (table: allTableNames, where: Object, setter: Function) => Promise.resolve(),
+    defaultDataDelete: async (table: allTableNames, id: number) => Promise.resolve()
 })
 
 export default function TableEngine(props: PropsWithChildren) {
@@ -18,19 +15,19 @@ export default function TableEngine(props: PropsWithChildren) {
     const { pageErrorHandler } = useContext(ErrorHandlerContext)
     const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
 
-    async function defaultDataGet(table: string, where: any, setter: Function) {
-        const response = await backend.get(table, where)
+    async function defaultDataGet(table: allTableNames, where: Object, setter: Function) {
+        const response = await backend.get(table as any, where)
 
         if (response.data && response.data.error && response.data.message)
             return pageErrorHandler(response)
-        if (!response.data.data || !Array.isArray(response.data.data))
+        if (!response.data.data)
             return
 
         setter(response.data.data)
     }
 
-    const defaultDataDelete = async (table: string, id: number) => {
-        const promise:Promise<void> = new Promise((resolve) => {
+    const defaultDataDelete = async (table: allTableNames, id: number) => {
+        const promise: Promise<void> = new Promise((resolve) => {
             const onAcceptHandler = async () => {
                 const response = await backend.remove(table, id)
                 if (response.data.error)

@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import backend, { BackendTableComp } from "../../../constants/backend";
+import backend from "../../../constants/backend/backend";
 import OverPageForm, { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import FormInput from "../../OverPageForm/FormInput";
 import FormSelection from "../../OverPageForm/FormSelection";
@@ -9,7 +9,7 @@ export default function BoatCreationForm(props: {
     onCancel: Function,
     mode: "creation" | "editing"
     afterSubmit?: Function,
-    defaultValues?: BackendTableComp
+    defaultValues?: Partial<boteProps>
 }) {
     const [error, setError] = useState('')
     const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
@@ -43,7 +43,7 @@ export default function BoatCreationForm(props: {
             response = await backend.edit("bote", id, {
                 nome: data.get("nome")?.toString(),
                 fornecedor_id: parseInt(fornecedor_id.toString())
-            })
+            } as boteProps)
         }
         // Tratamento de erro
         if (response && response.data.error && response.data.message) {
@@ -65,7 +65,7 @@ export default function BoatCreationForm(props: {
 
             <RequiredLabel>Fornecedor</RequiredLabel>
 
-            <FormSelection name="fornecedor_id" defaultValue={defaultValues?.fornecedor?.id} useTable="Fornecedor" errored={error == "fornecedor_id"} />
+            <FormSelection name="fornecedor_id" defaultValue={defaultValues?.fornecedor?.id} useTable="fornecedor" errored={error == "fornecedor_id"} />
 
             <FormInput value="Pronto" type="submit" errored={error == "submit"} />
         </OverPageForm>

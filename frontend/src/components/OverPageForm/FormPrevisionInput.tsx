@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef, useState } from "react"
-import { BackendTableComp } from "../../constants/backend"
 import { TableEngineContext } from "../GlobalContexts/TableEngineContext"
 import { DefaultFormInput, defaultKeyUpHandler } from "./FormInput"
 
@@ -8,18 +7,18 @@ interface FormPrevisionInputAttributes extends DefaultFormInput {
     className?: string,
     errored?: boolean,
     name?: string
-    searchInTable: string,
-    autoFocus?:boolean,
+    searchInTable: allTableNames,
+    autoFocus?: boolean,
     where: Object,
-    onChange?: (item: BackendTableComp | null) => void
+    onChange?: (item: any | null) => void
     onSubmit: () => void,
-    itemHandler: (item: BackendTableComp) => React.ReactNode
+    itemHandler: (item: any) => React.ReactNode
 }
 
 export default function FormPrevisionInput(props: FormPrevisionInputAttributes) {
     const { defaultDataGet } = useContext(TableEngineContext)
     const visibleInputRef = useRef<HTMLInputElement>(null)
-    let { where, searchInTable, errored,next, placeholder,autoFocus ,name, onChange, itemHandler, className } = props
+    let { where, searchInTable, errored, next, placeholder, autoFocus, name, onChange, itemHandler, className } = props
 
     const onBlurHandler: EventListener = (e: unknown) => {
         const t = e as React.FocusEvent<HTMLInputElement>
@@ -41,8 +40,8 @@ export default function FormPrevisionInput(props: FormPrevisionInputAttributes) 
         else w['nome'] = "^" + v
         defaultDataGet(searchInTable, { ...where, ...w }, setSugestionData)
     }
-    const [selectedData, setSelectedData] = useState<BackendTableComp[]>([])
-    const [sugestionData, setSugestionData] = useState<BackendTableComp[]>([])
+    const [selectedData, setSelectedData] = useState<Object[]>([])
+    const [sugestionData, setSugestionData] = useState<Object & { id: number }[]>([])
     const [inputVisible, setInputVisible] = useState(true)
     const [inputFocus, setInputFocus] = useState(true)
 
@@ -96,17 +95,17 @@ export default function FormPrevisionInput(props: FormPrevisionInputAttributes) 
     </div >
 }
 
-function Sugestions(props: { data: BackendTableComp[], itemHandler: (item: BackendTableComp) => React.ReactNode, inputRef: React.RefObject<HTMLInputElement>, isVisible: boolean, setter: (item: any) => void }) {
+function Sugestions(props: { data: Object & { id: number }[], itemHandler: (item: Object & { id: number }) => React.ReactNode, inputRef: React.RefObject<HTMLInputElement>, isVisible: boolean, setter: (item: any) => void }) {
     const [hovering, setHovering] = useState(false)
     const [clicked, setClicked] = useState(false)
 
-    useEffect(()=>{
-        props.inputRef.current?.addEventListener("focus",()=>{
+    useEffect(() => {
+        props.inputRef.current?.addEventListener("focus", () => {
             setClicked(false)
         })
     })
 
-    return <div className={`bg-subpanel border-borders border z-40 shadow-lg absolute top-full left-0 w-full flex flex-col justify-start m-o ${(props.isVisible || hovering) && (!clicked && props.data.length>0) ? "visible" : "invisible"}`}
+    return <div className={`bg-subpanel border-borders border z-40 shadow-lg absolute top-full left-0 w-full flex flex-col justify-start m-o ${(props.isVisible || hovering) && (!clicked && props.data.length > 0) ? "visible" : "invisible"}`}
         onMouseOver={() => setHovering(true)}
         onMouseLeave={() => setHovering(false)}
     >

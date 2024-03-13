@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
-import backend, { BackendTableComp } from "../../../constants/backend";
+import backend from "../../../constants/backend/backend";
 import CreationForm from "./FormBoat";
 
 import Table, { TableOrderEvent } from "../../table/Table";
@@ -15,7 +15,7 @@ import { TableEngineContext } from "../../GlobalContexts/TableEngineContext";
 export default function ViewBoat() {
     const { setGlobalPopupByKey, simpleSpawnInfo } = useContext(GlobalPopupsContext)
     const { defaultDataGet, defaultDataDelete } = useContext(TableEngineContext)
-    const [data, setData] = useState<BackendTableComp[]>([]);
+    const [data, setData] = useState<boteProps[]>([]);
     const [update, setUpdate] = useState(true)
     const [where, setWhere] = useState<any>({ include: 'fornecedor' })
 
@@ -57,7 +57,7 @@ export default function ViewBoat() {
 
     // Quando é clicado no botão "editar"
     const editHandler = (id: number) => {
-        const search = backend.utils.filterUsingID(data, id)
+        const search = backend.utils.filterUsingID(data, id) as boteProps
         if (!search)
             return simpleSpawnInfo("Não é possivel selecionar o item escolhido.");
 
@@ -67,7 +67,7 @@ export default function ViewBoat() {
             <CreationForm
                 key={'editingForm'}
                 mode="editing"
-                defaultValues={{ id, nome, fornecedor }}
+                defaultValues={{ id, nome, fornecedor_id: fornecedor?.id??-1 }}
                 onCancel={() => setGlobalPopupByKey("EditForm", null)}
                 afterSubmit={() => setUpdate(!update)}
             />
@@ -76,7 +76,7 @@ export default function ViewBoat() {
 
     // Quando é clicado no botão "deletar"
     const deleteHandler = (id: number) => defaultDataDelete(table_to_manage, id)
-        .then(()=>setUpdate(!update))
+        .then(() => setUpdate(!update))
 
     const tableContextMenuButtons = [
         { element: <><i>&#xe905;</i>Editar</>, handler: editHandler },

@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
 import TableItem from "./TableItem";
-import { BackendTableComp } from "../../constants/backend";
 import TableContextMenu, { ContextMenuButton } from "./TableContextMenu";
 import { GlobalPopupsContext } from "../GlobalContexts/PopupContext";
+import { data } from "autoprefixer";
 
 export interface TableOrderEvent {
     key: string | string[],
@@ -10,8 +10,8 @@ export interface TableOrderEvent {
 }
 
 interface TableAttributes {
-    data: BackendTableComp[],
-    tableItemHandler: (item: BackendTableComp, index: number) => React.ReactNode[],
+    data: allTableTypes[],
+    tableItemHandler: (item: any, index: number) => React.ReactNode[],
     tableOrderKeys?: (string | string[])[],
     disposition: number[],
     tableHeader: React.ReactNode[],
@@ -65,7 +65,6 @@ export default function Table(props: TableAttributes) {
                                 <OrderButton onClick={(order) => { if (tableOrderKeys) orderHandler({ key: tableOrderKeys[index], order }) }} />
                                 : null
                         }
-
                     </div>
                 })}
         </TableItem>
@@ -73,7 +72,7 @@ export default function Table(props: TableAttributes) {
         {
             data.map((item, index) => {
 
-                const itemID = item.id ?? -1
+                const itemID = item.id
                 return <TableItem
                     selected={props.selected?.includes(itemID)}
                     //Acionar o menu de contexto
@@ -89,7 +88,7 @@ export default function Table(props: TableAttributes) {
                         if (!props.selected.includes(itemID) && props.selectedSetter)
                             props.selectedSetter([...props.selected, itemID])
 
-                        else props.selectedSetter(props.selected.filter(each=>each!=itemID))
+                        else props.selectedSetter(props.selected.filter(each => each != itemID))
                     }
                     }
                     disposition={disposition}

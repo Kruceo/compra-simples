@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import backend from "../../../constants/backend";
+import backend from "../../../constants/backend/backend";
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
@@ -15,7 +15,6 @@ export default function PrintEntry() {
     if (!id) return "Essa página funciona com a referência de um ID. (?id=10)"
     localStorage.removeItem('printerSessionLocker')
     useEffect(() => {
-
         printSingleEntry(id)
     }, [])
 
@@ -38,43 +37,54 @@ export async function printSingleEntry(id: number | string) {
     if (localStorage.getItem("printerSessionLocker")) return
     localStorage.setItem("printerSessionLocker", "true")
     const width: number = (await thermalPrinter.getWidth()).data.width
-    const chunkSize = width/3
+    const chunkSize = width / 4
     let d = await backend.get('transacao', { include: "bote{fornecedor},transacao_item{produto[nome]}", id })
     if (d.data.error || !d.data.data || !Array.isArray(d.data.data)) return console.error(d.data.message);
 
     let queries: string[][] = []
-    const item = d.data.data[0]
-    queries.push(['center'])
-    queries.push(['println', `Transacao ${item.id}`])
+    const item :transacaoProps = d.data.data[0]
+    const itemDate = new Date(item.createdAt)
+    const itemDateString = itemDate.toLocaleDateString() + ' ' + itemDate.toLocaleTimeString()
+
+    queries.push(['println', `Transacao ${item.id}`.padEnd(chunkSize * 4 - itemDateString.length) + itemDateString])
     queries.push(['left'])
     queries.push(['println', '-'.repeat(width)])
 
     queries.push(['println', `Tipo: ${!item.tipo ? "Entrada" : "Saída"}`])
+    queries.push(['println', `Nome: ${item.bote?.fornecedor?.nome}`])
     queries.push(['println', `Bote: ${item.bote?.nome}`])
-    queries.push(['println', `Fornecedor: ${item.bote?.fornecedor?.nome}`])
+
     queries.push(['println', ""])
     queries.push(['println', ""])
 
-    queries.push(['println', `${"Produto".padEnd(chunkSize, ' ')} ${"Peso".padEnd(chunkSize-1, ' ')} ${"Total"}`])
+    queries.push(['println', `${"Produto".padEnd(chunkSize, ' ')} ${"Peso".padStart(chunkSize - 1, " ")} ${"Preço".padStart(chunkSize - 1, " ")} ${"Total".padStart(chunkSize - 1, " ")}`])
     queries.push(['println', '-'.repeat(width)])
 
-    
+
     console.log(d.data.data)
     item.transacao_itens?.forEach(each => {
-        const { produto, peso, valor_total } = each
-        
+        const { produto, preco, peso, valor_total } = each
+
         queries.push([
             'println',
             `\
-${getSigles(produto?.nome?.toString()??"Não Definido").toString().padEnd(chunkSize, ' ')} \
-${beautyNumber(peso       ??-1) .toString().padStart(chunkSize-1, ' ')} \
-${beautyNumber(valor_total??-1) .toString().padStart(chunkSize-1, ' ')}`
+${getSigles(produto?.nome?.toString() ?? "Não Definido").toString().padEnd(chunkSize, ' ')} \
+${beautyNumber(peso ?? -1).toString().padStart(chunkSize - 1, ' ')} \
+${beautyNumber(preco ?? -1).toString().padStart(chunkSize - 1, ' ')} \
+${beautyNumber(valor_total ?? -1).toString().padStart(chunkSize - 1, ' ')}`
         ])
     })
     queries.push(['println', '-'.repeat(width)])
     queries.push(['println', ''])
-    queries.push(['println', `${" ".repeat(chunkSize * 1.5)}Peso: ` + (beautyNumber( item.peso??-1).padStart(chunkSize*1.5 -6, ' '))])
-    queries.push(['println', `${" ".repeat(chunkSize * 1.5)}Valor: ` + (beautyNumber( item.valor??-1).padStart(chunkSize*1.5 -7, ' '))])
+    queries.push(['println', `${" ".repeat(chunkSize * 2)}Peso: ` + (beautyNumber(item.peso ?? -1).padStart(chunkSize * 2 - 6, ' '))])
+    queries.push(['println', `${" ".repeat(chunkSize * 2)}Valor: ` + (beautyNumber(item.valor ?? -1).padStart(chunkSize * 2 - 7, ' '))])
+
+    queries.push(['println', ""])
+    queries.push(['println', ""])
+    queries.push(['println', ""])
+    queries.push(['println', ""])
+    queries.push(['center', ""])
+    queries.push(['println', "Visto:" + "_".repeat(chunkSize * 3 - 1)])
 
 
     queries.push(['cut'])

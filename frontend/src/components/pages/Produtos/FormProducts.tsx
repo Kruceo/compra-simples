@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import backend, { BackendTableComp } from "../../../constants/backend";
+import backend from "../../../constants/backend/backend";
 import OverPageForm, { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import FormInput from "../../OverPageForm/FormInput";
 
@@ -10,7 +10,7 @@ export default function ProductCreationForm(props: {
     onCancel: Function,
     mode: "creation" | "editing"
     afterSubmit?: Function,
-    defaultValues?: BackendTableComp
+    defaultValues?: Partial<produtoProps>
 }) {
     const [error, setError] = useState('')
     const { setGlobalPopupByKey } = useContext(GlobalPopupsContext)

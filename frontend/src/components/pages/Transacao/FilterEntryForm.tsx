@@ -33,7 +33,7 @@ export default function FilterEntryForm(props: OverPageFormAttributes & { whereS
             <FormSelection useTable="fornecedor" onChange={(e) => setWhereKey('bote.fornecedor.id', e.currentTarget.value)}>
                 <option className="bg-background" value={""}>Qualquer Fornecedor</option>
             </FormSelection>
-            <FormSelection useTable="bote" onChange={(e) => setWhereKey('bote.id', e.currentTarget.value)}>
+            <FormSelection useTable="bote" useTableWhere={{fornecedor_id:where["bote.fornecedor.id"]}} onChange={(e) => setWhereKey('bote.id', e.currentTarget.value)}>
                 <option className="bg-background" value={""}>Qualquer Bote</option>
             </FormSelection>
             <FormSelection useTable="usuario" onChange={(e) => setWhereKey('usuario.id', e.currentTarget.value)}>

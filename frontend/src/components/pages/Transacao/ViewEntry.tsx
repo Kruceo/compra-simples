@@ -1,9 +1,8 @@
-import { useContext, useEffect, useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
-// import CreationForm from "./FormBotes";
 import Table, { TableOrderEvent } from "../../table/Table";
 import { bDate } from "../../../constants/dateUtils";
 import SubTopBar, { ToolBarButton } from "../../Layout/SubTopBar";
@@ -11,7 +10,6 @@ import { changeEntryStatus } from "./internal";
 import beautyNumber from "../../../constants/numberUtils";
 import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
 import { TableEngineContext } from "../../GlobalContexts/TableEngineContext";
-import { BackendTableComp } from "../../../constants/backend";
 import { TRANSACTION_INVALID, TRANSACTION_OPEN } from "../../../constants/codes";
 import FilterEntryForm from "./FilterEntryForm";
 
@@ -21,9 +19,9 @@ export default function ViewEntry() {
     const { defaultDataGet } = useContext(TableEngineContext)
     const navigate = useNavigate()
 
-    const [data, setData] = useState<BackendTableComp[]>([]);
+    const [data, setData] = useState<transacaoProps[]>([]);
     const [update, setUpdate] = useState(true)
-    const blockedWhere = { include: "bote{fornecedor},usuario", limit: Math.round(window.innerHeight / 50) }
+    const blockedWhere = { include: "bote{fornecedor},usuario", limit: Math.round(window.innerHeight / 40) }
     const [where, setWhere] = useState<any>({ ...blockedWhere, status: TRANSACTION_OPEN, order: "updatedAt,DESC" })
 
     const setWhereKey = (key: string, value: string) => {
@@ -87,13 +85,13 @@ export default function ViewEntry() {
                     onOrderChange={orderHandler}
                     data={data}
                     disposition={[0.4, 1.5, 1.5, 1, 1, 1, 0.4]}
-                    tableItemHandler={(item) => [
-                        item.id,
-                        item.bote?.nome,
-                        item.bote?.fornecedor?.nome,
-                        <div className="text-right">{beautyNumber(item.peso ?? -1)}</div>,
-                        <div className="text-right">{beautyNumber(item.valor ?? -1)} </div>,
-                        bDate(item.createdAt),
+                    tableItemHandler={(item: typeof data[0]) => [
+                        <div>{item.id}</div>,
+                        <div>{item.bote?.nome}</div>,
+                        <div>{item.bote?.fornecedor?.nome}</div>,
+                        <div className="text-right">{beautyNumber(item.peso)}</div>,
+                        <div className="text-right">{beautyNumber(item.valor)} </div>,
+                        <div>{bDate(item.createdAt)}</div>,
                         <div className="text-right">{item.tipo ? <i title="Saída" className="text-red-600">&#xea3f;</i> : <i title="Entrada" className="text-green-600">&#xea3b;</i>}</div>
                     ]}
                     tableOrderKeys={["id", ["Bote", "nome"], ["Bote", "Fornecedor", "nome"], "peso", "valor", "createdAt", "tipo"]}

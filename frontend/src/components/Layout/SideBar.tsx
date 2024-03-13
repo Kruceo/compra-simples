@@ -4,14 +4,15 @@ import { Link } from "react-router-dom"
 export default function SideBar() {
     return <>
         <nav className="bg-sidebar border-r border-borders w-44 mt-14 h-full fixed left-0 top-0 flex flex-col shadow-lg z-50">
+            <PanelLink href="/"><i>&#xe900;</i>Dashboard</PanelLink>
             <DropButton
-                title="Registro"
+                title="Cadastro"
                 dropDownContent={<>
                     <PanelLink href="/view/produto">Produtos</PanelLink>
                     <PanelLink href="/view/fornecedor">Fornecedores</PanelLink>
                     <PanelLink href="/view/bote">Botes</PanelLink>
                 </>}>
-                <i>&#xe905;</i> Registro
+                <i>&#xe905;</i> Cadastro
             </DropButton>
             <DropButton
                 title="Transação"
@@ -32,6 +33,15 @@ export default function SideBar() {
                 </>}>
 
                 <i>&#xe99c;</i> Relatório
+            </DropButton>
+            <DropButton
+                title="Recibos"
+                dropDownContent={<>
+                    <PanelLink href="/receipt/once">Avulso</PanelLink>
+                    <PanelLink href="/receipt/transaction">Por transação</PanelLink>
+                </>}>
+
+                <i>&#xe93b;</i> Recibos
             </DropButton>
         </nav>
 
@@ -74,5 +84,5 @@ export function DropButton(props: DropButtonAttributes) {
 }
 
 function PanelLink(props: React.HTMLAttributes<HTMLAnchorElement> & { href: string }) {
-    return <Link className="transition-colors hover:bg-hovers text-default-text text-left h-14 flex items-center px-4 gap-2" to={props.href}>{props.children}</Link>
+    return <Link className="transition-colors hover:bg-hovers text-default-text font-normal text-left h-14 flex items-center px-4 gap-2" to={props.href}>{props.children}</Link>
 }

@@ -25,7 +25,7 @@ export default function TableItem(props: TableBarAttributes) {
     return <div
         onContextMenu={props.onContextMenu}
         style={{ gridTemplateColumns: gridTemplateColumns }}
-        className={`relative grid items-center p-4 transition-colors ${(!headerMode ? "hover:bg-borders" : "font-bold shadow-lg")} ${props.selected == true ? "bg-selected" : "hover:bg-hovers"} ${props.className}`}
+        className={`relative grid items-center p-4 transition-colors ${(!headerMode && !props.selected ? "hover:bg-hovers" : "font-bold shadow-lg")} ${props.selected == true ? "bg-selected hover:brightness-125" : ""} ${props.className}`}
         onClick={props.onClick}
     >
         {

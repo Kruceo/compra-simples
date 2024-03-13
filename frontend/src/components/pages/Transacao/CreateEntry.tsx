@@ -4,7 +4,7 @@ import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import FormInput from "../../OverPageForm/FormInput";
 import SideBar from "../../Layout/SideBar";
-import backend, { BackendTableComp } from "../../../constants/backend";
+import backend from "../../../constants/backend/backend";
 import { saveEntryStack } from "./internal";
 import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
 import beautyNumber from "../../../constants/numberUtils";
@@ -19,11 +19,11 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
     const navigate = useNavigate()
     const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
 
-    const [addedTransitionItensData, setAddedTransitionItensData] = useState<BackendTableComp[]>([])
-    const [transitionBoat, setTransitionBoat] = useState<BackendTableComp>()
+    const [addedTransitionItensData, setAddedTransitionItensData] = useState<transacaoitemProps[]>([])
+    const [transitionBoat, setTransitionBoat] = useState<boteProps>()
     const [obs, setObs] = useState("")
 
-    const addTransitionItem = (Transação_item: BackendTableComp) => setAddedTransitionItensData([...addedTransitionItensData, { ...Transação_item, id: addedTransitionItensData.length + 1 }])
+    const addTransitionItem = (Transação_item: transacaoitemProps) => setAddedTransitionItensData([...addedTransitionItensData, { ...Transação_item, id: addedTransitionItensData.length + 1 }])
     const removeTransitionItem = (...Transação_item_ids: number[]) => setAddedTransitionItensData(addedTransitionItensData.filter(each => !Transação_item_ids.includes(each.id ?? -1)))
 
     const sumValor = () => {
@@ -42,11 +42,8 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
     const keyListenerHandler = (e: KeyboardEvent) => {
         switch (e.key) {
             case "F8":
-                // if (window.localStorage.getItem("createEntryKeyLocker")) return;
-                // window.localStorage.setItem("createEntryKeyLocker", "true")
-                const submitButtonEl: HTMLButtonElement | null = document.querySelector("#submitTransaction")
-                submitButtonEl?.focus()
-                // window.localStorage.removeItem("createEntryKeyLocker")
+                submitHandler(addedTransitionItensData, transitionBoat?.id)
+                window.onkeyup = null
                 break;
 
             default:
@@ -54,8 +51,25 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
         }
     }
     useEffect(() => {
-        window.addEventListener("keyup", keyListenerHandler)
-    }, [])
+        window.onkeyup = null
+        window.onkeyup = keyListenerHandler
+    }, [transitionBoat, addedTransitionItensData])
+
+    async function submitHandler(addedItens: transacaoitemProps[], boatID?: number) {
+        console.log(addedItens)
+        if (boatID == undefined) return simpleSpawnInfo("É necessario selecionar um bote.")
+        if (addedItens.length === 0) return simpleSpawnInfo("É necessario adicionar algum item à transação.")
+
+        const response = await saveEntryStack(boatID, obs, sumValor(), sumPeso(), props.type, backend.utils.removeAttributeFromAll<transacaoitemProps>(addedItens, "id") as transacaoitemProps[])
+
+        if (response.error || !response.data)
+            return simpleSpawnInfo(response.message ?? "Houve um problema desconhecido ao criar uma Transação.")
+        if (!Array.isArray(response.data)) {
+            // printSingleEntry(response.data.transacao_id ?? -1)
+            if (response.data.transacao_id)
+                navigate('/print/transacao/?id=' + response.data.transacao_id)
+        }
+    }
 
     return <>
         <Bar />
@@ -70,13 +84,13 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
 
                             <FormPrevisionInput
                                 placeholder="Insira o codigo do bote"
-                                onChange={(value) => {
+                                onChange={(value: boteProps) => {
                                     setTransitionBoat(value ?? undefined)
                                 }}
                                 autoFocus={true}
                                 searchInTable="bote"
-                                where={{ include: 'fornecedor' }}
-                                itemHandler={(item) => `${item.id} - ${item.nome} | ${item.fornecedor?.nome}`}
+                                where={{ include: 'fornecedor', limit: 5 }}
+                                itemHandler={(item: boteProps) => `${item.id} - ${item.nome} | ${item.fornecedor?.nome}`}
                                 onSubmit={() => null}
                                 next="input[name=product]"
                             />
@@ -130,23 +144,7 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
             <div className="p-4">
                 <Button
                     id="submitTransaction"
-                    onClick={async () => {
-                        //Errors
-                        if (!transitionBoat || !transitionBoat.id) return simpleSpawnInfo("É necessario selecionar um bote.")
-                        if (addedTransitionItensData.length === 0) return simpleSpawnInfo("É necessario adicionar algum item à transação.")
-
-                        const response = await saveEntryStack(transitionBoat.id, obs, sumValor(), sumPeso(), props.type, backend.utils.removeAttributeFromAll(addedTransitionItensData, "id"))
-
-                        if (response.error || !response.data)
-                            return simpleSpawnInfo(response.message ?? "Houve um problema desconhecido ao criar uma Transação.")
-                        if (!Array.isArray(response.data)) {
-                            // printSingleEntry(response.data.transacao_id ?? -1)
-                            navigate('/print/transacao/?id=' + response.data.transacao_id)
-                            setTimeout(() => {
-                                navigate("/create/entrada")
-                            }, 300);
-                        }
-                    }}
+                    onClick={() => submitHandler(addedTransitionItensData, transitionBoat?.id)}
                 >
                     <i>&#xe962;</i> Finalizar
                 </Button>
