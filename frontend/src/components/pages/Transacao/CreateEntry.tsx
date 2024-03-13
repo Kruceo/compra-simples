@@ -42,6 +42,7 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
     const keyListenerHandler = (e: KeyboardEvent) => {
         switch (e.key) {
             case "F8":
+                window.document.body.focus()
                 submitHandler(addedTransitionItensData, transitionBoat?.id)
                 window.onkeyup = null
                 break;

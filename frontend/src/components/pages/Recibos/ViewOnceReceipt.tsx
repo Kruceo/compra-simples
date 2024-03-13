@@ -68,7 +68,7 @@ export default function ViewReceipt() {
                     type="number"
                     placeholder="Insira o numero"
                     onChange={(e) => setReceiptNumber(e.currentTarget.valueAsNumber)} />
-                < Button className="hover:bg-green-100 mt-4" onClick={createReceipt}>
+                < Button className="hover:bg-green-100 mt-4 mx-auto" onClick={createReceipt}>
                     <i>&#xe926;</i> Pronto
                 </Button>
             </div>
