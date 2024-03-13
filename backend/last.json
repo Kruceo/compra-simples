@@ -1,8 +1,33 @@
 {
   "where": {
-    "id": {}
+    "tipo": {},
+    "status": {}
   },
-  "include": [],
+  "include": [
+    {
+      "__model_name": "Bote",
+      "include": [
+        {
+          "__model_name": "Fornecedor",
+          "include": [],
+          "attributes": [
+            "id",
+            "nome",
+            "integracao_id",
+            "createdAt",
+            "updatedAt"
+          ]
+        }
+      ],
+      "attributes": [
+        "id",
+        "fornecedor_id",
+        "nome",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  ],
   "order": [],
   "raw": false
 }
