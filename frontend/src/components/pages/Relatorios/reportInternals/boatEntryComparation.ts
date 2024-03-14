@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
-import backend from "../../../constants/backend/backend";
+import backend from "../../../../constants/backend/backend";
 import { openPDF, writeHeader, writeTable } from "./libraryReports";
-import { getSigles } from "../../../constants/stringUtils";
+import { getSigles } from "../../../../constants/stringUtils";
 
 export async function boatEntryComparation(d1: Date, d2: Date, status: number) {
 

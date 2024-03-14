@@ -5,7 +5,7 @@ import Content from '../../Layout/Content'
 import SideBar from '../../Layout/SideBar'
 import FormInput from '../../OverPageForm/FormInput'
 import { date2input, dateSetter } from './ViewPriceComparationReport'
-import monthTransComparation from './monthTransComparation'
+import monthTransComparation from './reportInternals/monthTransComparation'
 import { TRANSACTION_CLOSED, TRANSACTION_OPEN } from '../../../constants/codes'
 import FormSelection from '../../OverPageForm/FormSelection'
 

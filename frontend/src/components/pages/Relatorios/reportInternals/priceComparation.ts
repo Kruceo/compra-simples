@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
-import backend from "../../../constants/backend/backend";
+import backend from "../../../../constants/backend/backend";
 import { openPDF, writeHeader, writeTable } from "./libraryReports";
-import beautyNumber from "../../../constants/numberUtils";
+import beautyNumber from "../../../../constants/numberUtils";
 
 export async function priceComparation(d1: Date, d2: Date,status:number) {
     const resEntry = await backend.get("transacao", {

@@ -1,5 +1,5 @@
 import jsPDF from "jspdf"
-import beautyNumber from "../../../constants/numberUtils"
+import beautyNumber from "../../../../constants/numberUtils"
 
 interface PdfItemBoundings {
     x: number,
@@ -98,8 +98,8 @@ export function writeHeader(pdf: jsPDF, identification: string, date1: Date, dat
     // const pageH = pdf.internal.pageSize.height
 
     pdf.setLineWidth(0.75);
-    const headerBox = writeBox(pdf, startX, startY, pageW - 45, height)
-    const dateBox = writeBox(pdf, headerBox.x2, headerBox.y, 35, headerBox.h)
+    const headerBox = writeBox(pdf, startX, startY, pageW-10, height)
+    // const dateBox = writeBox(pdf, headerBox.x2, headerBox.y, 35, headerBox.h)
 
     pdf.setFontSize(16)
     pdf.setFont(pdf.getFont().fontName, "", "bold")
@@ -107,13 +107,14 @@ export function writeHeader(pdf: jsPDF, identification: string, date1: Date, dat
 
     pdf.setFont(pdf.getFont().fontName, "", "normal")
     pdf.setFontSize(12)
-    pdf.text(`SEMANA DE ${date1.toLocaleDateString()} À ${date2.toLocaleDateString()}`, headerBox.centerX, 18, { align: "center" })
+    pdf.text(`${date1.toLocaleDateString()} ATÉ ${date2.toLocaleDateString()}`, headerBox.centerX, 18, { align: "center" })
 
     pdf.setFont(pdf.getFont().fontName, "", "bold")
     pdf.setFontSize(20)
-    pdf.text(`${identification}`, dateBox.centerX, 15, { align: "center" })
+    // pdf.text(`${identification}`, dateBox.centerX, 15, { align: "center" })
 
-    const totalW = headerBox.w + dateBox.w
+    const totalW = headerBox.w 
+    // + dateBox.w
 
     return { x: startX, y: startY, h: height, w: totalW, x2: startX + totalW, y2: startY + height, centerX: startX + totalW / 2 }
 }

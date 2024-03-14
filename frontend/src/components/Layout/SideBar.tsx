@@ -30,6 +30,7 @@ export default function SideBar() {
                     <PanelLink href="/report/1">Comparativo de Preços</PanelLink>
                     <PanelLink href="/report/2">Comparativo de Botes</PanelLink>
                     <PanelLink href="/report/3">Comparativo por Mês</PanelLink>
+                    <PanelLink href="/report/4">Itens da Transação</PanelLink>
                 </>}>
 
                 <i>&#xe99c;</i> Relatório

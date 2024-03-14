@@ -8,7 +8,7 @@ import Button from "../../Layout/Button";
 import { dateSetter } from "../Relatorios/ViewPriceComparationReport";
 import { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import { WriteReceipt2PDF } from "./libReceipt";
-import { openPDF } from "../Relatorios/libraryReports";
+import { openPDF } from "../Relatorios/reportInternals/libraryReports";
 export default function ViewReceipt() {
     const [date, setDate] = useState<Date | null>(null)
     const [value, setValue] = useState<number | null>(null)
