@@ -1,16 +1,16 @@
-import sequelize from 'sequelize'
-import literalBuilder from './literalBuilder.mjs';
+import sequelize, { SequelizeScopeError } from 'sequelize'
+import { blockedAttributes } from './tableUtils.mjs';
+
 
 export default function attributeBuilder(text) {
-    if (!text || text.trim() == '') return
+    if (!text || text.trim() == '') return { exclude: blockedAttributes.toString() }
     if (/DROP|SELECT|select|drop/.test(text)) return;
-    console.log("\n----\n" + text + '\n\n\n')
     const splited = text.split(",")
     let attr = splited.map(each => {
         let parsedName = each.replace(/\(\w+?\)/g, '')
         let shortName = parsedName.replace(/\w+?\./g, '')
+        if (blockedAttributes.includes(shortName)) return "blocked_password";
         let nick = (parsedName.match(/\w+\.\w+$/) ?? [shortName])[0].replace(".", "_")
-        console.log(nick)
         const fn = each.match(/(?<=\()\w+(?=\))/) ?? []
 
         switch (fn[0]) {
@@ -69,8 +69,6 @@ export default function attributeBuilder(text) {
                 return [sequelize.col(parsedName), nick]
                 break;
         }
-
-        return item
     })
 
 

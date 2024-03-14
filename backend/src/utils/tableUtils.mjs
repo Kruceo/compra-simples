@@ -1,3 +1,5 @@
+export const blockedAttributes = ["senha","password","pwd","pass","secret","secrets"]
+
 /**
  * Return only the "allowNull:true" attributes
  * @param {import("sequelize").ModelStatic<Model<any, any>>} table 

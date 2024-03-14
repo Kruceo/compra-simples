@@ -23,11 +23,4 @@ else app.use('/v1', universalRouter)
 
 app.use(authRouter)
 
-await Usuario.findCreateFind({
-    where: {
-        nome: "admin",
-        senha: "admin"
-    }
-})
-
 app.listen(cfg.server.port, () => console.log(`Server running in ${cfg.server.port}`))

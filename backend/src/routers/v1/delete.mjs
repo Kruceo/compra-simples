@@ -1,6 +1,9 @@
 import tables from "../../database/tables.mjs"
 import statusCodes from "../../utils/statusCode.mjs"
 import { upperCaseLetter } from "../../utils/stringUtils.mjs"
+
+const blockedTables = ["usuario"]
+
 /**
  * V1 request handler to be used in Routers 
  * @param {import("express").Request} req 
@@ -8,6 +11,14 @@ import { upperCaseLetter } from "../../utils/stringUtils.mjs"
  * @returns 
  */
 export default async function deleteRequestHandler(req, res) {
+
+    if (blockedTables.includes(req.params.table.toLowerCase())) {
+        res.status(statusCodes.ServiceUnavailable).json({
+            error: true,
+            message: "Caminho bloqueado."
+        })
+    }
+
     const tableName = upperCaseLetter(req.params.table, 0)
     const id = req.params.id
     // Só utilizar o "ID" como seletor

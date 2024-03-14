@@ -1,8 +1,6 @@
 import tables from "../database/tables.mjs";
 import { upperCaseLetter } from "./stringUtils.mjs";
-import { getAssociatedModels } from "./tableUtils.mjs";
-
-const blockedAttributes = ['senha', 'password', 'pass', 'pwd']
+import { blockedAttributes, getAssociatedModels } from "./tableUtils.mjs";
 
 /**
  * Automatic create a include clause with all references included

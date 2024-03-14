@@ -3,6 +3,8 @@ import statusCodes from "../../utils/statusCode.mjs";
 import { upperCaseLetter } from "../../utils/stringUtils.mjs";
 import { getOnlyNecessaryAttributes } from "../../utils/tableUtils.mjs";
 
+const blockedTables = ["usuario"]
+
 /**
  * V1 request handler to be used in Routers 
  * @param {import("express").Request} req 
@@ -10,6 +12,12 @@ import { getOnlyNecessaryAttributes } from "../../utils/tableUtils.mjs";
  * @returns 
  */
 export default async function postRequestHandler(req, res) {
+    if (blockedTables.includes(req.params.table.toLowerCase())) {
+        res.status(statusCodes.ServiceUnavailable).json({
+            error: true,
+            message: "Caminho bloqueado."
+        })
+    }
     const tableName = upperCaseLetter(req.params.table, 0)
     let body = req.body
 
