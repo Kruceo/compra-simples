@@ -12,15 +12,12 @@ const app = express()
 app.use(express.json({ limit: "2mb" }))
 app.use(cookieParser())
 
-if (!process.argv.includes("--disable-auth")) {
-    app.use(cors({
-        origin: cfg.server.cors.origin,
-        credentials: cfg.server.cors.credentials // Certifique-se de configurar as credenciais como verdadeiras se estiver enviando cookies
-    }));
-    app.use('/v1', authenticationMiddleware, universalRouter)
-}
-else app.use('/v1', universalRouter)
+app.use(cors({
+    origin: cfg.server.cors.origin,
+    credentials: cfg.server.cors.credentials // Certifique-se de configurar as credenciais como verdadeiras se estiver enviando cookies
+}));
 
+app.use('/v1', authenticationMiddleware, universalRouter)
 app.use(authRouter)
 
 app.listen(cfg.server.port, () => console.log(`Server running in ${cfg.server.port}`))

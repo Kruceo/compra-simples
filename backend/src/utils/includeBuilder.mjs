@@ -42,22 +42,24 @@ export default function includeBuilder(query) {
     let hiddedQuery = query
         .replace(/{[^{}]*}/g, (s) => s.replace(/,/g, "%").replace(/{/g, "$1").replace(/}/g, "$2"))
         .replace(/\[[^\[\]]*\]*/, (s)=> s.replace(',','%'))
-
+    
     while (hiddedQuery.includes("{")) {
         hiddedQuery = hiddedQuery
             .replace(/{[^{}]*}/g, (s) => s.replace(/,/g, "%").replace(/{/g, "$1").replace(/}/g, "$2"))
             .replace(/{[^{}]*}/g, (s) => s.replace(",", "%"))
     }
-    // replace all $1 and $2 to {} again
-    hiddedQuery = hiddedQuery.replace(/\$1/g, '{').replace(/\$2/g, "}")
 
     console.log(hiddedQuery)
+
+    // replace all $1 and $2 to {} again
+    hiddedQuery = hiddedQuery.replace(/\$1/g, '{').replace(/\$2/g, "}")
 
     return hiddedQuery.split(',').map(each => {
         let include = []
 
         //retiro o conteudo dentro dos colchetes se necessario e também faço da primeira letra maiuscula
-        const realname = each.replace(/\[.*?\]/g, "").replace(/{.*?}/g, "")
+        const realname = each.replace(/\[.*?\]/g, "").replace(/{.*}/g, "")
+        console.log(realname)
         const name = upperCaseLetter(realname, 0)
         //capturo tambem o conteudo de dentro dos chaves se houver
 

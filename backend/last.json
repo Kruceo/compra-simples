@@ -4,17 +4,7 @@
     "exclude": "senha,password,pwd,pass,secret,secrets"
   },
   "include": [
-    {
-      "__model_name": "Fornecedor",
-      "include": [],
-      "attributes": [
-        "id",
-        "nome",
-        "integracao_id",
-        "createdAt",
-        "updatedAt"
-      ]
-    }
+    null
   ],
   "order": [],
   "raw": false
