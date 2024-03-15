@@ -8,7 +8,6 @@ function extenseDate(d: Date) {
         "Fevereiro",
         "Março",
         "Abril",
-
         "Maio",
         "Junho",
         "Julho",

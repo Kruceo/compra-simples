@@ -13,7 +13,7 @@ export default function FilterEntryForm(props: OverPageFormAttributes & { whereS
     const [minDate, setMinDate] = useState<Date>()
     const setWhereKey = (key: string, val: any) => {
         let mockup: any = where
-        if (!val) mockup[key] = ">0"
+        if (!val) mockup[key] = ">-9999"
         else mockup[key] = val
         setWhere({ ...mockup, createdAt: genDateString() })
     }

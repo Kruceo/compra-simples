@@ -20,10 +20,11 @@ export default function ViewEntryItemReport() {
     nowDate.setMinutes(59)
     nowDate.setSeconds(59)
 
+
     const [date1, setDate1] = useState(defaultLastWeek)
     const [date2, setDate2] = useState(nowDate)
     const [status, setStatus] = useState(TRANSACTION_OPEN)
-
+    const [produtoId, setProdutoId] = useState<string | number | undefined>(undefined)
     return <>
         <Bar />
         <SideBar />
@@ -42,8 +43,13 @@ export default function ViewEntryItemReport() {
                     <option value={TRANSACTION_OPEN}>Abertas</option>
                     <option value={TRANSACTION_CLOSED}>Fechadas</option>
                 </FormSelection>
+                <FormSelection
+                    useTable="produto"
+                    onChange={(e) => setProdutoId(e.currentTarget.value == "" ? undefined : e.currentTarget.value)} >
+                    <option value={""}>Qualquer</option>
+                </FormSelection>
                 <Button className="hover:bg-green-100 mx-2"
-                    onClick={() => entryItemReport(date1, date2, status)}>
+                    onClick={() => entryItemReport(date1, date2, status, produtoId)}>
                     <i>&#xe926;</i> Pronto
                 </Button>
             </div>

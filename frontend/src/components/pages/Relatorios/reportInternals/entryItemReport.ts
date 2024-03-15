@@ -2,12 +2,13 @@ import jsPDF from "jspdf";
 import backend from "../../../../constants/backend/backend";
 import { openPDF, writeHeader, writeTable } from "./libraryReports";
 
-export default async function entryItemReport(d1: Date, d2: Date, status: number) {
+export default async function entryItemReport(d1: Date, d2: Date, status: number, produtoId?: string | number) {
 
     const response = await backend.get("transacao_item", {
-        "transacao.status":status,
+        "transacao.status": status,
         "transacao.tipo": 0,
         "transacao.createdAt": ">" + d1.toISOString() + ',<' + d2.toISOString(),
+        produto_id: produtoId,
         include: "transacao[]{bote[]{fornecedor[]}},produto[]",
         attributes: "transacao.bote.fornecedor.nome,transacao.bote.nome,produto.nome,transacao_item.peso,transacao_item.preco,valor_total"
     })

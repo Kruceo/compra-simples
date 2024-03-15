@@ -9,7 +9,7 @@ import SubTopBar, { ToolBarButton } from "../../Layout/SubTopBar";
 import { WriteReceipt2PDF } from "./libReceipt";
 import jsPDF from "jspdf";
 import { openPDF, writeBox } from "../Relatorios/reportInternals/libraryReports";
-import { getNextSaturday } from "../../../constants/dateUtils";
+import { bDate, getNextSaturday } from "../../../constants/dateUtils";
 import { TRANSACTION_CLOSED, TRANSACTION_INVALID, TRANSACTION_OPEN } from "../../../constants/codes";
 import beautyNumber from "../../../constants/numberUtils";
 
@@ -45,7 +45,11 @@ export default function ViewPerTransReceipt() {
         <SideBar></SideBar>
         <Content>
             <SubTopBar>
-                <ToolBarButton enabled={selected.length > 0} onClick={generateReceipts}>Gerar Recibos</ToolBarButton>
+                <ToolBarButton onClick={() => {
+                    if (selected.length > 0) setSelected([])
+                    else setSelected(data.map(each => each.id ?? -1))
+                }}><i>&#xe997;</i> Selecionar Todos</ToolBarButton>
+                <ToolBarButton enabled={selected.length > 0} onClick={generateReceipts}><i>&#xe93b;</i> Gerar Recibos</ToolBarButton>
             </SubTopBar>
             <div className="w-full h-full mt-[6.5rem]">
                 <Table
@@ -69,11 +73,12 @@ export default function ViewPerTransReceipt() {
                             item.id,
                             item.bote.fornecedor.nome,
                             status,
-                            <div className="text-right">{beautyNumber(item.valor)}</div>
+                            <div className="text-right">{beautyNumber(item.valor)}</div>,
+                            bDate(item.createdAt)
                         ]
                     }}
-                    disposition={[0.3, 1, 0.3, 1]}
-                    tableHeader={["ID", "Fornecedor", "Status", "Valor"]}
+                    disposition={[0.1, 1, 0.3, 0.3, 0.3]}
+                    tableHeader={["ID", "Fornecedor", "Status", "Valor", "Data"]}
                     enableContextMenu={false}
                     selected={selected}
                     selectedSetter={setSelected}
