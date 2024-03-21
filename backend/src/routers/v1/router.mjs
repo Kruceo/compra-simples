@@ -11,6 +11,12 @@ import reportRequestHandler from "./report.mjs";
  */
 const universalRouter = new Router()
 
+/**
+ * 
+ * @param {*} req 
+ * @param {Response} res 
+ * @param {*} next 
+ */
 const databaseProtectionMiddleware = (req, res, next) => {
     console.log(req.method.padEnd(7, ' ') + req.originalUrl.padEnd(20, ' '), req.body)
     // const path = req.originalUrl.includes("usuario")

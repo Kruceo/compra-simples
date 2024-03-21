@@ -27,9 +27,6 @@ export function includeAll(table, parentTableName) {
 
 }
 
-const spliter = ','
-const subSpliter = ':'
-
 /**
  * @param {import("sequelize").ModelStatic<Model<any, any>>} table 
  * @param {string} query 
@@ -49,8 +46,6 @@ export default function includeBuilder(query) {
             .replace(/{[^{}]*}/g, (s) => s.replace(",", "%"))
     }
 
-    console.log(hiddedQuery)
-
     // replace all $1 and $2 to {} again
     hiddedQuery = hiddedQuery.replace(/\$1/g, '{').replace(/\$2/g, "}")
 
@@ -59,7 +54,6 @@ export default function includeBuilder(query) {
 
         //retiro o conteudo dentro dos colchetes se necessario e também faço da primeira letra maiuscula
         const realname = each.replace(/\[.*?\]/g, "").replace(/{.*}/g, "")
-        console.log(realname)
         const name = upperCaseLetter(realname, 0)
         //capturo tambem o conteudo de dentro dos chaves se houver
 
@@ -84,7 +78,7 @@ export default function includeBuilder(query) {
 
         if (each.includes("{") && includeQueryMatch) {
             //troco todos os "%" por "," novamente para que eu possa chamar a funcção de forma recursiva
-            const includeQuery = includeQueryMatch[0].replace("%", ",")
+            const includeQuery = includeQueryMatch[0].replace(/%/, ",")
             include = includeBuilder(includeQuery)
         }
         return { model, __model_name: name, include, attributes: tableAttributes }

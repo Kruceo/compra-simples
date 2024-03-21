@@ -52,7 +52,7 @@ export default async function getRequestHandler(req, res) {
         order: orderClause,
         raw
     }
-        ; (await import("fs")).writeFileSync("last.json", JSON.stringify(fullClause, null, 2))
+        ;
 
     try {
         const data = await tables[tableName].findAll(fullClause)

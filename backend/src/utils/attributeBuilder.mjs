@@ -9,6 +9,7 @@ export default function attributeBuilder(text) {
     let attr = splited.map(each => {
         let parsedName = each.replace(/\(\w+?\)/g, '')
         let shortName = parsedName.replace(/\w+?\./g, '')
+        //this blocks when the user calls /v1/usuario?attributes=senha
         if (blockedAttributes.includes(shortName)) return "blocked_password";
         let nick = (parsedName.match(/\w+\.\w+$/) ?? [shortName])[0].replace(".", "_")
         const fn = each.match(/(?<=\()\w+(?=\))/) ?? []
