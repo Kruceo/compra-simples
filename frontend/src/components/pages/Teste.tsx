@@ -6,6 +6,7 @@ import jsPDF from "jspdf";
 import { openPDF, writeTable } from "./Relatorios/reportInternals/libraryReports";
 import Bar from "../Layout/Bar";
 import SideBar from "../Layout/SideBar";
+import FormSelection from "../OverPageForm/FormSelection";
 
 export default function Teste() {
     const url = new URL(location.href)
@@ -49,7 +50,6 @@ export default function Teste() {
     }, [data])
 
     return <>
-        <Bar/>
-        <SideBar/>
+        <FormSelection useTable="bote" useTableWhere={{id:">5"}}></FormSelection>
     </>
 }

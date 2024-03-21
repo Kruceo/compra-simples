@@ -20,7 +20,7 @@ export default function SideBar() {
                     <PanelLink href="/create/entrada">Nova Entrada</PanelLink>
                     <PanelLink href="/create/saida">Nova Saída</PanelLink>
                     <PanelLink href="/view/transacao">Listagem</PanelLink>
-                    <PanelLink href="/close/transacao">Fechamento</PanelLink>
+                    {/* <PanelLink href="/close/transacao">Fechamento</PanelLink> */}
                 </>}>
                 <i>&#xe935;</i> Transação
             </DropButton>

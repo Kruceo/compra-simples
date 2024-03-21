@@ -7,6 +7,7 @@ import thermalPrinter from "../../../constants/thermalPrinter";
 import Button from "../../Layout/Button";
 import beautyNumber from "../../../constants/numberUtils";
 import { getSigles } from "../../../constants/stringUtils";
+import { Link } from "react-router-dom";
 
 export default function PrintEntry() {
     const url = new URL(window.location.href)
@@ -24,9 +25,22 @@ export default function PrintEntry() {
         <Content>
             <div className="p-4">
                 <h2 className="my-4">Impressão de transação</h2>
-                <Button onClick={() => printSingleEntry(id)}><i>&#xe954;</i> Imprimir Cupom </Button>
+                <div className="flex">
+                    <Button autoFocus onClick={() => printSingleEntry(id)}><i>&#xe954;</i> Imprimir Cupom </Button>
+
+                    <Link to={"/create/entrada"} className="ml-auto mr-4">
+                        <Button >
+                            <i>&#xea3b;</i> Ir para Nova Entrada
+                        </Button>
+                    </Link>
+                    <Link to={"/create/saida"}>
+                        <Button onClick={() => printSingleEntry(id)}>
+                            <i>&#xea3d;</i> Ir para Nova Saída
+                        </Button>
+                    </Link>
+                </div>
             </div>
-        </Content>
+        </Content >
     </>
 }
 
@@ -42,7 +56,7 @@ export async function printSingleEntry(id: number | string) {
     if (d.data.error || !d.data.data || !Array.isArray(d.data.data)) return console.error(d.data.message);
 
     let queries: string[][] = []
-    const item :transacaoProps = d.data.data[0]
+    const item: transacaoProps = d.data.data[0]
     const itemDate = new Date(item.createdAt)
     const itemDateString = itemDate.toLocaleDateString() + ' ' + itemDate.toLocaleTimeString()
 
