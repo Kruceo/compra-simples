@@ -12,6 +12,7 @@ import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
 import { TableEngineContext } from "../../GlobalContexts/TableEngineContext";
 import { TRANSACTION_CLOSED, TRANSACTION_INVALID, TRANSACTION_OPEN } from "../../../constants/codes";
 import FilterEntryForm from "./FilterEntryForm";
+import SumOfTrans from "./SumOfTrans";
 
 
 export default function ViewEntry() {
@@ -23,7 +24,7 @@ export default function ViewEntry() {
     const [data, setData] = useState<transacaoProps[]>([]);
     const [selected, setSelected] = useState<number[]>([])
     const [update, setUpdate] = useState(true)
-    const blockedWhere = { include: "bote{fornecedor},usuario", limit: Math.round(window.innerHeight / 40) }
+    const blockedWhere = { include: "bote{fornecedor},usuario", limit: 100 }
     const [where, setWhere] = useState<any>({ ...blockedWhere, status: TRANSACTION_OPEN, order: "updatedAt,DESC" })
 
     const setWhereKey = (key: string, value: string) => {
@@ -89,7 +90,7 @@ export default function ViewEntry() {
                 <ToolBarButton onClick={() => setGlobalPopupByKey("TransactionFilter",
                     <FilterEntryForm whereSetter={(w) => { setWhere({ ...blockedWhere, ...w }); setSelected([]) }} onCancel={() => setGlobalPopupByKey("TransactionFilter", null)} />
                 )}><i title="filtros">&#xe993;</i></ToolBarButton>
-
+                <p>Total: <SumOfTrans where={where} update={update}/></p>
             </>}>
                 <ToolBarButton onClick={() => {
                     if (selected.length > 0) setSelected([])
