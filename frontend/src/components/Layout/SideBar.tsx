@@ -31,6 +31,7 @@ export default function SideBar() {
                     <PanelLink href="/report/2">Comparativo de Botes</PanelLink>
                     <PanelLink href="/report/3">Comparativo por Mês</PanelLink>
                     <PanelLink href="/report/4">Itens da Transação</PanelLink>
+                    <PanelLink href="/report/5">Totais por fornecedor</PanelLink>
                 </>}>
 
                 <i>&#xe99c;</i> Relatório
@@ -40,6 +41,7 @@ export default function SideBar() {
                 dropDownContent={<>
                     <PanelLink href="/receipt/once">Avulso</PanelLink>
                     <PanelLink href="/receipt/transaction">Por transação</PanelLink>
+                    <PanelLink href="/receipt/vendor">Por transação</PanelLink>
                 </>}>
 
                 <i>&#xe93b;</i> Recibos

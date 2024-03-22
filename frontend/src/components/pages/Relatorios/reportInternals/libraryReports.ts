@@ -58,23 +58,24 @@ export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: numb
             if (dispositionOfStyle) {
                 if (dispositionOfStyle[columnIndex] == 'bold') {
                     pdf.setFont(pdf.getFont().fontName, 'bold')
+                    pdf.setLineWidth(0.75)
                 }
             }
 
             const x = sX + colXSum
             const box = writeBox(pdf, x, y, cellW, rowH)
             
-            let align: "left" | "right" | "center" = 'left'
-            let textX = box.x + 1
+            let align: "left" | "right" | "center" = 'center'
+            let textX = box.centerX
 
             //Case is number
             if (/^(\d|,|\.|-)+$/.test(column)) {
                 align = "right"
                 textX = box.x2 - 1
             }
-            else {
-                align = "center"
-                textX = box.centerX
+            else if(rowIndex != 0) {
+                align = "left"
+                textX = box.x + 1
             }
 
             colXSum += cellW

@@ -29,7 +29,7 @@ export default function LoginScreen() {
         }
     }
 
-    return <div className="flex justify-center items-center h-screen w-screen bg-no-repeat bg-cover" style={{backgroundImage:"url(https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE4wwuf?ver=19fd)"}}>
+    return <div className="flex justify-center items-center h-screen w-screen bg-no-repeat bg-cover" style={{backgroundImage:"url(https://www.bing.com/th?id=OBTQ.BT5E5226697BC9627BA6BA4740AED82E5A51E949E7F70321A9B83A0819BAFEC98A&rs=2&c=1)"}}>
         <form onSubmit={submitHandler} className="flex flex-col w-80 bg-subpanel p-4 border-borders border shadow-xl bg-cover bg-no-repeat">
             <h2>Login</h2>
             <RequiredLabel>Usuário</RequiredLabel>

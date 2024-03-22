@@ -5,81 +5,70 @@ import { getSigles } from "../../../../constants/stringUtils";
 
 export async function boatEntryComparation(d1: Date, d2: Date, status: number) {
 
-    const pdf = new jsPDF({ orientation: "landscape" })
-
-    const resTransicao = await backend.get("transacao", {
-        include: 'transacao_item[]{produto[]},bote[]{fornecedor[]}',
-        attributes: 'bote.nome,bote.fornecedor.nome,transacao_itens.produto.nome,(sum)transacao_itens.valor_total,tipo',
-        group: 'bote.nome,bote.fornecedor.nome,transacao_itens.produto.nome,tipo',
-        status: status,
-        createdAt: ">" + d1.toISOString() + ",<" + d2.toISOString(),
-        order: 'bote_nome,ASC'
+    const resTransactionItens = await backend.get("transacao_item", {
+        include: "transacao[]{bote[]},produto[]",
+        group: "transacao.bote.nome,produto.nome,tipo",
+        attributes: "transacao.bote.nome,produto.nome,(sum)valor_total,transacao.tipo",
+        "transacao.createdAt":">"+d1.toISOString()+",<"+d2.toISOString(),
+        "transacao.status": status,
     })
 
-    if (resTransicao.data.error || !resTransicao.data.data || !Array.isArray(resTransicao.data.data)) return alert('error 001 /boatEntryComparation')
+    if (resTransactionItens.data.error || !resTransactionItens.data.data) return console.error(resTransactionItens.data.message)
 
-    let prd = resTransicao.data.data.map((each: any) => { return { tipo: each.tipo, produto: each.produto_nome } })
-    let prd0 = prd.filter(each => !each.tipo)
-    let prd1 = prd.filter(each => each.tipo)
-    prd = [...prd0, { produto: "Subtotal", tipo: false }, ...prd1, { produto: "Total Geral", tipo: false }]
-    let products = prd.reduce((acum, next) => {
-        if (!acum.includes(next.produto) && next.produto)
-            return acum + ',' + next.produto
+    const data = resTransactionItens.data.data as unknown as { bote_nome: string, produto_nome: string, valor_total: number, transacao_tipo: boolean }[]
+    const initProducts = {
+        ...data.reduce((acum, next) => {
+            if (!next.transacao_tipo) {
+                acum[next.produto_nome] = 0
+            }
+            return acum
+        }, {} as any),
+        Subtotal: 0,
+        ...data.reduce((acum, next) => {
+            if (next.transacao_tipo) {
+                acum[next.produto_nome] = 0
+            }
+            return acum
+        }, {} as any),
+        Total: 0
+    }
+    let totals: any = { ...initProducts }
+    const reduced = data.reduce((acum, next) => {
+        if (!acum[next.bote_nome]) acum[next.bote_nome] = { ...initProducts }
+        acum[next.bote_nome][next.produto_nome] = next.valor_total
+
+        if (next.transacao_tipo === false) {
+            acum[next.bote_nome]["Subtotal"] += next.valor_total
+            acum[next.bote_nome]["Total"] += next.valor_total
+            totals["Subtotal"] += next.valor_total
+            totals["Total"] += next.valor_total
+        }
+        else {
+            acum[next.bote_nome]["Total"] -= next.valor_total
+            totals["Total"] -= next.valor_total
+        }
+
+        totals[next.produto_nome] += next.valor_total
+       
         return acum
-    }, '').split(",").slice(1)
-
-    let productsTotals: any = {}
-
-    products.forEach(each => productsTotals[each] = 0)
-
-    let dataTrasacao = resTransicao.data.data.reduce((acum, next: any) => {
-        let mo = { ...acum }
-        let boatKey = getSigles(next.fornecedor_nome) + ' - ' + next.bote_nome
-        if (!mo[boatKey]) {
-            mo[boatKey] = {}
-            products.forEach((each) => mo[boatKey][each] = 0)
-        }
-        if (products.includes(next.produto_nome)) {
-            mo[boatKey][next.produto_nome] = next.tipo ? -next.transacao_itens_valor_total ?? 0 : next.transacao_itens_valor_total
-            productsTotals[next.produto_nome] += next.transacao_itens_valor_total
-        }
-        if (!mo[boatKey]['Subtotal'])
-            mo[boatKey]['Subtotal'] = 0
-        mo[boatKey]['Subtotal'] += next.tipo == false ? next.transacao_itens_valor_total : 0
-        productsTotals["Subtotal"] += next.tipo == false ? next.transacao_itens_valor_total : 0
-
-        if (!mo[boatKey]['Total Geral'])
-            mo[boatKey]['Total Geral'] = 0
-        mo[boatKey]['Total Geral'] += next.tipo == false ? next.transacao_itens_valor_total : -next.transacao_itens_valor_total
-        productsTotals['Total Geral'] += next.tipo == false ? next.transacao_itens_valor_total : -next.transacao_itens_valor_total
-        return mo
     }, {} as any)
 
-    console.log(dataTrasacao)
+    const table = Object.entries(reduced).map((each: [string, unknown]) => {
+        return [each[0], ...Object.values(each[1] as Object)]
+    })
 
-    const table: string[][] = Object.entries(dataTrasacao).map((each: any) => [each[0], ...Object.values(each[1])])
-    table.push(products.map(each=>"-"))
-    table.push(["Total", ...Object.values(productsTotals) as string[]])
+    const totalsTable: (number | string)[] = ["Total", ...Object.values(totals) as number[]]
 
-    const today = new Date()
-
-    let lastBoundingBox = writeHeader(pdf, today.toLocaleDateString().slice(0, 5), d1, d2)
-
-    let tableDispositionOfStyle = ['bold']
-    tableDispositionOfStyle[table[0].length - 1] = 'bold'
-    tableDispositionOfStyle[products.length - 3] = 'bold'
-
-
-    console.log(table)
-
-    let fontSize = 100 / products.length
-
-    if (fontSize > 10) fontSize = 10
-
-    pdf.setFontSize(fontSize)
-
-    writeTable(pdf, table, lastBoundingBox.x, lastBoundingBox.y2 + 7, ["Bote", ...getSigles(products)], [2], tableDispositionOfStyle)
-
+    const pdf = new jsPDF({orientation:"landscape"})
+    
+    const productsKeys = Object.keys(initProducts)
+    let styleDisposition = ["bold"]
+    styleDisposition[productsKeys.indexOf("Subtotal") + 1] = "bold"
+    styleDisposition[productsKeys.length] = "bold"
+    var lastTable = writeHeader(pdf,"",d1,d2)
+    pdf.setFontSize(10)
+    lastTable = writeTable(pdf, table, lastTable.x,lastTable.y2+6, ["Botes", ...getSigles(productsKeys)], [2], styleDisposition)
+    writeTable(pdf,[], lastTable.x, lastTable.y2+6, totalsTable as string[], [2], styleDisposition)
     openPDF(pdf)
 }
 

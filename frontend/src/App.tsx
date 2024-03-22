@@ -20,6 +20,8 @@ import ViewTransComparationReport from './components/pages/Relatorios/ViewTransC
 import ViewReceipt from './components/pages/Recibos/ViewOnceReceipt'
 import ViewPerTransReceipt from './components/pages/Recibos/ViewPerTransReceipt'
 import ViewEntryItemReport from './components/pages/Relatorios/ViewEntryItemReport'
+import ViewTotalsByVendors from './components/pages/Relatorios/ViewTotalsByVendors'
+import ViewPerVendorReceipt from './components/pages/Recibos/ViewPerVendor'
 
 function App() {
 
@@ -42,11 +44,13 @@ function App() {
               <Route path='/report/2' element={<Proteged>{<ViewBoatEntryComparationReport />}</Proteged>} />
               <Route path='/report/3' element={<Proteged>{<ViewTransComparationReport />}</Proteged>} />
               <Route path='/report/4' element={<Proteged>{<ViewEntryItemReport />}</Proteged>} />
+              <Route path='/report/5' element={<Proteged>{<ViewTotalsByVendors />}</Proteged>} />
 
               <Route path='/login' element={<LoginScreen />} />
 
               <Route path='/receipt/once' element={<ViewReceipt />} />
               <Route path='/receipt/transaction' element={<ViewPerTransReceipt />} />
+              <Route path='/receipt/vendor' element={<ViewPerVendorReceipt />} />
 
               <Route path='/teste' element={<Teste />} />
 
