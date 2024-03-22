@@ -14,38 +14,53 @@ import { TRANSACTION_CLOSED, TRANSACTION_INVALID, TRANSACTION_OPEN } from "../..
 import beautyNumber from "../../../constants/numberUtils";
 
 interface PerVendorResponse {
-    fornecedor_nome: string, valor: number, tipo: boolean,id:number,bote_fornecedor_id:number
+    fornecedor_nome: string, valor: number, tipo: boolean, id: number, bote_fornecedor_id: number
+}
+
+interface ParsedVendorResponse{
+    value:number,id:number,desconts:number,total:number,nome:string
 }
 
 export default function ViewPerVendorReceipt() {
     const { defaultDataGet } = useContext(TableEngineContext)
-    const [data, setData] = useState<PerVendorResponse[]>([])
+    const [data, setData] = useState<ParsedVendorResponse[]>([])
     const [selected, setSelected] = useState<number[]>([])
     useEffect(() => {
         defaultDataGet("transacao", {
             include: "bote[]{fornecedor[]}",
             attributes: "bote.fornecedor_id,bote.fornecedor.nome,(sum)valor,tipo",
-            group: "bote.fornecedor_id,bote.fornecedor.nome,tipo"
+            group: "bote.fornecedor_id,bote.fornecedor.nome,tipo",
+            status: TRANSACTION_OPEN
         }, (d: PerVendorResponse[]) => {
-            d = d.map((each) => {return {...each,id:parseInt(`${each.bote_fornecedor_id}${each.tipo?1:0}`)}})
-            setData(d)
+
+            let p:ParsedVendorResponse[] = d.reduce((acum, next) => {
+                if (!acum[next.bote_fornecedor_id]) acum[next.bote_fornecedor_id] = { nome: next.fornecedor_nome, desconts: 0, value: 0, total: 0 ,id:-1}
+                if (next.tipo) {
+                    acum[next.bote_fornecedor_id].desconts += next.valor
+                } else acum[next.bote_fornecedor_id].value += next.valor
+
+                acum[next.bote_fornecedor_id].total = acum[next.bote_fornecedor_id].value - acum[next.bote_fornecedor_id].desconts
+                return acum
+            }, [] as ParsedVendorResponse[])
+
+            p = p.filter(each=>each!=null).map((each,index) => { return { ...each, id: parseInt(`${index}`) } })
+            setData(p)
         })
 
     }, [])
-    console.log(data)
     function generateReceipts() {
         const pdf = new jsPDF()
         const selectedItems = data.filter(each => selected.includes(each.id ?? -1))
         const saturdayDate = getNextSaturday()
         let lastBox = writeBox(pdf, 0, -5, 0, 0)
         selectedItems.forEach(each => {
-            const { valor, fornecedor_nome } = each
+            const { total, nome } = each
             if (lastBox.y2 + 85 > pdf.internal.pageSize.height) {
                 pdf.addPage()
-                lastBox = WriteReceipt2PDF(pdf, 5, valor, fornecedor_nome, saturdayDate, "PAGTO FORNECIMENTO DE MERCADORIAS")
+                lastBox = WriteReceipt2PDF(pdf, 5, total, nome, saturdayDate, "PAGTO FORNECIMENTO DE MERCADORIAS")
                 return;
             }
-            lastBox = WriteReceipt2PDF(pdf, lastBox.y2 + 10, valor, fornecedor_nome, saturdayDate, "PAGTO FORNECIMENTO DE MERCADORIAS")
+            lastBox = WriteReceipt2PDF(pdf, lastBox.y2 + 10, total, nome, saturdayDate, "PAGTO FORNECIMENTO DE MERCADORIAS")
 
         })
         openPDF(pdf)
@@ -65,16 +80,17 @@ export default function ViewPerVendorReceipt() {
             <div className="w-full h-full mt-[6.5rem]">
                 <Table
                     data={data as any}
-                    tableItemHandler={(item: PerVendorResponse) => {
+                    tableItemHandler={(item: ParsedVendorResponse) => {
                         return [
-                            item.fornecedor_nome,
-                            item.tipo?"Saída":"Entrada",
-                            <div className="text-right">{beautyNumber(item.valor)}</div>,
-                           
+                            item.nome,
+                            <div className="text-right">{beautyNumber(item.value)}</div>,
+                            <div className="text-right">{beautyNumber(item.desconts)}</div>,
+                            <div className="text-right">{beautyNumber(item.total)}</div>,
+
                         ]
                     }}
                     disposition={[2, 1, 1]}
-                    tableHeader={["Fornecedor", "Tipo", "Valor"]}
+                    tableHeader={["Fornecedor", "Valor", "Descontos","Total"]}
                     enableContextMenu={false}
                     selected={selected}
                     selectedSetter={setSelected}

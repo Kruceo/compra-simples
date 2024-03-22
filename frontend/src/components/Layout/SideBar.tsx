@@ -41,7 +41,7 @@ export default function SideBar() {
                 dropDownContent={<>
                     <PanelLink href="/receipt/once">Avulso</PanelLink>
                     <PanelLink href="/receipt/transaction">Por transação</PanelLink>
-                    <PanelLink href="/receipt/vendor">Por transação</PanelLink>
+                    <PanelLink href="/receipt/vendor">Por fornecedor</PanelLink>
                 </>}>
 
                 <i>&#xe93b;</i> Recibos
