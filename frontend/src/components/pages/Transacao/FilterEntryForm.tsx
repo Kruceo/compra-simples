@@ -6,7 +6,7 @@ import FormInput from "../../OverPageForm/FormInput";
 
 export default function FilterEntryForm(props: OverPageFormAttributes & { whereSetter: (value: any) => any }) {
 
-    const { whereSetter } = props
+    const { whereSetter,...resProps } = props
 
     const [where, setWhere] = useState<any>({})
     const [maxDate, setMaxDate] = useState<Date>()
@@ -18,8 +18,10 @@ export default function FilterEntryForm(props: OverPageFormAttributes & { whereS
         setWhere({ ...mockup, createdAt: genDateString() })
     }
 
+    //Atualiza o where sempre que uma data é atualizada
     useEffect(()=>setWhere({...where,createdAt:genDateString()}),[minDate,maxDate])
-    console.log(where)
+
+    //gera a clausula da data como >data ou <data ou os dois 
     const genDateString = () => {
         if (!minDate && !maxDate) return undefined
         let clauses: string[] = []
@@ -28,7 +30,7 @@ export default function FilterEntryForm(props: OverPageFormAttributes & { whereS
         return clauses.toString()
     }
 
-    return <OverPageForm title="Filtro" {...props} onSubmit={(e) => e.preventDefault()}>
+    return <OverPageForm title="Filtro" {...resProps} onSubmit={(e) => e.preventDefault()}>
         <div className="flex flex-col gap-4">
             <FormSelection useTable="fornecedor" onChange={(e) => setWhereKey('bote.fornecedor.id', e.currentTarget.value)}>
                 <option className="bg-background" value={""}>Qualquer Fornecedor</option>
