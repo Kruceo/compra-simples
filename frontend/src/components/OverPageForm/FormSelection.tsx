@@ -22,7 +22,6 @@ export default function FormSelection(props: FormSelectionAttributes) {
         (async () => {
             if (!useTable) return;
             let res = await backend.get(useTable, useTableWhere ?? {})
-            console.log(res)
 
             if (res.data.error) {
                 pageErrorHandler(res)
@@ -46,7 +45,6 @@ export default function FormSelection(props: FormSelectionAttributes) {
         }, 100);
 
     }, [useTableWhere])
-
     return <select ref={ref} {...restProps}
         // defaultValue={defaultValue}
         className={`bg-transparent px-3 py-2 border-borders border outline-none ${errored ? "border-red-600" : ""} ${props.className}`}>

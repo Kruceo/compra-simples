@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FormSelection from "../../OverPageForm/FormSelection";
 import OverPageForm, { OverPageFormAttributes } from "../../OverPageForm/OverPageForm";
 import { TRANSACTION_CLOSED, TRANSACTION_INVALID, TRANSACTION_OPEN } from "../../../constants/codes";
@@ -18,6 +18,8 @@ export default function FilterEntryForm(props: OverPageFormAttributes & { whereS
         setWhere({ ...mockup, createdAt: genDateString() })
     }
 
+    useEffect(()=>setWhere({...where,createdAt:genDateString()}),[minDate,maxDate])
+    console.log(where)
     const genDateString = () => {
         if (!minDate && !maxDate) return undefined
         let clauses: string[] = []
@@ -53,7 +55,7 @@ export default function FilterEntryForm(props: OverPageFormAttributes & { whereS
                     onChange={(e) => setMinDate(e.currentTarget.valueAsDate ?? undefined)}></FormInput>
                 <p>Até</p>
                 <FormInput type="date"
-                    onChange={(e) => setMaxDate(e.currentTarget.valueAsDate ?? undefined)}></FormInput>
+                    onChange={(e) => setMaxDate(e.currentTarget.valueAsDate ?? undefined) }></FormInput>
             </div>
             <FormInput onClick={() => { whereSetter(where); props.onCancel() }} type="submit" value={"Pronto"} />
 
