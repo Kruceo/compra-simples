@@ -8,7 +8,7 @@ export default async function totalsByVendors(d1: Date, d2: Date, status: number
     //compras 
     const res0 = await backend.get("transacao", {
         include: "bote[]{fornecedor[]}",
-        attributes: "bote.fornecedor.nome,(sum)valor,tipo",
+        attributes: "bote.fornecedor.nome,(sum)valor,(sum)peso,tipo",
         group: "bote.fornecedor.nome,tipo",
         status: status,
         order: "tipo,DESC"
@@ -16,10 +16,10 @@ export default async function totalsByVendors(d1: Date, d2: Date, status: number
 
     if (res0.data.error || !res0.data.data) return console.error(res0.data.message)
 
-    const data0 = res0.data.data as unknown as { tipo: boolean, fornecedor_nome: string, valor: number }[]
+    const data0 = res0.data.data as unknown as { tipo: boolean, fornecedor_nome: string,peso:number, valor: number }[]
 
     const reduced = data0.reduce((acum, next) => {
-        if (!acum[next.fornecedor_nome]) acum[next.fornecedor_nome] = { value: 0, desconts: 0, total: 0 }
+        if (!acum[next.fornecedor_nome]) acum[next.fornecedor_nome] = { weight:0,value: 0, desconts: 0, total: 0 }
         if (next.tipo) {
             //tipo 1 
             acum[next.fornecedor_nome]["desconts"] += next.valor
@@ -27,6 +27,8 @@ export default async function totalsByVendors(d1: Date, d2: Date, status: number
         else {
             //tipo 0 
             acum[next.fornecedor_nome]["value"] += next.valor
+            acum[next.fornecedor_nome]["weight"] += next.peso
+
         }
         acum[next.fornecedor_nome]["total"] = acum[next.fornecedor_nome]["value"] - acum[next.fornecedor_nome]["desconts"]
 
@@ -36,7 +38,7 @@ export default async function totalsByVendors(d1: Date, d2: Date, status: number
     console.log(reduced)
 
     const table = Object.entries(reduced).map((each) => {
-        const e = each as [string, { valor: number, desconto: number, total: number }]
+        const e = each as [string, { value: number,weight:number, desconts: number, total: number }]
         return [e[0], ...Object.values(e[1])]
     })
     console.log("#####", table)
@@ -44,7 +46,7 @@ export default async function totalsByVendors(d1: Date, d2: Date, status: number
     const pdf = new jsPDF()
     let lastBox = writeHeader(pdf, '', d1, d2)
     pdf.setFontSize(10)
-    writeTable(pdf, table, lastBox.x, lastBox.y2 + 6, ["Fornecedor", "Valor","Descontos","Total"])
+    writeTable(pdf, table, lastBox.x, lastBox.y2 + 6, ["Fornecedor", "Peso","Valor","Descontos","Total"],[2])
 
     openPDF(pdf)
 }
