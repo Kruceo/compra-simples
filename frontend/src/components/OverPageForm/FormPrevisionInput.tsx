@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from "react"
 import { TableEngineContext } from "../GlobalContexts/TableEngineContext"
 import { DefaultFormInput, defaultKeyUpHandler } from "./FormInput"
+import { data } from "autoprefixer"
+import backend from "../../constants/backend/backend"
 
 interface FormPrevisionInputAttributes extends DefaultFormInput {
     placeholder?: string,
@@ -10,6 +12,7 @@ interface FormPrevisionInputAttributes extends DefaultFormInput {
     searchInTable: allTableNames,
     autoFocus?: boolean,
     where: Object,
+    defaultValue?: number
     onChange?: (item: any | null) => void
     onSubmit: () => void,
     itemHandler: (item: any) => React.ReactNode
@@ -50,9 +53,12 @@ export default function FormPrevisionInput(props: FormPrevisionInputAttributes) 
         visibleInputRef.current?.addEventListener("blur", onBlurHandler)
         visibleInputRef.current?.addEventListener("blur", () => setInputFocus(false))
         visibleInputRef.current?.addEventListener("focus", () => setInputFocus(true))
+        onChange ? onChange(props.defaultValue) : null
+        
     }, [])
 
     useEffect(() => {
+
         if (selectedData.length > 0) setInputVisible(false)
         if (inputFocus) setInputVisible(true)
         if (selectedData.length == 0 || visibleInputRef.current?.value == '') setInputVisible(true)
@@ -82,6 +88,7 @@ export default function FormPrevisionInput(props: FormPrevisionInputAttributes) 
                 autoCorrect="off"
                 autoFocus={autoFocus}
                 onKeyUp={(e) => defaultKeyUpHandler(e, next)}
+                defaultValue={props.defaultValue}
             />
             <p className={"w-full"}
                 style={{ display: inputVisible ? "none" : "block" }}

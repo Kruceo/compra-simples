@@ -3,7 +3,6 @@ import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
 import { TableEngineContext } from "../../GlobalContexts/TableEngineContext";
-import FormSelection from "../../OverPageForm/FormSelection";
 import Table from "../../table/Table";
 import Button from "../../Layout/Button";
 import TransitionItemAdder from "./TransitionAdder";
@@ -12,6 +11,7 @@ import { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
 import { useNavigate } from "react-router-dom";
 import beautyNumber from "../../../constants/numberUtils";
+import FormPrevisionInput from "../../OverPageForm/FormPrevisionInput";
 
 export default function EditEntry() {
     const url = new URL(window.location.href);
@@ -21,11 +21,17 @@ export default function EditEntry() {
     const { defaultDataGet } = useContext(TableEngineContext)
     const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
     const navigate = useNavigate()
-    const [data, setData] = useState<transacaoProps>({ bote_id: -1, createdAt: "-1", updatedAt: "-1", id: -1, obs: "", peso: -1, status: -1, tipo: 0, usuario_id: -1, valor: -1 })
+    const [data, setData] = useState<transacaoProps>()
     const [toRemoveItens, setToRemoveItens] = useState<number[]>([])
     const [toAddItens, setToAddItens] = useState<transacaoitemProps[]>([])
 
+    /**
+     * Muda uma key como "bote_id" para o valor que quiser 
+     * @param key 
+     * @param value 
+     */
     function changeKey(key: "bote_id" | "obs" | "valor" | "peso" | "usuario_id", value: any) {
+        if (!data) return
         let newData = { ...data }
 
         newData[key] = value as never
@@ -33,8 +39,10 @@ export default function EditEntry() {
         setData(newData)
     }
 
-    function removeItem(id: number) {
 
+    /** Remove um item do "data.transacao_itens" ou do state addedItens */
+    function removeItem(id: number) {
+        if (!data) return
         if (data.transacao_itens?.map(each => each.id).includes(id)) {
             data.transacao_itens = data.transacao_itens?.filter(each => each.id !== id)
             setToRemoveItens([id, ...toRemoveItens])
@@ -44,10 +52,11 @@ export default function EditEntry() {
         }
     }
 
+    //Faz o fetch inicial que pega a transacao do id correspondente 
     useEffect(() => {
         defaultDataGet("transacao", { id: transacao_id, include: "transacao_item{produto[nome]}" }, (d: transacaoProps[]) => setData(d[0]))
     }, [])
-    if (!data) return ""
+    if (!data) return <><Bar /><SideBar /></>
     return <>
         <Bar />
         <SideBar />
@@ -55,9 +64,17 @@ export default function EditEntry() {
             <div className="p-4">
                 <div className="flex flex-col">
                     <RequiredLabel className="relative block">Bote</RequiredLabel>
-                    <FormSelection className="w-64" useTable="bote" defaultValue={data?.bote_id} onChange={(e) => {
-                        changeKey("bote_id", parseInt(e.currentTarget.value))
-                    }} />
+                    <FormPrevisionInput className="w-64"
+                        searchInTable="bote"
+                        itemHandler={(item: boteProps) => item.nome}
+                        onSubmit={() => null}
+                        where={{}}
+                        autoFocus
+                        defaultValue={data.bote_id}
+                        onChange={(e: boteProps | null) => {
+                            if (e)
+                                changeKey("bote_id", e.id)
+                        }} />
                 </div>
                 <div className="grid grid-cols-3 mt-8">
                     <div className="col-span-1 border-r border-borders pr-4">
@@ -73,7 +90,7 @@ export default function EditEntry() {
                             }}
                             data={[...data.transacao_itens ?? [], ...toAddItens]} disposition={[1]} tableHeader={["Nome", "Peso", "Preço", "Total"]} tableItemHandler={(d: transacaoitemProps) => {
                                 return [
-                                    <div>{d.produto?.nome}</div>,
+                                    <p>{d.produto?.nome}</p>,
                                     <p className="text-end">{beautyNumber(d.peso)}</p>,
                                     <p className="text-end">{beautyNumber(d.preco)}</p>,
                                     <p className="text-end">{beautyNumber(d.valor_total)}</p>
@@ -123,8 +140,9 @@ async function finishEdit(data: transacaoProps, toAdd: transacaoitemProps[], toR
 
     let totalValue = 0
     let totalWeight = 0
+    //remove itens que estao na lista do toremove 
     const filtred = data.transacao_itens.filter(i => !toRemoveIds.includes(i.id))
-
+    //junta os itens que estao no to add e no filtered 
     const fullAdded = [...filtred, ...toAdd]
 
     fullAdded.forEach(each => {
@@ -132,6 +150,9 @@ async function finishEdit(data: transacaoProps, toAdd: transacaoitemProps[], toR
         totalValue += each.valor_total
     })
 
+    // Cria todos os transacao itens
+    // Mas primeiro retira os ids aleatorios para que possa ser gerado automaticamente no DB
+    // Tambem coloca o transacao_id da transacao que está no state "Data"
     const createdItensRes = await backend.create("transacao_item", toAdd.map((each: any) => {
         delete each.id
         each.transacao_id = data.id
@@ -142,6 +163,10 @@ async function finishEdit(data: transacaoProps, toAdd: transacaoitemProps[], toR
         return createdItensRes.data
     }
 
+
+    // Nao foi implemente um bulk no metodo de delete
+    // mas isso deleta cada um dos itens um a um
+    // se houver um erro, retorna 
     for (const id of toRemoveIds) {
         const removedItemRes = await backend.remove("transacao_item", id)
         if (removedItemRes.data.error) {
@@ -150,6 +175,7 @@ async function finishEdit(data: transacaoProps, toAdd: transacaoitemProps[], toR
         }
     }
 
+    //Por fim apenas edita a transacao com as somas e dados atualizados
     const transactionEditRes = await backend.edit("transacao", data.id, { valor: totalValue, peso: totalWeight, bote_id: data.bote_id, obs: data.obs })
 
     if (transactionEditRes.data.error) return { error: true, message: transactionEditRes.data.message }

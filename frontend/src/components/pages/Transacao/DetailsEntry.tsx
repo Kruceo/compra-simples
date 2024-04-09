@@ -25,6 +25,7 @@ export default function DetailsEntry() {
         <Bar />
         <SideBar />
         <Content>
+            
             <h2 className="p-4">Transação {id}</h2>
             <h3 className="px-4">Observação:</h3>
             <p className="px-4 mb-4 border-borders border mx-4 mt-2 p-4 rounded-sm opacity-50">{data?.obs}</p>
