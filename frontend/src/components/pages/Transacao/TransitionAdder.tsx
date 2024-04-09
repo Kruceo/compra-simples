@@ -10,7 +10,7 @@ export default function TransitionItemAdder(props: { onSubmit: (item: transacaoi
     const [productPrice, setProductPrice] = useState<number>()
     const [productWeight, setProductWeight] = useState<number>()
     const [error, setError] = useState("")
-    return <div className="p-4 min-h-44 grid grid-cols-4 gap-3">
+    return <div className="min-h-44 grid grid-cols-4 gap-3">
         <div className="box-border col-span-4 mb-4">
             <RequiredLabel className="col-span-4">Produto</RequiredLabel>
             <FormPrevisionInput
@@ -89,7 +89,7 @@ export default function TransitionItemAdder(props: { onSubmit: (item: transacaoi
                     props.onSubmit(
                         {
                             transacao_id: -1,
-                            id: Math.round(product?.id ?? -1 + Math.random() * 9999),
+                            id: parseInt((new Date()).getTime().toString().slice(5)),
                             produto_id: product?.id,
                             preco: productPrice,
                             peso: productWeight,
@@ -110,10 +110,7 @@ export default function TransitionItemAdder(props: { onSubmit: (item: transacaoi
                         setTimeout(() => {
                             productEl?.focus({ preventScroll: false })
                             window.scrollBy({ top: productEl.clientTop })
-
                         }, 200)
-
-
                     }
 
 

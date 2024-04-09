@@ -33,8 +33,10 @@ export default function FormSelection(props: FormSelectionAttributes) {
             if (!d || !Array.isArray(d)) return;
 
             d = d.sort((a) => {
-                if (a.id == defaultValue) return -1
-                else return 1
+
+                if (a.id == defaultValue)
+                    return -10
+                else return 10
             })
             setData(d)
 
@@ -44,7 +46,7 @@ export default function FormSelection(props: FormSelectionAttributes) {
                 ref.current.dispatchEvent(new Event("change", { bubbles: true }))
         }, 100);
 
-    }, [useTableWhere])
+    }, [useTableWhere, defaultValue])
     return <select ref={ref} {...restProps}
         // defaultValue={defaultValue}
         className={`bg-transparent px-3 py-2 border-borders border outline-none ${errored ? "border-red-600" : ""} ${props.className}`}>
@@ -55,7 +57,7 @@ export default function FormSelection(props: FormSelectionAttributes) {
             data.map((item) => <option className="bg-background"
                 onKeyUp={(e) => defaultKeyUpHandler(e)}
                 key={item.id}
-                // selected={item.id == defaultValue}
+                // selected={item.id.toString() == defaultValue}
                 data-item={JSON.stringify(item)}
                 value={item.id}>
                 {item.nome}

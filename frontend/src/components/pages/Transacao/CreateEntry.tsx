@@ -4,7 +4,7 @@ import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import FormInput from "../../OverPageForm/FormInput";
 import SideBar from "../../Layout/SideBar";
-import backend from "../../../constants/backend/backend";
+import backend, { edit } from "../../../constants/backend/backend";
 import { saveEntryStack } from "./internal";
 import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
 import beautyNumber from "../../../constants/numberUtils";
@@ -18,6 +18,8 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
 
     const navigate = useNavigate()
     const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
+
+    const vasc = new URL(window.location.href)
 
     const [addedTransitionItensData, setAddedTransitionItensData] = useState<transacaoitemProps[]>([])
     const [transitionBoat, setTransitionBoat] = useState<boteProps>()
@@ -105,7 +107,7 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
             </div>
             <div className="grid grid-cols-3">
                 <h2 className="col-span-3 p-4">Produtos</h2>
-                <div className="h-full border-r border-borders">
+                <div className="p-4 h-full border-r border-borders">
                     <TransitionItemAdder onSubmit={(item) => addTransitionItem(item)} />
                 </div>
                 <div className="col-span-2">

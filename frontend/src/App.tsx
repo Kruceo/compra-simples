@@ -22,6 +22,7 @@ import ViewPerTransReceipt from './components/pages/Recibos/ViewPerTransReceipt'
 import ViewEntryItemReport from './components/pages/Relatorios/ViewEntryItemReport'
 import ViewTotalsByVendors from './components/pages/Relatorios/ViewTotalsByVendors'
 import ViewPerVendorReceipt from './components/pages/Recibos/ViewPerVendor'
+import EditEntry from './components/pages/Transacao/EditEntry'
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
               <Route path='/create/entrada' element={<Proteged>{<CreateEntry type={0} />}</Proteged>} />
               <Route path='/create/saida' element={<Proteged>{<CreateEntry type={1} />}</Proteged>} />
               <Route path='/view/transacao/' element={<Proteged>{<ViewEntry />}</Proteged>} />
+              <Route path='/edit/transacao/' element={<Proteged>{<EditEntry />}</Proteged>} />
               <Route path='/details/transacao/' element={<Proteged>{<DetailsEntry />}</Proteged>} />
               <Route path='/print/transacao/' element={<Proteged>{<PrintEntry />}</Proteged>} />
               <Route path='/report/1' element={<Proteged>{<ViewReports />}</Proteged>} />
