@@ -10,7 +10,7 @@ interface FormInputAttributes extends DefaultFormInput, React.DetailedHTMLProps<
 }
 
 export default function FormInput(props: FormInputAttributes) {
-    let { type, pattern, next, errored, erroredClassName, onInput, ...restProps } = props
+    let { type, pattern, next, errored, erroredClassName, onInput, className,...restProps } = props
     if (type == "float") {
         pattern = "^[0-9]+([.,][0-9]+)?$"
         type = "text"
@@ -20,13 +20,13 @@ export default function FormInput(props: FormInputAttributes) {
         return <input
             {...restProps}
             type={type}
-            className={"bg-submit mt-4 p-2 font-bold rounded-sm cursor-pointer hover:brightness-125 " + props.className}
+            className={"bg-submit mt-4 p-2 font-bold rounded-sm cursor-pointer hover:brightness-125 " + className}
         />
     return <input
         {...restProps}
         onKeyUp={(e) => defaultKeyUpHandler(e, next)}
         type={type}
-        className={`bg-transparent px-3 py-2 border-borders border outline-none ${errored ? "border-red-600" : ""} ${props.className}`}
+        className={`bg-transparent px-3 py-2 border-borders border outline-none ${errored ? "border-red-600" : ""} ${className}`}
         onWheel={(e) => e.currentTarget.blur()}
     />
 }

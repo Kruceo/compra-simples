@@ -111,8 +111,8 @@ export default function EditEntry() {
                             data={[...data.transacao_itens ?? [], ...toAddItens]} disposition={[1]} tableHeader={["Nome", "Peso", "Preço", "Total"]} tableItemHandler={(d: transacaoitemProps) => {
                                 return [
                                     <p key={d.id}>{d.produto?.nome}</p>,
-                                    <FormInput key={d.id} className="w-fit" type="number" step={0.01} onChange={(e) => editItem(d.id, undefined, e.currentTarget.valueAsNumber)} defaultValue={d.peso} />,
-                                    <FormInput key={d.id} className="w-fit" type="number" step={0.01} onChange={(e) => editItem(d.id, e.currentTarget.valueAsNumber, undefined)} defaultValue={d.preco} />,
+                                    <FormInput key={d.id} className="w-full" type="number" step={0.01} onChange={(e) => editItem(d.id, undefined, e.currentTarget.valueAsNumber)} defaultValue={d.peso} />,
+                                    <FormInput key={d.id} className="w-full" type="number" step={0.01} onChange={(e) => editItem(d.id, e.currentTarget.valueAsNumber, undefined)} defaultValue={d.preco} />,
                                     <p key={d.id}>{beautyNumber(d.valor_total)} </p>
                                 ]
                             }} >
