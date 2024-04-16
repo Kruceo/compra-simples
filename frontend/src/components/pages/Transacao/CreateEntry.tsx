@@ -4,7 +4,7 @@ import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import FormInput from "../../OverPageForm/FormInput";
 import SideBar from "../../Layout/SideBar";
-import backend, { edit } from "../../../constants/backend/backend";
+import backend from "../../../constants/backend/backend";
 import { saveEntryStack } from "./internal";
 import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
 import beautyNumber from "../../../constants/numberUtils";
@@ -19,20 +19,22 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
     const navigate = useNavigate()
     const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
 
-    const vasc = new URL(window.location.href)
-
     const [addedTransitionItensData, setAddedTransitionItensData] = useState<transacaoitemProps[]>([])
     const [transitionBoat, setTransitionBoat] = useState<boteProps>()
     const [obs, setObs] = useState("")
 
+    // adiciona um transacao item á lista de adicionados
     const addTransitionItem = (Transação_item: transacaoitemProps) => setAddedTransitionItensData([...addedTransitionItensData, { ...Transação_item, id: addedTransitionItensData.length + 1 }])
+    // remove um ou mais transacao item da lista de adicionados
     const removeTransitionItem = (...Transação_item_ids: number[]) => setAddedTransitionItensData(addedTransitionItensData.filter(each => !Transação_item_ids.includes(each.id ?? -1)))
 
+    // soma o valor total de todos os transacao itens 
     const sumValor = () => {
         return addedTransitionItensData.reduce((acum, next) => {
             return acum + (next.valor_total ?? 0)
         }, 0)
     }
+    // soma o peso de todos os transacao itens 
     const sumPeso = () => addedTransitionItensData.reduce((acum, next) => {
         return acum + (next.peso ?? 0)
     }, 0)
@@ -40,12 +42,13 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
     const tableContextMenuButtons = [
         { element: <><i>&#xe9ac;</i>Remover</>, handler: removeTransitionItem }
     ]
-
+    //listener para a tecla f8 finalizar a transacao
     const keyListenerHandler = (e: KeyboardEvent) => {
         switch (e.key) {
             case "F8":
+                if (!transitionBoat) break;
                 window.document.body.focus()
-                submitHandler(addedTransitionItensData, transitionBoat?.id)
+                submitHandler(addedTransitionItensData, transitionBoat.id)
                 window.onkeyup = null
                 break;
 
@@ -58,8 +61,9 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
         window.onkeyup = keyListenerHandler
     }, [transitionBoat, addedTransitionItensData])
 
+    /** Funcao que finaliza a transacao */
     async function submitHandler(addedItens: transacaoitemProps[], boatID?: number) {
-        console.log(addedItens)
+        
         if (boatID == undefined) return simpleSpawnInfo("É necessario selecionar um bote.")
         if (addedItens.length === 0) return simpleSpawnInfo("É necessario adicionar algum item à transação.")
 

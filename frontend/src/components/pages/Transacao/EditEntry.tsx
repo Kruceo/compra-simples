@@ -12,6 +12,7 @@ import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
 import { useNavigate } from "react-router-dom";
 import beautyNumber from "../../../constants/numberUtils";
 import FormPrevisionInput from "../../OverPageForm/FormPrevisionInput";
+import FormInput from "../../OverPageForm/FormInput";
 
 export default function EditEntry() {
     const url = new URL(window.location.href);
@@ -39,7 +40,6 @@ export default function EditEntry() {
         setData(newData)
     }
 
-
     /** Remove um item do "data.transacao_itens" ou do state addedItens */
     function removeItem(id: number) {
         if (!data) return
@@ -50,6 +50,26 @@ export default function EditEntry() {
         else {
             setToAddItens(toAddItens.filter(each => each.id !== id))
         }
+    }
+
+    function editItem(id: number, price?: number, weight?: number) {
+        if (!data) return console.error("A transação não esta definida.")
+        let newData: transacaoProps = { ...data }
+
+        if (!newData.transacao_itens) return console.error("A transacao requisitada não incluiu na resposta os itens da transacao.")
+
+        for (const item of newData.transacao_itens) {
+            if (item.id !== id) continue
+
+            item.preco = price ?? item.preco
+            item.peso = weight ?? item.peso
+            item.valor_total = item.peso * item.preco
+            console.log(newData, item.peso, item.preco)
+        }
+
+
+
+        setData(newData)
     }
 
     //Faz o fetch inicial que pega a transacao do id correspondente 
@@ -90,10 +110,10 @@ export default function EditEntry() {
                             }}
                             data={[...data.transacao_itens ?? [], ...toAddItens]} disposition={[1]} tableHeader={["Nome", "Peso", "Preço", "Total"]} tableItemHandler={(d: transacaoitemProps) => {
                                 return [
-                                    <p>{d.produto?.nome}</p>,
-                                    <p className="text-end">{beautyNumber(d.peso)}</p>,
-                                    <p className="text-end">{beautyNumber(d.preco)}</p>,
-                                    <p className="text-end">{beautyNumber(d.valor_total)}</p>
+                                    <p key={d.id}>{d.produto?.nome}</p>,
+                                    <FormInput key={d.id} className="w-fit" type="number" step={0.01} onChange={(e) => editItem(d.id, undefined, e.currentTarget.valueAsNumber)} defaultValue={d.peso} />,
+                                    <FormInput key={d.id} className="w-fit" type="number" step={0.01} onChange={(e) => editItem(d.id, e.currentTarget.valueAsNumber, undefined)} defaultValue={d.preco} />,
+                                    <p key={d.id}>{beautyNumber(d.valor_total)} </p>
                                 ]
                             }} >
 
@@ -136,7 +156,12 @@ export default function EditEntry() {
 }
 
 async function finishEdit(data: transacaoProps, toAdd: transacaoitemProps[], toRemoveIds: number[]): Promise<{ error?: boolean, message?: string }> {
-    if (!data.transacao_itens) return { error: true, message: "no transactions itens." }
+    if (!data.transacao_itens) return { error: true, message: "Os itens da transacao nao estao presentes." }
+
+    // verificação pra ver se esta tudo ok com os itens de transacao como Nan em valores
+    for (const item of data.transacao_itens) {
+        if (Number.isNaN(item.valor_total)) return { error: true, message: "Valores nao permitidos nos itens da transacao." }
+    }
 
     let totalValue = 0
     let totalWeight = 0
@@ -163,8 +188,15 @@ async function finishEdit(data: transacaoProps, toAdd: transacaoitemProps[], toR
         return createdItensRes.data
     }
 
+    // Edita os itens um a um
+    for (const item of data.transacao_itens) {
+        const editRes = await backend.edit("transacao_item", item.id, item)
+        if (editRes.data.error && editRes.data.message)
+            return editRes.data
+    }
 
-    // Nao foi implemente um bulk no metodo de delete
+
+    // Nao foi implementado um bulk no metodo de delete
     // mas isso deleta cada um dos itens um a um
     // se houver um erro, retorna 
     for (const id of toRemoveIds) {
