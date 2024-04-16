@@ -132,7 +132,7 @@ export default function EditEntry() {
                             if (res.error) {
                                 return simpleSpawnInfo(res.message ?? "Ocorreu um erro não reconhecido.")
                             }
-                            navigate(`/details/transacao?id=${data.id}`)
+                            navigate(`/print/transacao?id=${data.id}`)
                         },
                         () => null)
                     }><i>&#xe962;</i> Finalizar</Button>
