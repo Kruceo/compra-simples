@@ -146,7 +146,7 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
             <section className="py-8 px-4 border-b border-borders">
                 <div>
                     <RequiredLabel className="block">Observação</RequiredLabel>
-                    <FormInput className="block"
+                    <FormInput className="block w-full"
                         placeholder="Insira uma observação"
                         onChange={(e) => setObs(e.currentTarget.value)
                         }

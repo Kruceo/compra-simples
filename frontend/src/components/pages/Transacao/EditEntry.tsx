@@ -82,7 +82,7 @@ export default function EditEntry() {
         <SideBar />
         <Content>
             <section className="px-4 py-8 border-b border-borders">
-                <h2>Editando</h2>
+                <h2>Editor de Transação</h2>
             </section>
 
             <section className="px-4 py-8 border-b border-borders">
@@ -118,7 +118,7 @@ export default function EditEntry() {
                                     <p key={d.id}>{d.produto?.nome}</p>,
                                     <FormInput key={d.id} className="w-full" type="number" step={0.01} onChange={(e) => editItem(d.id, undefined, e.currentTarget.valueAsNumber)} defaultValue={d.peso} />,
                                     <FormInput key={d.id} className="w-full" type="number" step={0.01} onChange={(e) => editItem(d.id, e.currentTarget.valueAsNumber, undefined)} defaultValue={d.preco} />,
-                                    <p key={d.id}>{beautyNumber(d.valor_total)} </p>
+                                    <p className="text-end" key={d.id}>{beautyNumber(d.valor_total)} </p>
                                 ]
                             }} >
 
