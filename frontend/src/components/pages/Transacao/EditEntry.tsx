@@ -81,23 +81,28 @@ export default function EditEntry() {
         <Bar />
         <SideBar />
         <Content>
-            <div className="p-4">
-                <div className="flex flex-col">
-                    <RequiredLabel className="relative block">Bote</RequiredLabel>
-                    <FormPrevisionInput className="w-64"
-                        searchInTable="bote"
-                        itemHandler={(item: boteProps) => item.nome}
-                        onSubmit={() => null}
-                        where={{}}
-                        autoFocus
-                        defaultValue={data.bote_id}
-                        onChange={(e: boteProps | null) => {
-                            if (e)
-                                changeKey("bote_id", e.id)
-                        }} />
-                </div>
-                <div className="grid grid-cols-3 mt-8">
-                    <div className="col-span-1 border-r border-borders pr-4">
+            <section className="px-4 py-8 border-b border-borders">
+                <h2>Editando</h2>
+            </section>
+
+            <section className="px-4 py-8 border-b border-borders">
+                <RequiredLabel className="relative block">Bote</RequiredLabel>
+                <FormPrevisionInput className="w-64"
+                    searchInTable="bote"
+                    itemHandler={(item: boteProps) => item.nome}
+                    onSubmit={() => null}
+                    where={{}}
+                    autoFocus
+                    defaultValue={data.bote_id}
+                    onChange={(e: boteProps | null) => {
+                        if (e)
+                            changeKey("bote_id", e.id)
+                    }} />
+            </section>
+
+            <section className="px-4 py-0 border-b border-borders">
+                <div className="grid grid-cols-3">
+                    <div className="col-span-1 border-r border-borders pr-4 py-8">
                         <TransitionItemAdder onSubmit={(d) => setToAddItens([...toAddItens, d])}></TransitionItemAdder>
                     </div>
                     <div className="col-span-2">
@@ -120,37 +125,27 @@ export default function EditEntry() {
                         </Table>
                     </div>
                 </div>
-                <div className="mt-4 border-borders border-t pt-4 flex flex-col">
-                    <RequiredLabel>Observação</RequiredLabel>
-                    <textarea name="obs" id="obs" cols={50} rows={2} defaultValue={data.obs}
-                        onChange={(e) => changeKey("obs", e.target.value)}></textarea>
-                </div>
-                <div className="mt-8 pt-8 flex border-borders border-t">
-                    <Button onClick={() => simpleSpawnInfo("Deseja continuar?",
-                        async () => {
-                            const res = await finishEdit(data, toAddItens, toRemoveItens)
-                            if (res.error) {
-                                return simpleSpawnInfo(res.message ?? "Ocorreu um erro não reconhecido.")
-                            }
-                            navigate(`/print/transacao?id=${data.id}`)
-                        },
-                        () => null)
-                    }><i>&#xe962;</i> Finalizar</Button>
-                </div>
-                {/* <pre>
-                    <code>
-                        {JSON.stringify(data ?? "", null, 2)}
-                        <br></br>
-                        ------------------------------------------------------------------------
-                        <br></br>
-                        {JSON.stringify(toRemoveItens ?? "", null, 2)}
-                        <br></br>
-                        ------------------------------------------------------------------------
-                        <br></br>
-                        {JSON.stringify(toAddItens ?? "", null, 2)}
-                    </code>
-                </pre> */}
-            </div>
+            </section>
+
+
+            <section className="px-4 py-8 border-b border-borders flex flex-col">
+                <RequiredLabel>Observação</RequiredLabel>
+                <textarea name="obs" id="obs" cols={50} rows={2} defaultValue={data.obs}
+                    onChange={(e) => changeKey("obs", e.target.value)}></textarea>
+            </section>
+
+            <section className="px-4 py-8 border-b border-borders">
+                <Button onClick={() => simpleSpawnInfo("Deseja continuar?",
+                    async () => {
+                        const res = await finishEdit(data, toAddItens, toRemoveItens)
+                        if (res.error) {
+                            return simpleSpawnInfo(res.message ?? "Ocorreu um erro não reconhecido.")
+                        }
+                        navigate(`/print/transacao?id=${data.id}`)
+                    },
+                    () => null)
+                }><i>&#xe962;</i> Finalizar</Button>
+            </section>
         </Content >
     </>
 }

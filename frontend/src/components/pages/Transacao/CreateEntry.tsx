@@ -63,7 +63,7 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
 
     /** Funcao que finaliza a transacao */
     async function submitHandler(addedItens: transacaoitemProps[], boatID?: number) {
-        
+
         if (boatID == undefined) return simpleSpawnInfo("É necessario selecionar um bote.")
         if (addedItens.length === 0) return simpleSpawnInfo("É necessario adicionar algum item à transação.")
 
@@ -82,53 +82,56 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
         <Bar />
         <SideBar />
         <Content>
-            <div className="px-4 py-8 flex border-b border-borders min-h-44">
-                <div>
-                    <h2>Nova {props.type == 0 ? "Entrada" : "Saída"}</h2>
-                    <div className="grid grid-cols-2">
-                        <div className="w-full">
-                            <RequiredLabel>Bote</RequiredLabel>
+            <section className="py-8 px-4 border-b border-borders">
+                <h2>Nova {props.type == 0 ? "Entrada" : "Saída"}</h2>
+            </section>
 
-                            <FormPrevisionInput
-                                placeholder="Insira o codigo do bote"
-                                onChange={(value: boteProps) => {
-                                    setTransitionBoat(value ?? undefined)
-                                }}
-                                autoFocus={true}
-                                searchInTable="bote"
-                                where={{ include: 'fornecedor', limit: 5 }}
-                                itemHandler={(item: boteProps) => `${item.id} - ${item.nome} | ${item.fornecedor?.nome}`}
-                                onSubmit={() => null}
-                                next="input[name=product]"
-                            />
-                        </div>
-                    </div>
+            <section className="py-8 px-4 border-b border-borders flex relative">
+                <div>
+                    <RequiredLabel>Bote</RequiredLabel>
+                    <FormPrevisionInput
+                        className="w-64"
+                        placeholder="Insira o codigo do bote"
+                        onChange={(value: boteProps) => {
+                            setTransitionBoat(value ?? undefined)
+                        }}
+                        autoFocus={true}
+                        searchInTable="bote"
+                        where={{ include: 'fornecedor', limit: 5 }}
+                        itemHandler={(item: boteProps) => `${item.id} - ${item.nome} | ${item.fornecedor?.nome}`}
+                        onSubmit={() => null}
+                        next="input[name=product]"
+                    />
                 </div>
-                <div className="p-4 bg-subpanel border-borders border flex flex-col relative m-4 ml-auto">
+                <div className="p-4 bg-subpanel border-borders border flex flex-col absolute -translate-x-full -translate-y-full" style={{ left: "calc(100% - 1rem)" }}>
                     <h2>Atalhos</h2>
                     <p>F8 - Finalizar transação</p>
                 </div>
-            </div>
-            <div className="grid grid-cols-3">
-                <h2 className="col-span-3 p-4">Produtos</h2>
-                <div className="p-4 h-full border-r border-borders">
-                    <TransitionItemAdder onSubmit={(item) => addTransitionItem(item)} />
+            </section>
+
+            <section className="py-0 px-4 border-b border-borders">
+                <div className="grid grid-cols-3">
+                    {/* <h2 className="col-span-3 p-4">Produtos</h2> */}
+                    <div className="col-span-1 border-r border-borders pr-4 py-8">
+                        <TransitionItemAdder onSubmit={(item) => addTransitionItem(item)} />
+                    </div>
+                    <div className="col-span-2">
+                        <Table
+                            contextMenu={{ buttons: tableContextMenuButtons }}
+                            data={addedTransitionItensData}
+                            disposition={[]}
+                            tableHeader={['Produto', "Preço", "Peso", "Total"]}
+                            tableItemHandler={(item) => [
+                                item.produto?.nome,
+                                <p className="text-end">{beautyNumber(item.preco ?? -1)}</p>,
+                                <p className="text-end">{beautyNumber(item.peso ?? -1)}</p>,
+                                <p className="text-end">{beautyNumber(item.valor_total ?? -1)}</p>]}
+                        />
+                    </div>
                 </div>
-                <div className="col-span-2">
-                    <Table
-                        contextMenu={{ buttons: tableContextMenuButtons }}
-                        data={addedTransitionItensData}
-                        disposition={[]}
-                        tableHeader={['Produto', "Preço", "Peso", "Total"]}
-                        tableItemHandler={(item) => [
-                            item.produto?.nome,
-                            <p className="text-end">{beautyNumber(item.preco ?? -1)}</p>,
-                            <p className="text-end">{beautyNumber(item.peso ?? -1)}</p>,
-                            <p className="text-end">{beautyNumber(item.valor_total ?? -1)}</p>]}
-                    />
-                </div>
-            </div>
-            <div className="px-4 py-8 border-b border-t border-borders">
+            </section>
+
+            <section className="py-8 px-4 border-b border-borders flex flex-col">
                 <h2 className="mb-4">Resumo</h2>
                 <div>
                     <p>
@@ -138,24 +141,27 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
                         <i>&#xe9b0;</i> Peso Total: {sumPeso().toLocaleString()} KG
                     </p>
                 </div>
-            </div>
-            <div className="px-4 py-8 border-b border-borders flex flex-col">
-                <RequiredLabel>Observação</RequiredLabel>
-                <FormInput
-                    placeholder="Insira uma observação"
-                    onChange={(e) => setObs(e.currentTarget.value)
-                    }
-                    next="#submitTransaction"
-                />
-            </div>
-            <div className="p-4">
+            </section>
+
+            <section className="py-8 px-4 border-b border-borders">
+                <div>
+                    <RequiredLabel className="block">Observação</RequiredLabel>
+                    <FormInput className="block"
+                        placeholder="Insira uma observação"
+                        onChange={(e) => setObs(e.currentTarget.value)
+                        }
+                        next="#submitTransaction"
+                    />
+                </div>
+            </section>
+            <section className="py-8 px-4 border-b border-borders">
                 <Button
                     id="submitTransaction"
                     onClick={() => submitHandler(addedTransitionItensData, transitionBoat?.id)}
                 >
                     <i>&#xe962;</i> Finalizar
                 </Button>
-            </div>
+            </section>
         </Content>
     </>
 }

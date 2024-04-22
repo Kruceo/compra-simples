@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios"
+import axios from "axios"
 import { get } from './get'
 import { create } from "./create"
 import { edit } from "./edit"
@@ -9,10 +9,6 @@ export const api_port = 8080
 export const api_v = "v1"
 
 export const backendAxios = axios.create({ withCredentials: true })
-
-
-
-
 
 interface BackendResponse<T> {
     error?: boolean,
