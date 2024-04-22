@@ -3,7 +3,7 @@ import { get } from './get'
 import { create } from "./create"
 import { edit } from "./edit"
 import { remove } from "./remove"
-import config from "../../../config.json" assert {type: "json"}
+import config from "../../../public/config.json" assert {type: "json"}
 
 export const api_address = config.api_address
 export const api_protocol = config.api_protocol

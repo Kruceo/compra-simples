@@ -1,0 +1,10 @@
+{
+    "api_address": "192.168.0.162",
+    "api_protocol": "http",
+    "api_port": 8080,
+    "printer": {
+        "address": "192.168.0.62",
+        "protocol": "http",
+        "port": 8888
+    }
+}

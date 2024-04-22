@@ -1,27 +1,16 @@
 FROM nginx:1.25.4
 
-ENV DOMAIN=localhost
-
-RUN echo 'server {'                            > /etc/nginx/conf.d/react-app.conf && \
-    echo '    listen 8080;'                    >> /etc/nginx/conf.d/react-app.conf && \
-    echo '    server_name ${DOMAIN};'          >> /etc/nginx/conf.d/react-app.conf && \
-    echo '    root /var/www;'                  >> /etc/nginx/conf.d/react-app.conf && \
-    echo '    index index.html;'               >> /etc/nginx/conf.d/react-app.conf && \
-    echo ''                                    >> /etc/nginx/conf.d/react-app.conf && \
-    echo '    location / {'                    >> /etc/nginx/conf.d/react-app.conf && \
-    echo '       try_files $uri $uri/ /index.html; ' >> /etc/nginx/conf.d/react-app.conf && \
-    echo '    }'                                               >> /etc/nginx/conf.d/react-app.conf && \
-    echo ''                                                    >> /etc/nginx/conf.d/react-app.conf && \
-    echo '    # Outras configurações, como SSL, cache, etc.'   >> /etc/nginx/conf.d/react-app.conf && \
-    echo '}'                                                   >> /etc/nginx/conf.d/react-app.conf
-
 RUN apt update && apt install nodejs -y && apt install npm -y
 
 WORKDIR /frontend
+COPY ./package.json           ./package.json
+RUN npm i
+
+ENV DOMAIN=localhost
 
 COPY ./src                    ./src
 COPY ./public                 ./public
-COPY ./package.json           ./package.json
+
 COPY ./tailwind.config.js     ./tailwind.config.js
 COPY ./postcss.config.js      ./postcss.config.js
 COPY ./tsconfig.json          ./tsconfig.json
@@ -29,12 +18,23 @@ COPY ./tsconfig.node.json     ./tsconfig.node.json
 COPY ./vite.config.ts         ./vite.config.ts
 COPY ./index.html             ./index.html
 
-RUN npm i
+ENV API_ADDRESS=localhost
+ENV API_PROTOCOL=http
+ENV API_PORT=8080
 
-RUN npm run build
+ENV PRINTER_ADDRESS=localhost
+ENV PRINTER_PROTOCOL=http
+ENV PRINTER_PORT=8888  
 
-RUN mkdir /var/www
+COPY ./scripts/configureContainer.mjs ./configure.mjs
+
+RUN echo "node configure.mjs" > start.sh && \
+    echo "nginx"              >> start.sh
+
+RUN chmod +x start.sh
 
 RUN rm /etc/nginx/conf.d/default.conf
 
-RUN cp -r /frontend/dist/* /var/www/
+ENV PROD=true
+
+CMD [ "./start.sh" ]
