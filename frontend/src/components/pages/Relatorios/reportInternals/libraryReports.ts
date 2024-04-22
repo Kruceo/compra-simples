@@ -111,8 +111,8 @@ export function writeHeader(pdf: jsPDF, identification: string, date1: Date, dat
     pdf.text(`${date1.toLocaleDateString()} ATÉ ${date2.toLocaleDateString()}`, headerBox.centerX, 18, { align: "center" })
 
     pdf.setFont(pdf.getFont().fontName, "", "bold")
-    pdf.setFontSize(20)
-    // pdf.text(`${identification}`, dateBox.centerX, 15, { align: "center" })
+    pdf.setFontSize(6)
+    pdf.text(`${identification}`, headerBox.x2-2, headerBox.y2-2, { align: "right" })
 
     const totalW = headerBox.w 
     // + dateBox.w

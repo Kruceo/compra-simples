@@ -1,8 +1,9 @@
 import axios, { AxiosResponse } from "axios"
+import config from "../../config.json" assert {type: "json"}
 
-const api_protocol = 'http'
-const api_address = '192.168.0.62'
-const api_port = 8888
+const api_protocol = config.printer.protocol
+const api_address = config.printer.address
+const api_port = config.printer.port
 
 async function print(query: string[][]) {
     const full_address = `${api_protocol}://${api_address}:${api_port}/query`

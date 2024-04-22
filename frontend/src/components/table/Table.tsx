@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import TableItem from "./TableItem";
 import TableContextMenu, { ContextMenuButton } from "./TableContextMenu";
 import { GlobalPopupsContext } from "../GlobalContexts/PopupContext";
-import { data } from "autoprefixer";
 
 export interface TableOrderEvent {
     key: string | string[],

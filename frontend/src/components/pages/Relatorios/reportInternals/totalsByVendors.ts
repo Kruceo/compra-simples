@@ -1,7 +1,6 @@
 import jsPDF from "jspdf"
 import backend from "../../../../constants/backend/backend"
 import { writeHeader, writeTable, openPDF } from "./libraryReports"
-import { data } from "autoprefixer"
 
 export default async function totalsByVendors(d1: Date, d2: Date, status: number) {
 

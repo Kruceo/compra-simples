@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react"
 import { TableEngineContext } from "../GlobalContexts/TableEngineContext"
 import { DefaultFormInput, defaultKeyUpHandler } from "./FormInput"
-import { data } from "autoprefixer"
-import backend from "../../constants/backend/backend"
 
 interface FormPrevisionInputAttributes extends DefaultFormInput {
     placeholder?: string,

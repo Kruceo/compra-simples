@@ -121,7 +121,6 @@ export default function EditEntry() {
                                     <p className="text-end" key={d.id}>{beautyNumber(d.valor_total)} </p>
                                 ]
                             }} >
-
                         </Table>
                     </div>
                 </div>

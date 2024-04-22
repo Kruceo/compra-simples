@@ -1,4 +1,4 @@
-import backend, { BackendResponse } from "../../../constants/backend/backend";
+import backend from "../../../constants/backend/backend";
 
 interface saveEntryStackResponse {
     error?: boolean,

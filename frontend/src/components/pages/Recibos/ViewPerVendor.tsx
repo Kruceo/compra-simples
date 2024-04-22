@@ -9,8 +9,8 @@ import SubTopBar, { ToolBarButton } from "../../Layout/SubTopBar";
 import { WriteReceipt2PDF } from "./libReceipt";
 import jsPDF from "jspdf";
 import { openPDF, writeBox } from "../Relatorios/reportInternals/libraryReports";
-import { bDate, getNextSaturday } from "../../../constants/dateUtils";
-import { TRANSACTION_CLOSED, TRANSACTION_INVALID, TRANSACTION_OPEN } from "../../../constants/codes";
+import { getNextSaturday } from "../../../constants/dateUtils";
+import { TRANSACTION_OPEN } from "../../../constants/codes";
 import beautyNumber from "../../../constants/numberUtils";
 
 interface PerVendorResponse {

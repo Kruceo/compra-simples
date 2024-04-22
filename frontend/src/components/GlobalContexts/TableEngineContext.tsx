@@ -3,11 +3,11 @@ import backend from "../../constants/backend/backend"
 import { ErrorHandlerContext } from "./ErrorHandlerContext";
 import { GlobalPopupsContext } from "./PopupContext";
 
-type queryClause = allTableTypes & { include?: string, attributes?: string, group?: string, limit?: number, order?: string }
+// type queryClause = allTableTypes & { include?: string, attributes?: string, group?: string, limit?: number, order?: string }
 
 export const TableEngineContext = createContext({
-    defaultDataGet: async (table: allTableNames, where: Object, setter: Function) => Promise.resolve(),
-    defaultDataDelete: async (table: allTableNames, id: number) => Promise.resolve()
+    defaultDataGet: async (_table: allTableNames, _where: Object, _setter: Function) => Promise.resolve(),
+    defaultDataDelete: async (_table: allTableNames, _id: number) => Promise.resolve()
 })
 
 export default function TableEngine(props: PropsWithChildren) {
