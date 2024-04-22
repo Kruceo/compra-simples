@@ -3,9 +3,11 @@ import { get } from './get'
 import { create } from "./create"
 import { edit } from "./edit"
 import { remove } from "./remove"
-export const api_address = '192.168.0.62'
-export const api_protocol = 'http'
-export const api_port = 8080
+import config from "../../../config.json" assert {type: "json"}
+
+export const api_address = config.api_address
+export const api_protocol = config.api_protocol
+export const api_port = config.api_port
 export const api_v = "v1"
 
 export const backendAxios = axios.create({ withCredentials: true })

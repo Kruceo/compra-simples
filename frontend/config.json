@@ -1,0 +1,5 @@
+{
+    "api_address": "192.168.0.62",
+    "api_protocol": "http",
+    "api_port": 8080
+}
