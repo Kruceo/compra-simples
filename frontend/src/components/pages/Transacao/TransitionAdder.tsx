@@ -89,7 +89,7 @@ export default function TransitionItemAdder(props: { onSubmit: (item: transacaoi
                     props.onSubmit(
                         {
                             transacao_id: -1,
-                            id: parseInt((new Date()).getTime().toString().slice(5)),
+                            id: (new Date()).getTime(),
                             produto_id: product?.id,
                             preco: productPrice,
                             peso: productWeight,
