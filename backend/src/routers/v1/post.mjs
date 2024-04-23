@@ -42,7 +42,6 @@ export default async function postRequestHandler(req, res) {
     }
 
     //Wipe the attributes that can't appears in table 
-
     for (let i = 0; i < body.length; i++) {
         body[i] = wipeNoTableAttributes(body[i], table)
     }

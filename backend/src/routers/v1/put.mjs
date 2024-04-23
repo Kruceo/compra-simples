@@ -33,7 +33,7 @@ export default async function putRequestHandler(req, res) {
     if (!item)
         return res.status(statusCodes.BadRequest)
             .json({ error: true, message: "O item especificado não existe." })
-
+    
     try {
         const data = await item.update(body)
         res.json({ data, message: "O item foi atualizado com sucesso." })
