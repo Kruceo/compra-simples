@@ -32,7 +32,7 @@ async function bulkCreate(tables: "usuario", data: usuarioProps[]): Promise<Axio
 async function bulkCreate(tables: "fornecedor", data: fornecedorProps[]): Promise<AxiosResponse<BackendResponse<fornecedorProps[]>>>
 
 async function bulkCreate(tables: string, data: any[]): Promise<AxiosResponse<BackendPostResponse>> {
-    const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}`
+    const full_address = `${api_protocol}://${api_address}:${api_port}/${api_v}/${tables}/bulk`
     try {
         const response = await backendAxios.post(full_address, data)
         return response

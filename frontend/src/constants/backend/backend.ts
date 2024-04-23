@@ -1,9 +1,9 @@
 import axios from "axios"
 import { get } from './get'
-import { create } from "./create"
-import { edit } from "./edit"
-import { remove } from "./remove"
-import config from "../../../public/config.json" assert {type: "json"}
+import { create, bulkCreate } from "./create"
+import { edit, bulkEdit } from "./edit"
+import { remove,bulkRemove } from "./remove"
+import config from "../../../config.json" assert {type: "json"}
 
 export const api_address = config.api_address
 export const api_protocol = config.api_protocol
@@ -51,7 +51,7 @@ const utils = {
     removeAttributeFromAll
 }
 
-export { get, create, remove, edit, utils, auth }
-export default { get, create, remove, edit, utils, auth }
+export { get, create, bulkCreate,bulkEdit, remove,bulkRemove , edit, utils, auth }
+export default { get,bulkCreate,bulkEdit, create, bulkRemove,  remove, edit, utils, auth }
 
 export type { BackendResponse }

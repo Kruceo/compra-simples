@@ -11,6 +11,10 @@ const blockedTables = ["usuario"]
  * @returns 
  */
 export default async function bulkPutRequestHandler(req, res) {
+    if (!Array.isArray(req.body)) {
+        return res.status(statusCodes.BadRequest).json({ error: true, message: "Esse endereço só aceita listas." })
+    }
+
     if (blockedTables.includes(req.params.table.toLowerCase())) {
         res.status(statusCodes.ServiceUnavailable).json({
             error: true,
@@ -23,9 +27,6 @@ export default async function bulkPutRequestHandler(req, res) {
     /*** @type {import("sequelize").ModelCtor<import("sequelize").Model<any, any>>}*/
     const table = tables[tableName]
     if (!table) return;
-
-
-    if (!Array.isArray(body)) return
 
     for (const item of body) {
 
@@ -53,5 +54,5 @@ export default async function bulkPutRequestHandler(req, res) {
                 .json({ error: true, message: "Houve um erro de SQL: " + error })
         }
     }
-    res.json({error:false,message:"Todos os itens foram atualizados com sucesso."})
+    res.json({ error: false, message: "Todos os itens foram atualizados com sucesso." })
 }

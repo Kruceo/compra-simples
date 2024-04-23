@@ -30,7 +30,7 @@ export async function saveEntryStack(bote_id: number, obs: string, valor: number
         return each
     })
 
-    const transacaoItensResponse = await backend.create("transacao_item", parsedTransacaoItens)
+    const transacaoItensResponse = await backend.bulkCreate("transacao_item", parsedTransacaoItens)
 
     if (transacaoItensResponse.data.error) {
         return { error: true, message: transacaoItensResponse.data.message }

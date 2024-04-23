@@ -172,7 +172,7 @@ async function finishEdit(data: transacaoProps, toAdd: transacaoitemProps[], toR
     // Cria todos os transacao itens
     // Mas primeiro retira os ids aleatorios para que possa ser gerado automaticamente no DB
     // Tambem coloca o transacao_id da transacao que está no state "Data"
-    const createdItensRes = await backend.create("transacao_item", toAdd.map((each: any) => {
+    const createdItensRes = await backend.bulkCreate("transacao_item", toAdd.map((each: any) => {
         delete each.id
         each.transacao_id = data.id
         return each
@@ -183,22 +183,16 @@ async function finishEdit(data: transacaoProps, toAdd: transacaoitemProps[], toR
     }
 
     // Edita os itens um a um
-    for (const item of data.transacao_itens) {
-        const editRes = await backend.edit("transacao_item", item.id, item)
-        if (editRes.data.error && editRes.data.message)
-            return editRes.data
-    }
+    const editRes = await backend.bulkEdit("transacao_item", data.transacao_itens)
+    
+    if (editRes.data.error && editRes.data.message)
+    return editRes.data
 
-
-    // Nao foi implementado um bulk no metodo de delete
     // mas isso deleta cada um dos itens um a um
-    // se houver um erro, retorna 
-    for (const id of toRemoveIds) {
-        const removedItemRes = await backend.remove("transacao_item", id)
-        if (removedItemRes.data.error) {
-            return removedItemRes.data
-            break
-        }
+    // se houver um erro, retorna     
+    const removedItemRes = await backend.bulkRemove("transacao_item", toRemoveIds)
+    if (removedItemRes.data.error) {
+        return removedItemRes.data
     }
 
     //Por fim apenas edita a transacao com as somas e dados atualizados

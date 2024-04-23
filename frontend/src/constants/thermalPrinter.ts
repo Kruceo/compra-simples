@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios"
-import config from "../../public/config.json" assert {type: "json"}
+import config from "../../config.json" assert {type: "json"}
 
 const api_protocol = config.printer.protocol
 const api_address = config.printer.address

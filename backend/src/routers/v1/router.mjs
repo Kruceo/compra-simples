@@ -6,6 +6,8 @@ import putRequestHandler from "./put.mjs";
 import getRequestHandler from "./get.mjs";
 import reportRequestHandler from "./report.mjs";
 import bulkPutRequestHandler from "./bulkPut.mjs";
+import bulkPostRequestHandler from "./bulkPost.mjs";
+import bulkDeleteRequestHandler from "./bulkDelete.mjs";
 
 /**
  * @type {Router}
@@ -33,8 +35,10 @@ universalRouter.use(databaseProtectionMiddleware)
 
 universalRouter.get(`/:table`, getRequestHandler)
 
+universalRouter.post(`/:table/bulk`,bulkPostRequestHandler)
 universalRouter.post(`/:table`, postRequestHandler)
 
+universalRouter.delete(`/:table/bulk`, bulkDeleteRequestHandler)
 universalRouter.delete(`/:table/:id`, deleteRequestHandler)
 
 universalRouter.put(`/:table/bulk`, bulkPutRequestHandler)

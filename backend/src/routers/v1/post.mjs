@@ -28,32 +28,20 @@ export default async function postRequestHandler(req, res) {
     if (!table) return;
     const tableNecessaryAttributes = getOnlyNecessaryAttributes(table)
 
-    if (!Array.isArray(body)) {
-        body = [req.body]
-    }
-
     //Check the attributes
-    for (const item of body) {
-        if (!checkAttributes(item, tableNecessaryAttributes))
-            return res.status(statusCodes.BadRequest)
-                .json({
-                    error: true, message: "Existem campos não preenchidos."
-                })
-    }
+    if (!checkAttributes(body, tableNecessaryAttributes))
+        return res.status(statusCodes.BadRequest)
+            .json({
+                error: true, message: "Existem campos não preenchidos."
+            })
+
 
     //Wipe the attributes that can't appears in table 
-    for (let i = 0; i < body.length; i++) {
-        body[i] = wipeNoTableAttributes(body[i], table)
-    }
+    body = wipeNoTableAttributes(body, table)
 
     try {
-        if (body.length === 1) {
-            const data = await table.create(body[0])
-            res.json({ data, message: "O item foi criado com sucesso." })
-            return;
-        }
-        const data = await table.bulkCreate(body)
-        res.json({ data, message: "Os itens foram criados com sucesso." })
+        const data = await table.create(body)
+        res.json({ data, message: "O item foi criado com sucesso." })
         return;
     } catch (error) {
         return res.status(statusCodes.InternalServerError)
@@ -67,10 +55,9 @@ export default async function postRequestHandler(req, res) {
  * @param {string[]} tableAttributes 
  * @returns {boolean}
  */
-function checkAttributes(item, tableAttributes) {
+export function checkAttributes(item, tableAttributes) {
     for (const attr of tableAttributes) {
         if (item[attr] == undefined || item[attr] == null) {
-            console.log(attr)
             return false
         }
     }
@@ -84,7 +71,7 @@ function checkAttributes(item, tableAttributes) {
  * @param {ModelCtor<Model<any, any>>} table 
  * @returns {Object}
  */
-function wipeNoTableAttributes(item, table) {
+export function wipeNoTableAttributes(item, table) {
     const allAttrs = Object.keys(table.getAttributes())
     const newItem = {}
     Object.keys(item).forEach(attr => {
@@ -92,7 +79,6 @@ function wipeNoTableAttributes(item, table) {
             newItem[attr] = item[attr]
         }
     })
-    console.log("new item", newItem)
     return newItem
 }
 
