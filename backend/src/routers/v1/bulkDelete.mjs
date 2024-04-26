@@ -1,4 +1,3 @@
-import { where } from "sequelize"
 import tables from "../../database/tables.mjs"
 import statusCodes from "../../utils/statusCode.mjs"
 import { upperCaseLetter } from "../../utils/stringUtils.mjs"

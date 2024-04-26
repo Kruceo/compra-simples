@@ -13,6 +13,7 @@ import { TableEngineContext } from "../../GlobalContexts/TableEngineContext";
 import { TRANSACTION_CLOSED, TRANSACTION_INVALID, TRANSACTION_OPEN } from "../../../constants/codes";
 import FilterEntryForm from "./FilterEntryForm";
 import SumOfTrans from "./SumOfTrans";
+import backend from "../../../constants/backend/backend";
 
 
 export default function ViewEntry() {
@@ -65,9 +66,9 @@ export default function ViewEntry() {
 
     const closeHandler = () => {
         simpleSpawnInfo("Tem certeza que deseja continuar?", async () => {
-            for (const item_id of selected) {
-                await changeEntryStatus(item_id, TRANSACTION_CLOSED)
-            }
+            backend.bulkEdit("transacao", selected.map(id => {
+                return { id: id, status: TRANSACTION_CLOSED } as transacaoProps
+            }))
             setTimeout(() => {
                 setSelected([])
                 setUpdate(!update)
@@ -78,7 +79,7 @@ export default function ViewEntry() {
 
     const tableContextMenuButtons = [
         { element: <><i>&#xe922;</i>Detalhes</>, handler: (id: number) => navigate(`/details/transacao?id=${id}`) },
-        { element: <><i>&#xe955;</i>Editar</>,   handler: (id: number) => navigate(`/edit/transacao?id=${id}`) },
+        { element: <><i>&#xe955;</i>Editar</>, handler: (id: number) => navigate(`/edit/transacao?id=${id}`) },
         { element: <><i>&#xe954;</i>Imprimir</>, handler: (id: number) => navigate(`/print/transacao?id=${id}`) },
         { element: <><i>&#xe9ac;</i>Invalidar</>, handler: invalidEntries }
     ]
@@ -91,7 +92,7 @@ export default function ViewEntry() {
                 <ToolBarButton onClick={() => setGlobalPopupByKey("TransactionFilter",
                     <FilterEntryForm whereSetter={(w) => { setWhere({ ...blockedWhere, ...w }); setSelected([]) }} onCancel={() => setGlobalPopupByKey("TransactionFilter", null)} />
                 )}><i title="filtros">&#xe993;</i></ToolBarButton>
-                <p>Total: <SumOfTrans where={where} update={update}/></p>
+                <p>Total: <SumOfTrans where={where} update={update} /></p>
             </>}>
                 <ToolBarButton onClick={() => {
                     if (selected.length > 0) setSelected([])
@@ -99,7 +100,7 @@ export default function ViewEntry() {
                 }}><i>&#xe997;</i> Selecionar Todos</ToolBarButton>
                 <ToolBarButton enabled={selected.length > 0} onClick={closeHandler}>
                     <i>&#xe95e;</i> Fechamento</ToolBarButton>
-                <ToolBarButton className="hover:bg-green-100" onClick={() => navigate("/create/entrada")}><i>&#xea3b;</i> Criar</ToolBarButton>
+                {/* <ToolBarButton className="hover:bg-green-100" onClick={() => navigate("/create/entrada")}><i>&#xea3b;</i> Criar</ToolBarButton> */}
             </SubTopBar>
             <div className="w-full h-full mt-[6.5rem]">
                 <Table

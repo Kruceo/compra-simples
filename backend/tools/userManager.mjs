@@ -1,7 +1,7 @@
 import readline from 'readline'
 import tables, { Usuario } from '../src/database/tables.mjs';
 import { encrypt } from '../src/security/encrypt.mjs';
-
+import process from 'process';
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout

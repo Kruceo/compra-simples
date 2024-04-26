@@ -1,8 +1,7 @@
-import tables, { Usuario } from "../src/database/tables.mjs";
+import tables from "../src/database/tables.mjs";
 import fs from 'fs'
 import path from 'path'
 import cp from 'child_process'
-import { getOnlyNecessaryAttributes } from "../src/utils/tableUtils.mjs";
 
 let columns = []
 
