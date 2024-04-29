@@ -159,14 +159,14 @@ const Transacao_item = dbserver.define("transacao_item", {
         singular: "transacao_item"
     }
 })
-// await Produto.sync({ force: false })
-// await Usuario.sync({ force: false })
-// await Fornecedor.sync({ force: false })
+await Produto.sync({ force: false })
+await Usuario.sync({ force: false })
+await Fornecedor.sync({ force: false })
 
 
-// await Bote.sync({ force: false })
-// await Transacao.sync({ force: false })
-// await Transacao_item.sync({ force: false })
+await Bote.sync({ force: false })
+await Transacao.sync({ force: false })
+await Transacao_item.sync({ force: false })
 
 
 /** Setup relations */

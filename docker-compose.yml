@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:latest
+    ports: 
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: example
+
+  backend:
+    build: "./backend"
+    command: ["/bin/sh","-c","sleep 10s && ./start.sh"]
+    volumes:
+      - /var/lib/postgresql/data
+    ports:
+      - "8090:8080"
+    environment:
+      - CORS_ORIGIN=http://192.168.0.62:8085
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=example
+      - DB_SCHEMA=principal
+      - DB_HOST=192.168.0.62
+      - DB_PORT=5432
+      - DB_DIALECT=postgres
+      - SECRET=otherexample
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8085:80"
+    depends_on:
+      - db
+      - backend
+    environment:
+      - DOMAIN=192.168.0.62
+      - API_ADDRESS=192.168.0.62
+      - API_PROTOCOL=http
+      - API_PORT=8090
+      - PRINTER_PROTOCOL=http
+      - PRINTER_ADDRESS=192.168.0.62
+      - PRINTER_PORT=8888
+    
+  thermal:
+    image: rafola/thermal-printer
+    ports:
+      - "8888:8888"
+    depends_on:
+      - db
+      - backend
+      - frontend
+    environment:
+      - PRINTER_TYPE=EPSON
+      - PRINTER_INTERFACE=/dev/usb/lp0
+    devices:
+      - "/dev/usb/lp0"

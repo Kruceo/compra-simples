@@ -2,23 +2,24 @@
     "database": {
         "username": "postgres",
         "password": "admin",
+        "port": 5432,
         "schema": "principal",
         "host": "localhost",
         "dialect": "postgres"
     },
-    "server":{
-        "port":8080,
-        "cors":{
-            "origin":"http://192.168.0.62:5173",
-            "credentials":true
+    "server": {
+        "port": 8080,
+        "cors": {
+            "origin": "http://192.168.0.62:5173",
+            "credentials": true
         }
     },
-    "security":{
-        "jwt":{
-            "secret":"abc",
-            "tokenExpireTime":"24h"
+    "security": {
+        "jwt": {
+            "secret": "abc",
+            "tokenExpireTime": "24h"
         },
-        "prefixLength":6,
-        "sufixLength":10
+        "prefixLength": 6,
+        "sufixLength": 10
     }
 }

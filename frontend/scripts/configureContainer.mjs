@@ -31,14 +31,12 @@ let config = {
 fs.writeFileSync("config.json", JSON.stringify(config, null, 2))
 console.log("Configuration created.")
 
-if (fs.existsSync("/var/www/assets")) return
+if (fs.existsSync("/var/www/assets")) process.exit()
 
 if (!fs.existsSync("./dist/assets")) {
     console.log("dist not exists")
     cp.execSync("npm run build", { stdio: "inherit" })
 }
-
-// process.exit()
 
 if (!fs.existsSync("/var/www"))
     fs.mkdirSync("/var/www", { recursive: true })

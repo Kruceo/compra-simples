@@ -28,8 +28,8 @@ ENV PRINTER_PORT=8888
 
 COPY ./scripts/configureContainer.mjs ./configure.mjs
 
-RUN echo "node configure.mjs" > start.sh && \
-    echo "nginx"              >> start.sh
+RUN echo "node configure.mjs"     > start.sh && \
+    echo "nginx -g 'daemon off;'"    >> start.sh
 
 RUN chmod +x start.sh
 
@@ -38,3 +38,4 @@ RUN rm /etc/nginx/conf.d/default.conf
 ENV PROD=true
 
 CMD [ "./start.sh" ]
+# CMD ["nginx", "-g", "daemon off;"]
