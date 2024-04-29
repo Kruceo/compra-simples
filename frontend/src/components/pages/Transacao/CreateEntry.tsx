@@ -25,6 +25,7 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
 
     // adiciona um transacao item á lista de adicionados
     const addTransitionItem = (Transação_item: transacaoitemProps) => setAddedTransitionItensData([...addedTransitionItensData, { ...Transação_item, id: addedTransitionItensData.length + 1 }])
+
     // remove um ou mais transacao item da lista de adicionados
     const removeTransitionItem = (...Transação_item_ids: number[]) => setAddedTransitionItensData(addedTransitionItensData.filter(each => !Transação_item_ids.includes(each.id ?? -1)))
 
@@ -111,9 +112,14 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
 
             <section className="py-0 px-4 border-b border-borders">
                 <div className="grid grid-cols-3">
-                    {/* <h2 className="col-span-3 p-4">Produtos</h2> */}
                     <div className="col-span-1 border-r border-borders pr-4 py-8">
-                        <TransitionItemAdder onSubmit={(item) => addTransitionItem(item)} />
+                        {/* Altera o where dos produtos do transitionItemAdder de acordo se é venda ou compra "type == 0" ou "type == 1"*/}
+                        {
+                            props.type ?
+                                <TransitionItemAdder key={"transitionAdderBuy"} productWhere={{ tipo: 1 }} onSubmit={(item) => addTransitionItem(item)} />
+                                : <TransitionItemAdder key={"transitionAdderSell"} productWhere={{ tipo: 0 }} onSubmit={(item) => addTransitionItem(item)} />
+                        }
+
                     </div>
                     <div className="col-span-2">
                         <Table

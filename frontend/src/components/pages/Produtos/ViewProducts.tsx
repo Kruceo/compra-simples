@@ -64,12 +64,12 @@ export default function ViewProducts() {
         if (!search)
             return simpleSpawnInfo("Não é possivel selecionar o item escolhido.");
 
-        const { nome, preco } = search
+        const { nome, preco, tipo } = search
         setGlobalPopupByKey("EditForm",
             <CreationForm
                 key={'editingForm'}
                 mode="editing"
-                defaultValues={{ id, nome, preco }}
+                defaultValues={{ id, nome, preco, tipo }}
                 onCancel={() => setGlobalPopupByKey("EditForm", null)}
                 afterSubmit={() => setUpdate(!update)}
             />
@@ -102,12 +102,13 @@ export default function ViewProducts() {
                     disposition={[1, 6, 4, 4]}
                     tableItemHandler={(item) => [
                         item.id, item.nome,
-                        <div className="text-right">{beautyNumber(item.preco ?? -1)}</div>,
-                        bDate(item.updatedAt)
+                        <p className="text-right">{beautyNumber(item.preco ?? -1)}</p>,
+                        bDate(item.updatedAt),
+                        <div className="text-right">{item.tipo ? <i title="Saída" className="text-red-600">&#xea3f;</i> : <i title="Entrada" className="text-green-600">&#xea3b;</i>}</div>
                     ]}
-                    tableOrderKeys={["id", "nome", "preco", "updatedAt"]}
+                    tableOrderKeys={["id", "nome", "preco", "updatedAt","tipo"]}
                     tableHeader={[
-                        "ID", "Nome", "Preço", "Ultima Atualização"
+                        "ID", "Nome", "Preço", "Ultima Atualização","T"
                     ]}
                 />
             </div>

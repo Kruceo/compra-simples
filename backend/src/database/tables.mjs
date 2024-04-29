@@ -69,6 +69,11 @@ const Produto = dbserver.define("produto", {
     preco: {
         type: DataTypes.FLOAT,
         allowNull: false
+    },
+    tipo: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
     }
 }, {
     tableName: "produtos",

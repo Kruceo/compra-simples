@@ -55,6 +55,7 @@ export default function EditEntry() {
     function editItem(id: number, price?: number, weight?: number) {
         if (!data) return console.error("A transação não esta definida.")
         let newData: transacaoProps = { ...data }
+        let newToAddItens = [...toAddItens]
 
         if (!newData.transacao_itens) return console.error("A transacao requisitada não incluiu na resposta os itens da transacao.")
 
@@ -67,8 +68,17 @@ export default function EditEntry() {
             console.log(newData, item.peso, item.preco)
         }
 
+        for (const item of newToAddItens) {
+            if (item.id !== id) continue
+
+            item.preco = price ?? item.preco
+            item.peso = weight ?? item.peso
+            item.valor_total = item.peso * item.preco
+            console.log(newData, item.peso, item.preco)
+        }
 
 
+        setToAddItens(newToAddItens)
         setData(newData)
     }
 
@@ -103,7 +113,7 @@ export default function EditEntry() {
             <section className="px-4 py-0 border-b border-borders">
                 <div className="grid grid-cols-3">
                     <div className="col-span-1 border-r border-borders pr-4 py-8">
-                        <TransitionItemAdder onSubmit={(d) => setToAddItens([...toAddItens, d])}></TransitionItemAdder>
+                        <TransitionItemAdder productWhere={{tipo:data.tipo}} onSubmit={(d) => setToAddItens([...toAddItens, d])}></TransitionItemAdder>
                     </div>
                     <div className="col-span-2">
                         <Table

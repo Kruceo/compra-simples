@@ -5,7 +5,7 @@ import FormPrevisionInput from "../../OverPageForm/FormPrevisionInput"
 import { RequiredLabel } from "../../OverPageForm/OverPageForm"
 import Button from "../../Layout/Button"
 
-export default function TransitionItemAdder(props: { onSubmit: (item: transacaoitemProps) => void }) {
+export default function TransitionItemAdder(props: { productWhere?: Partial<produtoProps>, onSubmit: (item: transacaoitemProps) => void }) {
     const [product, setProduct] = useState<produtoProps>()
     const [productPrice, setProductPrice] = useState<number>()
     const [productWeight, setProductWeight] = useState<number>()
@@ -28,7 +28,7 @@ export default function TransitionItemAdder(props: { onSubmit: (item: transacaoi
                 }}
                 name="product"
                 searchInTable="produto"
-                where={{}}
+                where={props.productWhere ?? {}}
                 itemHandler={(item) => `${item.id} - ${item.nome}`}
                 onSubmit={() => null}
                 next="#priceInput"

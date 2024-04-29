@@ -21,6 +21,7 @@ interface produtoProps {
     id: number
     nome: string
     preco: number
+    tipo: 0 | 1
     createdAt: string
     updatedAt: string
     transacao_itens?: transacaoitemProps[]
@@ -64,4 +65,3 @@ interface usuarioProps {
 }
 type allTableNames = "bote" | "fornecedor" | "produto" | "transacao" | "transacao_item" | "usuario"
 type allTableTypes = boteProps | fornecedorProps | produtoProps | transacaoProps | transacaoitemProps | usuarioProps
-

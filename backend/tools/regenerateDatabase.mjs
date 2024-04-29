@@ -1,6 +1,6 @@
 import readline from 'readline'
 import cfg from "../config/config.json" assert { type: "json" }
-import { Sequelize } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -41,6 +41,13 @@ const tables = await import("../src/database/tables.mjs")
 
 for (const table of Object.entries(tables).reverse()) {
     if (table[0] == "default") continue;
+    await table[1].destroy({
+        where: {
+            id: {
+                [Op.gt]: 0
+            }
+        }
+    })
     console.log(`Sincronizando ${table[0]}`)
     await table[1].sync({ force: true })
 }
