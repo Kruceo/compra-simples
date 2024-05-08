@@ -18,7 +18,7 @@ const f = {
     "server": {
         "port": 8080,
         "cors": {
-            "origin": cors_origin,
+            "origin": cors_origin.split(","),
             "credentials": true
         }
     },

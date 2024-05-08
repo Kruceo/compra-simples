@@ -22,7 +22,11 @@ const Usuario = dbserver.define("usuario", {
 })
 
 const Fornecedor = dbserver.define("fornecedor", {
-    id: _ID,
+    id: {
+        type:DataTypes.INTEGER,
+        autoIncrement:true,
+        primaryKey: true,
+    },
     nome: {
         type: DataTypes.STRING,
         allowNull: false

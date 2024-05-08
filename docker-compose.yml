@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   db:
     image: postgres:latest
@@ -7,6 +5,9 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: example
+    networks:
+      easyfish:
+        ipv4_address: 172.28.0.200
 
   backend:
     build: "./backend"
@@ -16,16 +17,19 @@ services:
     ports:
       - "8090:8080"
     environment:
-      - CORS_ORIGIN=http://192.168.0.62:8085
+      - CORS_ORIGIN=http://localhost:8085,http://172.28.0.202
       - DB_USERNAME=postgres
       - DB_PASSWORD=example
       - DB_SCHEMA=principal
-      - DB_HOST=192.168.0.62
+      - DB_HOST=172.28.0.200
       - DB_PORT=5432
       - DB_DIALECT=postgres
       - SECRET=otherexample
     depends_on:
       - db
+    networks:
+      easyfish:
+        ipv4_address: 172.28.0.201
 
   frontend:
     build: ./frontend
@@ -35,24 +39,35 @@ services:
       - db
       - backend
     environment:
-      - DOMAIN=192.168.0.62
-      - API_ADDRESS=192.168.0.62
+      - DOMAIN=localhost
+      - API_ADDRESS=localhost
       - API_PROTOCOL=http
       - API_PORT=8090
       - PRINTER_PROTOCOL=http
-      - PRINTER_ADDRESS=192.168.0.62
+      - PRINTER_ADDRESS=localhost
       - PRINTER_PORT=8888
-    
+    networks:
+      easyfish:
+        ipv4_address: 172.28.0.202
+
   thermal:
     image: rafola/thermal-printer
     ports:
       - "8888:8888"
     depends_on:
-      - db
-      - backend
       - frontend
     environment:
-      - PRINTER_TYPE=EPSON
-      - PRINTER_INTERFACE=/dev/usb/lp0
+      - PRINTER_VENDOR=EPSON
+      - PRINTER_NAME=TM-T20X
     devices:
-      - "/dev/usb/lp0"
+      - "/dev/bus/usb"
+    networks:
+      easyfish:
+        ipv4_address: 172.28.0.203
+networks:
+  easyfish:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
