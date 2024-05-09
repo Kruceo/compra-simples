@@ -3,25 +3,27 @@ services:
     image: postgres:latest
     ports: 
       - "5432:5432"
+    restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: example
+    volumes:
+      - db_data:/var/lib/postgresql/data
     networks:
       easyfish:
-        ipv4_address: 172.28.0.200
+        ipv4_address: 172.128.0.200
 
   backend:
     build: "./backend"
     command: ["/bin/sh","-c","sleep 10s && ./start.sh"]
-    volumes:
-      - /var/lib/postgresql/data
     ports:
-      - "8090:8080"
+      - "8080:8080"
+    restart: unless-stopped
     environment:
-      - CORS_ORIGIN=http://localhost:8085,http://172.28.0.202
+      - CORS_ORIGIN=http://localhost,http://172.128.0.202
       - DB_USERNAME=postgres
       - DB_PASSWORD=example
       - DB_SCHEMA=principal
-      - DB_HOST=172.28.0.200
+      - DB_HOST=172.128.0.200
       - DB_PORT=5432
       - DB_DIALECT=postgres
       - SECRET=otherexample
@@ -29,45 +31,48 @@ services:
       - db
     networks:
       easyfish:
-        ipv4_address: 172.28.0.201
+        ipv4_address: 172.128.0.201
 
   frontend:
     build: ./frontend
     ports:
-      - "8085:80"
-    depends_on:
-      - db
-      - backend
+      - "80:80"
+    restart: unless-stopped
     environment:
       - DOMAIN=localhost
       - API_ADDRESS=localhost
       - API_PROTOCOL=http
-      - API_PORT=8090
+      - API_PORT=8080
       - PRINTER_PROTOCOL=http
       - PRINTER_ADDRESS=localhost
       - PRINTER_PORT=8888
+    depends_on:
+      - backend
     networks:
       easyfish:
-        ipv4_address: 172.28.0.202
+        ipv4_address: 172.128.0.202
 
   thermal:
     image: rafola/thermal-printer
     ports:
       - "8888:8888"
-    depends_on:
-      - frontend
+    restart: unless-stopped
     environment:
       - PRINTER_VENDOR=EPSON
       - PRINTER_NAME=TM-T20X
     devices:
       - "/dev/bus/usb"
+    depends_on:
+      - frontend
     networks:
       easyfish:
-        ipv4_address: 172.28.0.203
+        ipv4_address: 172.128.0.203
 networks:
   easyfish:
     driver: bridge
     ipam:
       driver: default
       config:
-        - subnet: 172.28.0.0/16
+        - subnet: 172.128.0.0/16
+volumes:
+  db_data:
