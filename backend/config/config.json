@@ -1,7 +1,7 @@
 {
     "database": {
         "username": "postgres",
-        "password": "admin",
+        "password": "example",
         "port": 5432,
         "schema": "principal",
         "host": "localhost",

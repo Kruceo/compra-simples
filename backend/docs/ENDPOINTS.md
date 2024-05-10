@@ -2,8 +2,15 @@
 
 ## **SUMÁRIO**
 
+## **SUMÁRIO**
+
+## **SUMÁRIO**
+
 - [**METODO GET - OBTER**](#metodo-get---obter)
-  - [Obtendo todos](#obtendo-todos)
+  - [Argumentos universais usavéis](#argumentos-universais-usavéis)
+  - [Operadores de propriedades de tabela](#operadores-de-propriedades-de-tabela)
+  - [Funções de atributos](#funções-de-atributos)
+  - [Obtendo Todos](#obtendo-todos)
   - [Filtragem de valor exato](#filtragem-de-valor-exato)
   - [Filtragem de valor parcial](#filtragem-de-valor-parcial)
   - [Filtragem de valor parcial com outras condições](#filtragem-de-valor-parcial-com-outras-condições)
@@ -14,6 +21,7 @@
   - [Inclusão de tabelas relacionadas](#inclusão-de-tabelas-relacionadas)
   - [Inclusão de cadeia de tabelas relacionadas](#inclusão-de-cadeia-de-tabelas-relacionadas)
   - [Inclusão de tabelas com atributos limitados](#inclusão-de-tabelas-com-atributos-limitados)
+  - [Comparação de propriedades de tabelas incluídas](#comparação-de-propriedades-de-tabelas-incluídas)
   - [Colunas personalizadas](#colunas-personalizadas)
   - [Agrupamento, funções e inclusão](#agrupamento-funções-e-inclusão)
 - [**METODO POST - CRIAR**](#metodo-post---criar)
@@ -21,10 +29,46 @@
   - [Criação de varios itens](#criação-de-varios-itens)
 - [**METODO PUT - ATUALIZAR**](#metodo-put---atualizar)
   - [Edição de um item](#edição-de-um-item)
+  - [Edição de varios itens](#edição-de-varios-itens)
 - [**METODO DELETE - REMOVER**](#metodo-delete---remover)
   - [Remoção de um item](#remoção-de-um-item)
+  - [Remoção de varios itens](#remoção-de-varios-itens)
 - [**RESPOSTAS DA API**](#respostas-da-api)
+
+
 ## **METODO GET - OBTER**
+
+### Argumentos universais usavéis
+
+`limit, order, include, attributes, group`
+
+### Operadores de propriedades de tabela
+
+- `^value` : Texto começa com _value_
+- `>value` : Valor é maior que _value_
+- `<value` : Valor é menor que _value_
+- `value1|value2` : Valor é _value1_ ou _value2_
+- `!value` : Valor não é _value_
+
+### Funções de atributos
+
+Funções de atributos são usados no argumento `attributes`.
+
+> Ex: GET /produto?`attributes=nome,valor,createdAt`
+
+> Ex: GET /produto?`attributes=nome,(sum)valor`&`group=nome`
+
+> Ex: GET /bote?`include=fornecedor`&`attributes=nome,fornecedor.bote`&`group=fornecedor.nome`
+
+| Exemplo             | Descrição                       | Adicional                           |
+|---------------------|---------------------------------|-------------------------------------|
+| `(sum)valor`        | Soma todos os valores do grupo  |**Necessário o argumento `group`**   |
+| `(min)valor`        | Pega o valor minimo do grupo    |**Necessário o argumento `group`**   |
+| `(max)valor`        | Pega o maior valor do grupo     |**Necessário o argumento `group`**   |
+| `(avg)valor`        | Média dos valores do grupo      |**Necessário o argumento `group`**   |
+| `(day)createdAt`    | Retorna apenas o dia da data    |                                     |
+| `(month)createdAt`  | Retorna apenas o mês da data    |                                     |
+| `(year)createdAt`   | Retorna apenas o ano da data    |                                     |
 
 ### Obtendo Todos
 
@@ -127,6 +171,14 @@ Recupera os resultados incluindo suas tabelas mas apenas com os atributos deseja
 
 <br/>
 
+### Comparação de propriedades de tabelas incluídas
+
+```GET /:table?include=produto&produto.id=10```
+
+Recupera os resultados incluindo a tabela `produto` mas apenas aquelas que o `id` da tabela incluída seja `10`.
+
+<br/>
+
 ### Colunas personalizadas
 
 ```GET /:table?attributes=attr1,attr2```
@@ -163,7 +215,7 @@ Cria um novo item na tabela desejada. Os argumentos devem ser enviados no corpo 
 
 ### Criação de varios itens
 
-```POST /:table```
+```POST /:table/bulk```
 
 Cria varios novos itens na tabela desejada. Os argumentos devem ser enviados no corpo da requisição em formato de `array`, por exemplo: 
 
@@ -199,6 +251,32 @@ Edita um item da tabela especificada pelo id fornecido. Os argumentos devem ser 
 
 <br/>
 
+### Edição de varios itens
+
+```PUT /:table/bulk```
+
+Edita varios itens na tabela desejada. Os argumentos devem ser enviados no corpo da requisição em formato de `array`, cada item tem que ter obrigatóriamente o `ID`, por exemplo: 
+
+```json
+[
+    { 
+    "id": 1,
+    "nome": "Camarão", 
+    "preco": 10.55 
+    },
+    { 
+    "id": 5,
+    "nome": "Polvo", 
+    },
+    { 
+    "id": 7,
+    "preco": 22.50, 
+    }
+]
+```
+
+</br>
+
 ## **METODO DELETE - REMOVER**
 
 ### Remoção de um item
@@ -208,6 +286,18 @@ Edita um item da tabela especificada pelo id fornecido. Os argumentos devem ser 
 Deleta o item desejado da tabela especificada pelo id.
 
 <br/>
+
+### Remoção de varios itens
+
+```DELETE /:table/bulk```
+
+Exclui varios itens na tabela desejada. Os argumentos devem ser enviados no corpo da requisição em formato de `array`, cada item é apenas o numero do `ID`: 
+
+```json
+[ 1,5,7 ]
+```
+
+</br>
 
 ## **RESPOSTAS DA API**
 
