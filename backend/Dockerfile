@@ -1,14 +1,20 @@
 FROM node:21-alpine
-WORKDIR /backend
-COPY config config
-COPY src src
-COPY tools tools
 
-COPY index.mjs index.mjs
-COPY package.json package.json
-COPY package-lock.json package-lock.json
+RUN apk add git
 
-COPY tools/genConfigFile.mjs genConfigFile.mjs
+# Clone just the "backend" of github repo
+LABEL random="0"
+WORKDIR /easyfish
+RUN git init
+RUN git branch -m main
+RUN git remote add -f origin https://github.com/Kruceo/easyfish.git
+RUN git config core.sparseCheckout true
+RUN echo "backend" >> .git/info/sparse-checkout
+RUN git pull origin main
+
+RUN apk del git
+
+WORKDIR /easyfish/backend
 
 ENV  DB_USERNAME=postgres
 ENV  DB_PASSWORD=admin
@@ -23,7 +29,7 @@ ENV SECRET=2crows
 
 RUN npm i
 
-RUN echo "node genConfigFile.mjs \$DB_USERNAME \$DB_PASSWORD \$DB_SCHEMA \$DB_PORT \$DB_HOST \$DB_DIALECT \$CORS_ORIGIN \$SECRET ./config/config.json" > start.sh
+RUN echo "node ./tools/genConfigFile.mjs \$DB_USERNAME \$DB_PASSWORD \$DB_SCHEMA \$DB_PORT \$DB_HOST \$DB_DIALECT \$CORS_ORIGIN \$SECRET ./config/config.json" > start.sh
 RUN echo "node index.mjs" >> start.sh
 RUN chmod +x start.sh
 

@@ -14,7 +14,10 @@ server {
        try_files $uri $uri/ /index.html;          
     }                                             
 }`
-if (process.env.PROD)
+
+const prod = process.env.PROD ? true : false
+
+if (prod)
     fs.writeFileSync("/etc/nginx/conf.d/react-app.conf", nginxConfig)
 
 let config = {
@@ -37,6 +40,8 @@ if (!fs.existsSync("./dist/assets")) {
     console.log("dist not exists")
     cp.execSync("npm run build", { stdio: "inherit" })
 }
+
+if (!prod) process.exit()
 
 if (!fs.existsSync("/var/www"))
     fs.mkdirSync("/var/www", { recursive: true })
