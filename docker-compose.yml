@@ -1,3 +1,13 @@
+networks:
+  easyfish:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.128.0.0/16
+volumes:
+  db_data:
+
 services:
   db:
     image: postgres:latest
@@ -60,6 +70,8 @@ services:
     environment:
       - PRINTER_VENDOR=EPSON
       - PRINTER_NAME=TM-T20X
+      - PRINTER_WIDTH=48
+      - PRINTER_CHARSET=WPC1254_Turkish
     devices:
       - "/dev/bus/usb"
     depends_on:
@@ -67,12 +79,3 @@ services:
     networks:
       easyfish:
         ipv4_address: 172.128.0.203
-networks:
-  easyfish:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.128.0.0/16
-volumes:
-  db_data:

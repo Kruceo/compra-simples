@@ -1,41 +1,40 @@
 # Frontend
 
-## Configuration
+## Configuração
 
-All basic necessary config is located at `config.json`.
+Toda configuração básica necessária está localizada em config.json.
 
-Any like this:
+Exemplo:
 
 ```json
 {
-  "api_address": "192.168.0.62",
-  "api_protocol": "http",
-  "api_port": 8080,
-  "printer": {
-      "address": "192.168.0.62",
-      "protocol": "http",
-      "port": 8888
-  }
+"endereco_api": "192.168.0.62",
+"protocolo_api": "http",
+"porta_api": 8080,
+"impressora": {
+"endereco": "192.168.0.62",
+"protocolo": "http",
+"porta": 8888
+}
 }
 ```
 
-## Printer Configuration
+## Configuração da Impressora
 
-The printer config is for the server `kruceo/thermal-printer`, that can be run with **docker**, using the image `rafola/thermal-printer`.
+A configuração da impressora é para o servidor [kruceo/thermal-printer](https://github.com/kruceo/thermal-printer), que pode ser executado com docker, utilizando a imagem [rafola/thermal-printer](https://hub.docker.com/r/rafola/thermal-printer).
 
-## Testing
+# Teste
 
 ```bash
 npm run dev
 ```
 
+# Construção
 
-## Build
-
-One time that build are complete, the config is static.
+Uma vez que a construção esteja completa, a configuração é estática.
 
 ```bash
-npm i 
+npm i
 npm run build
 cd dist
 ```

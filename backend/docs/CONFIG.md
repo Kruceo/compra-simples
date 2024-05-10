@@ -6,9 +6,6 @@
 - [**SERVER**](#server)
 - [**SECURITY**](#security)
 - [**FERRAMENTAS**](#ferramentas)
-  
-  
-
 
 O arquivo de configuração fica localizado em `./config/config.json`.
 
