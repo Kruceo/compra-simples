@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
@@ -13,12 +13,13 @@ import { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import Table from "../../table/Table";
 import TransitionItemAdder from "./TransitionAdder";
 import Button from "../../Layout/Button";
+import { SinglePageInputMapContext } from "../../GlobalContexts/SinglePageInputMap";
 
 export default function CreateEntry(props: { type: 0 | 1 }) {
 
     const navigate = useNavigate()
     const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
-
+    const { setPathKeyHandler } = useContext(SinglePageInputMapContext)
     const [addedTransitionItensData, setAddedTransitionItensData] = useState<transacaoitemProps[]>([])
     const [transitionBoat, setTransitionBoat] = useState<boteProps>()
     const [obs, setObs] = useState("")
@@ -44,23 +45,24 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
         { element: <><i>&#xe9ac;</i>Remover</>, handler: removeTransitionItem }
     ]
     //listener para a tecla f8 finalizar a transacao
-    const keyListenerHandler = (e: KeyboardEvent) => {
+    const keyListenerHandler: React.KeyboardEventHandler = (e) => {
+        // console.log("#",e)
         switch (e.key) {
             case "F8":
-                if (!transitionBoat) break;
+                if (!transitionBoat) {
+                    console.log("breaked")
+                    break
+                };
                 window.document.body.focus()
                 submitHandler(addedTransitionItensData, transitionBoat.id)
-                window.onkeyup = null
                 break;
 
             default:
                 break;
         }
     }
-    useEffect(() => {
-        window.onkeyup = null
-        window.onkeyup = keyListenerHandler
-    }, [transitionBoat, addedTransitionItensData])
+
+    useEffect(()=>setPathKeyHandler(keyListenerHandler),[transitionBoat,addedTransitionItensData])
 
     /** Funcao que finaliza a transacao */
     async function submitHandler(addedItens: transacaoitemProps[], boatID?: number) {

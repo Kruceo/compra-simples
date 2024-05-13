@@ -1,11 +1,12 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
 import { useNavigate } from "react-router-dom";
+import { SinglePageInputMapContext } from "../../GlobalContexts/SinglePageInputMap";
 
 export default function ViewDashboard() {
-
+    const { setPathKeyHandler } = useContext(SinglePageInputMapContext)
     const navigate = useNavigate()
     const keyListenerHandler = (e: KeyboardEvent) => {
         switch (e.key) {
@@ -23,7 +24,8 @@ export default function ViewDashboard() {
         }
     }
     useEffect(() => {
-        window.addEventListener("keyup", keyListenerHandler)
+        setPathKeyHandler(keyListenerHandler as any)
+
     }, [])
     return <>
         <Bar />

@@ -23,6 +23,7 @@ import ViewEntryItemReport from './components/pages/Relatorios/ViewEntryItemRepo
 import ViewTotalsByVendors from './components/pages/Relatorios/ViewTotalsByVendors'
 import ViewPerVendorReceipt from './components/pages/Recibos/ViewPerVendor'
 import EditEntry from './components/pages/Transacao/EditEntry'
+import SinglePageInputMap from './components/GlobalContexts/SinglePageInputMap'
 
 function App() {
 
@@ -31,34 +32,35 @@ function App() {
       <PopupContext>
         <ErrorHandler>
           <TableEngine>
-            <Routes>
-              <Route path='/' element={<Proteged>{<ViewDashboard />}</Proteged>} />
-              <Route path='/view/bote' element={<Proteged>{<ViewBotes />}</Proteged>} />
-              <Route path='/view/produto' element={<Proteged>{<ViewProducts />}</Proteged>} />
-              <Route path='/view/fornecedor' element={<Proteged>{<ViewVendors />}</Proteged>} />
-              <Route path='/create/entrada' element={<Proteged>{<CreateEntry type={0} />}</Proteged>} />
-              <Route path='/create/saida' element={<Proteged>{<CreateEntry type={1} />}</Proteged>} />
-              <Route path='/view/transacao/' element={<Proteged>{<ViewEntry />}</Proteged>} />
-              <Route path='/edit/transacao/' element={<Proteged>{<EditEntry />}</Proteged>} />
-              <Route path='/details/transacao/' element={<Proteged>{<DetailsEntry />}</Proteged>} />
-              <Route path='/print/transacao/' element={<Proteged>{<PrintEntry />}</Proteged>} />
-              <Route path='/report/1' element={<Proteged>{<ViewReports />}</Proteged>} />
-              <Route path='/report/2' element={<Proteged>{<ViewBoatEntryComparationReport />}</Proteged>} />
-              <Route path='/report/3' element={<Proteged>{<ViewTransComparationReport />}</Proteged>} />
-              <Route path='/report/4' element={<Proteged>{<ViewEntryItemReport />}</Proteged>} />
-              <Route path='/report/5' element={<Proteged>{<ViewTotalsByVendors />}</Proteged>} />
+            <SinglePageInputMap>
+              <Routes>
+                <Route path='/' element={<Proteged>{<ViewDashboard />}</Proteged>} />
+                <Route path='/view/bote' element={<Proteged>{<ViewBotes />}</Proteged>} />
+                <Route path='/view/produto' element={<Proteged>{<ViewProducts />}</Proteged>} />
+                <Route path='/view/fornecedor' element={<Proteged>{<ViewVendors />}</Proteged>} />
+                <Route path='/create/entrada' element={<Proteged>{<CreateEntry type={0} />}</Proteged>} />
+                <Route path='/create/saida' element={<Proteged>{<CreateEntry type={1} />}</Proteged>} />
+                <Route path='/view/transacao/' element={<Proteged>{<ViewEntry />}</Proteged>} />
+                <Route path='/edit/transacao/' element={<Proteged>{<EditEntry />}</Proteged>} />
+                <Route path='/details/transacao/' element={<Proteged>{<DetailsEntry />}</Proteged>} />
+                <Route path='/print/transacao/' element={<Proteged>{<PrintEntry />}</Proteged>} />
+                <Route path='/report/1' element={<Proteged>{<ViewReports />}</Proteged>} />
+                <Route path='/report/2' element={<Proteged>{<ViewBoatEntryComparationReport />}</Proteged>} />
+                <Route path='/report/3' element={<Proteged>{<ViewTransComparationReport />}</Proteged>} />
+                <Route path='/report/4' element={<Proteged>{<ViewEntryItemReport />}</Proteged>} />
+                <Route path='/report/5' element={<Proteged>{<ViewTotalsByVendors />}</Proteged>} />
 
-              <Route path='/login' element={<LoginScreen />} />
+                <Route path='/login' element={<LoginScreen />} />
 
-              <Route path='/receipt/once' element={<ViewReceipt />} />
-              <Route path='/receipt/transaction' element={<ViewPerTransReceipt />} />
-              <Route path='/receipt/vendor' element={<ViewPerVendorReceipt />} />
+                <Route path='/receipt/once' element={<ViewReceipt />} />
+                <Route path='/receipt/transaction' element={<ViewPerTransReceipt />} />
+                <Route path='/receipt/vendor' element={<ViewPerVendorReceipt />} />
 
-              <Route path='/teste' element={<Teste />} />
+                <Route path='/teste' element={<Teste />} />
 
-              <Route path='/*' element={<View404 />} />
-            </Routes>
-
+                <Route path='/*' element={<View404 />} />
+              </Routes>
+            </SinglePageInputMap>
           </TableEngine>
         </ErrorHandler>
       </PopupContext>
