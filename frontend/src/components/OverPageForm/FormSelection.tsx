@@ -49,7 +49,7 @@ export default function FormSelection(props: FormSelectionAttributes) {
     }, [useTableWhere, defaultValue])
     return <select ref={ref} {...restProps}
         // defaultValue={defaultValue}
-        className={`bg-transparent px-3 py-2 border-borders border outline-none ${errored ? "border-red-600" : ""} ${props.className}`}>
+        className={`bg-transparent px-3 py-2 border-borders border outline-none ${errored ? "border-red-600" : ""} ${props.className} focus:-outline-offset-2 outline-2 focus:outline-white`}>
         {
             props.children
         }
