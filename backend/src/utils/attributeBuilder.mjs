@@ -16,10 +16,13 @@ export default function attributeBuilder(text) {
 
         switch (fn[0]) {
             case "concat":
-                console.log(parsedName)
+                console.log("######", parsedName)
 
                 const pairs = parsedName.split(/\+| /).reduce((acum, name) => {
-                    acum.push(sequelize.col(name), " ")
+                    if (/^".+"$/.test(name))
+                        acum.push(name.replace(/"/g,""), " ")
+                    else
+                        acum.push(sequelize.col(name), " ")
                     return acum
                 }, [])
 

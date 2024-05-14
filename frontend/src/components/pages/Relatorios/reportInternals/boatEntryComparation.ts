@@ -6,9 +6,9 @@ import { getSigles } from "../../../../constants/stringUtils";
 export async function boatEntryComparation(d1: Date, d2: Date, status: number) {
 
     const resTransactionItens = await backend.get("transacao_item", {
-        include: "transacao[]{bote[]},produto[]",
-        group: "transacao.bote.nome,produto.nome,transacao.tipo",
-        attributes: "transacao.bote.nome,produto.nome,(sum)valor_total,transacao.tipo",
+        include: "transacao[]{bote[]{fornecedor[]}},produto[]",
+        group: "bote_nome,produto.nome,transacao.tipo",
+        attributes: "(concat)transacao.bote.fornecedor.nome+\"-\"+transacao.bote.nome,produto.nome,(sum)valor_total,transacao.tipo",
         "transacao.createdAt":">"+d1.toISOString()+",<"+d2.toISOString(),
         "transacao.status": status,
     })

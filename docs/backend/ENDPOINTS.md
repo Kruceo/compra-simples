@@ -60,15 +60,16 @@ Funções de atributos são usados no argumento `attributes`.
 
 > Ex: GET /bote?`include=fornecedor`&`attributes=nome,fornecedor.bote`&`group=fornecedor.nome`
 
-| Exemplo             | Descrição                       | Adicional                           |
-|---------------------|---------------------------------|-------------------------------------|
-| `(sum)valor`        | Soma todos os valores do grupo  |**Necessário o argumento `group`**   |
-| `(min)valor`        | Pega o valor minimo do grupo    |**Necessário o argumento `group`**   |
-| `(max)valor`        | Pega o maior valor do grupo     |**Necessário o argumento `group`**   |
-| `(avg)valor`        | Média dos valores do grupo      |**Necessário o argumento `group`**   |
-| `(day)createdAt`    | Retorna apenas o dia da data    |                                     |
-| `(month)createdAt`  | Retorna apenas o mês da data    |                                     |
-| `(year)createdAt`   | Retorna apenas o ano da data    |                                     |
+| Exemplo                   | Descrição                                   | Adicional                           |
+|---------------------------|---------------------------------------------|-------------------------------------|
+| `(sum)valor`              | Soma todos os valores do grupo              |**Necessário o argumento `group`**   |
+| `(min)valor`              | Pega o valor minimo do grupo                |**Necessário o argumento `group`**   |
+| `(max)valor`              | Pega o maior valor do grupo                 |**Necessário o argumento `group`**   |
+| `(avg)valor`              | Média dos valores do grupo                  |**Necessário o argumento `group`**   |
+| `(day)createdAt`          | Retorna apenas o dia da data                |                                     |
+| `(month)createdAt`        | Retorna apenas o mês da data                |                                     |
+| `(year)createdAt`         | Retorna apenas o ano da data                |                                     |
+| `(concat)nome+valor`      | Concatena duas ou mais colunas em uma só    |                                     |
 
 ### Obtendo Todos
 
@@ -193,6 +194,22 @@ Pesquisas envolvendo _attributes_ sempre serão retornados em modo **RAW**.
 ```GET /:table?attributes=attr1.preco,(sum)attr.child.valor&include=child&group=preco```
 
 Recupera os resultados agrupando e somando valores de acordo com a query.
+
+<br/>
+
+### Concatenação de attributos e textos
+
+```GET /:table?attributes=(concat)nome+"-"+valor```
+
+Recupera os resultados juntando a coluna "nome" com o caractere "-" e também a coluna "valor".
+
+<br/>
+
+### Concatenação de attributos e agrupamento
+
+```GET /:table?attributes=(concat)nome+"-"+valor```
+
+Recupera os resultados juntando a coluna "nome" com o caractere "-" e também a coluna "valor".
 
 <br/>
 
