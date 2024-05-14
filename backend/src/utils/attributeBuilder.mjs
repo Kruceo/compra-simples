@@ -15,6 +15,19 @@ export default function attributeBuilder(text) {
         const fn = each.match(/(?<=\()\w+(?=\))/) ?? []
 
         switch (fn[0]) {
+            case "concat":
+                console.log(parsedName)
+
+                const pairs = parsedName.split(/\+| /).reduce((acum, name) => {
+                    acum.push(sequelize.col(name), " ")
+                    return acum
+                }, [])
+
+                return [
+                    sequelize.fn("CONCAT", ...pairs.slice(0, pairs.length - 1)),
+                    nick.replace(/\+| /g, "_")
+                ]
+                break;
             case "sum":
                 return [
                     sequelize.fn("SUM", sequelize.col(parsedName)),
