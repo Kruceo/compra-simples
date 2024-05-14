@@ -5,12 +5,12 @@ Guia para instalação em um ambiente Windows junto do Docker Desktop
 ## Requisitos
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) - Motor e gerênciador de containers
-- [Git](https://git-scm.com/) - Ferramenta de repositóios
+- [Git](https://git-scm.com/) - Ferramenta para gerir repositórios
 - [usbipd-win 4.2.0](https://github.com/dorssel/usbipd-win/releases) - Ferramenta para compartilhar dispositivos USB entre o Host e WSL
 
 ## Instalação
 
-Partindo do pré suposto que você já tem o `Docker Desktop`, `Git` e `usbipd-win` instalado e configurado:
+Partindo do pressuposto que você já tem o `Docker Desktop`, `Git` e `usbipd-win` instalado e configurado:
 
 ### Passo 1 - Repositório
 

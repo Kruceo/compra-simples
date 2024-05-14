@@ -1,4 +1,4 @@
-# CONFIG
+# Config
 
 Toda configuração básica necessária está localizada em `./config.json`.
 

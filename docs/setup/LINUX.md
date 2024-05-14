@@ -4,8 +4,8 @@ Guia para instalação em um ambiente Linux.
 
 ## Requisitos
 
-- [Git](https://git-scm.com/) - Ferramenta de repositóios
-- [NodeJS v21.0.0](https://nodejs.org/en) - Runtime de Javascript.
+- [Git](https://git-scm.com/) - Ferramenta para gerir repositórios
+- [NodeJS v21.0.0](https://nodejs.org/en) - Runtime de Javascript
 - [PostgresSQL](https://www.postgresql.org/download/) - Database
 - [Thermal-Printer](https://github.com/Kruceo/thermal-printer) - Servidor para impressoras térmicas
 
