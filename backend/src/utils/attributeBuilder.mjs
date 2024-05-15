@@ -1,28 +1,35 @@
-import sequelize, { SequelizeScopeError } from 'sequelize'
+import sequelize from 'sequelize'
 import { blockedAttributes } from './tableUtils.mjs';
 
 
 export default function attributeBuilder(text) {
     if (!text || text.trim() == '') return { exclude: blockedAttributes.toString() }
+
     if (/DROP|SELECT|select|drop/.test(text)) return;
+
     const splited = text.split(",")
     let attr = splited.map(each => {
         let parsedName = each.replace(/\(\w+?\)/g, '')
         let shortName = parsedName.replace(/\w+?\./g, '')
+
         //this blocks when the user calls /v1/usuario?attributes=senha
-        if (blockedAttributes.includes(shortName)) return "blocked_password";
+        //this block /v1/usuario?attributes=(concat)nome+senha
+        for (const part of parsedName.split(/\.| /)) {
+            if (blockedAttributes.includes(part))
+                return "blocked.blocked";
+        }
+
         let nick = (parsedName.match(/\w+\.\w+$/) ?? [shortName])[0].replace(".", "_")
         const fn = each.match(/(?<=\()\w+(?=\))/) ?? []
 
         switch (fn[0]) {
             case "concat":
-                console.log("######", parsedName)
-
                 const pairs = parsedName.split(/\+| /).reduce((acum, name) => {
                     if (/^".+"$/.test(name))
-                        acum.push(name.replace(/"/g,""), " ")
-                    else
+                        acum.push(name.replace(/"/g, ""), " ")
+                    else {
                         acum.push(sequelize.col(name), " ")
+                    }
                     return acum
                 }, [])
 

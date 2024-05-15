@@ -16,7 +16,10 @@ app.use(cors({
     credentials: cfg.server.cors.credentials // Certifique-se de configurar as credenciais como verdadeiras se estiver enviando cookies
 }));
 
-app.use('/v1', authenticationMiddleware, universalRouter)
+app.use('/v1',
+    authenticationMiddleware,
+    universalRouter
+)
 app.use(authRouter)
 
 app.listen(cfg.server.port, () => console.log(`Server running in ${cfg.server.port}`))
