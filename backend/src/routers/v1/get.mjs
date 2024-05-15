@@ -16,49 +16,49 @@ const hidden = ["usuarios", "users", "usr"]
  * @returns 
  */
 export default async function getRequestHandler(req, res) {
-
-    const tableName = upperCaseLetter(req.params.table, 0)
-
-    let { limit, order, include, attributes, group, ...restQuery } = req.query
-
-    var whereClause = {}
-
-    // Operator clause build , any like the symbol ">2" turns to [Op.gt]:2
-    Object.keys(restQuery).forEach(each => {
-        let newKey = each
-        // case includes "." add $attr$, to get and compare attributes of included tables
-        if (each.includes(".")) newKey = `$${each}$`
-        whereClause[newKey] = opBuilder(restQuery[each])
-    })
-
-    //Ordering clause build, any like ["id","ASC"] or [LiteralTable,"id","DESC"]
-    let orderClause = []
-    if (order) orderClause.push(orderingBuilder(order))
-
-    //group is like: ['car.name','car.price']
-    let groupClause = groupBuilder(group)
-
-    //attributes uses fn.col or fn.sum //url example:  attributes=teste.nome,(sum)teste.price
-    let attributesClause = attributeBuilder(attributes)
-
-    let raw = false
-    if (attributes) raw = true;
-    let fullClause = {
-        where: whereClause,
-        attributes: attributesClause,
-        group: groupClause,
-        limit: limit,
-        include: includeBuilder(include),
-        order: orderClause,
-        raw
-    }
-        ;
-
     try {
+        const tableName = upperCaseLetter(req.params.table, 0)
+
+        let { limit, order, include, attributes, group, ...restQuery } = req.query
+
+        var whereClause = {}
+
+        // Operator clause build , any like the symbol ">2" turns to [Op.gt]:2
+        Object.keys(restQuery).forEach(each => {
+            let newKey = each
+            // case includes "." add $attr$, to get and compare attributes of included tables
+            if (each.includes(".")) newKey = `$${each}$`
+            whereClause[newKey] = opBuilder(restQuery[each])
+        })
+
+        //Ordering clause build, any like ["id","ASC"] or [LiteralTable,"id","DESC"]
+        let orderClause = []
+        if (order) orderClause.push(orderingBuilder(order))
+
+        //group is like: ['car.name','car.price']
+        let groupClause = groupBuilder(group)
+
+        //attributes uses fn.col or fn.sum //url example:  attributes=teste.nome,(sum)teste.price
+        let attributesClause = attributeBuilder(attributes)
+
+        let raw = false
+        if (attributes) raw = true;
+        let fullClause = {
+            where: whereClause,
+            attributes: attributesClause,
+            group: groupClause,
+            limit: limit,
+            include: includeBuilder(include),
+            order: orderClause,
+            raw
+        }
+            ;
+
+
         const data = await tables[tableName].findAll(fullClause)
         res.json({ data })
     } catch (error) {
         return res.status(statusCodes.InternalServerError)
-            .json({ error: true, message: "Houve um erro de SQL: " + error })
+            .json({ error: true, message: error.message })
     }
 }

@@ -2,10 +2,6 @@
 
 ## **SUMÁRIO**
 
-## **SUMÁRIO**
-
-## **SUMÁRIO**
-
 - [**METODO GET - OBTER**](#metodo-get---obter)
   - [Argumentos universais usavéis](#argumentos-universais-usavéis)
   - [Operadores de propriedades de tabela](#operadores-de-propriedades-de-tabela)
@@ -24,6 +20,8 @@
   - [Comparação de propriedades de tabelas incluídas](#comparação-de-propriedades-de-tabelas-incluídas)
   - [Colunas personalizadas](#colunas-personalizadas)
   - [Agrupamento, funções e inclusão](#agrupamento-funções-e-inclusão)
+  - [Concatenação de attributos e textos](#concatenação-de-attributos-e-textos)
+  - [Concatenação de attributos e agrupamento](#concatenação-de-attributos-e-agrupamento)
 - [**METODO POST - CRIAR**](#metodo-post---criar)
   - [Criação de um novo item](#criação-de-um-novo-item)
   - [Criação de varios itens](#criação-de-varios-itens)
@@ -207,7 +205,7 @@ Recupera os resultados juntando a coluna "nome" com o caractere "-" e também a 
 
 ### Concatenação de attributos e agrupamento
 
-```GET /:table?attributes=(concat)nome+"-"+valor```
+```GET /:table?attributes=(concat)nome+valor```
 
 Recupera os resultados juntando a coluna "nome" com o caractere "-" e também a coluna "valor".
 

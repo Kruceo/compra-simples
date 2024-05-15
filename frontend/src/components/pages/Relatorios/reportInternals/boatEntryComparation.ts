@@ -11,6 +11,7 @@ export async function boatEntryComparation(d1: Date, d2: Date, status: number) {
         attributes: "(concat)transacao.bote.fornecedor.nome+\"-\"+transacao.bote.nome,produto.nome,(sum)valor_total,transacao.tipo",
         "transacao.createdAt":">"+d1.toISOString()+",<"+d2.toISOString(),
         "transacao.status": status,
+        order:"bote_nome,ASC"
     })
 
     if (resTransactionItens.data.error || !resTransactionItens.data.data) return console.error(resTransactionItens.data.message)
@@ -63,11 +64,16 @@ export async function boatEntryComparation(d1: Date, d2: Date, status: number) {
     
     const productsKeys = Object.keys(initProducts)
     let styleDisposition = ["bold"]
+    
     styleDisposition[productsKeys.indexOf("Subtotal") + 1] = "bold"
     styleDisposition[productsKeys.length] = "bold"
+
     var lastTable = writeHeader(pdf,"",d1,d2)
     pdf.setFontSize(10)
-    lastTable = writeTable(pdf, table, lastTable.x,lastTable.y2+6, ["Botes", ...getSigles(productsKeys)], [2], styleDisposition)
+    const header = ["Botes", ...getSigles(productsKeys)]
+    
+    lastTable = writeTable(pdf, table, lastTable.x,lastTable.y2+6,header , [2], styleDisposition)
+    
     writeTable(pdf,[], lastTable.x, lastTable.y2+6, totalsTable as string[], [2], styleDisposition)
     openPDF(pdf)
 }

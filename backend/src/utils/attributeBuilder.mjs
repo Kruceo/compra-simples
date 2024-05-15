@@ -5,8 +5,6 @@ import { blockedAttributes } from './tableUtils.mjs';
 export default function attributeBuilder(text) {
     if (!text || text.trim() == '') return { exclude: blockedAttributes.toString() }
 
-    if (/DROP|SELECT|select|drop/.test(text)) return;
-
     const splited = text.split(",")
     let attr = splited.map(each => {
         let parsedName = each.replace(/\(\w+?\)/g, '')
@@ -16,7 +14,7 @@ export default function attributeBuilder(text) {
         //this block /v1/usuario?attributes=(concat)nome+senha
         for (const part of parsedName.split(/\.| /)) {
             if (blockedAttributes.includes(part))
-                return "blocked.blocked";
+                throw new Error("Atributo bloqueado")
         }
 
         let nick = (parsedName.match(/\w+\.\w+$/) ?? [shortName])[0].replace(".", "_")
@@ -25,8 +23,10 @@ export default function attributeBuilder(text) {
         switch (fn[0]) {
             case "concat":
                 const pairs = parsedName.split(/\+| /).reduce((acum, name) => {
-                    if (/^".+"$/.test(name))
-                        acum.push(name.replace(/"/g, ""), " ")
+                    if (/^".+"$/.test(name)) {
+                        const str = name.replace(/"/g, "")
+                        acum.push(sequelize.literal(`' ${str}'`), " ")
+                    }
                     else {
                         acum.push(sequelize.col(name), " ")
                     }
