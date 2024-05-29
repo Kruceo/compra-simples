@@ -31,7 +31,7 @@ module.exports = {
         "default-text": "#c0c0c0",
         borders: "#262626",
         hovers: "#222",
-        selected:"#224"
+        selected: "#224"
 
         // toolbar: "#753341",
         // bar: "#722233",
@@ -47,6 +47,15 @@ module.exports = {
         // selected:"#997788"
 
       },
+      keyframes: {
+        "skeleton-fade": {
+          "0%": { transform: "translate(-100%,0%)",background: "linear-gradient(90deg,transparent,#fff1,transparent)" },
+          "100%": { transform: "translate(100%,0%)",background: "linear-gradient(90deg,transparent,#fff1,transparent)" }
+        }
+      },
+      animation:{
+        "skeleton-fade":"skeleton-fade 1s infinite linear"
+      }
     },
   },
   plugins: [],

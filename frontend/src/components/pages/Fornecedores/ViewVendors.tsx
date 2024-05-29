@@ -19,6 +19,8 @@ export default function ViewVendors() {
     const [update, setUpdate] = useState(true)
     const [where, setWhere] = useState<any>({})
 
+    const [loadingData, setLoadingData] = useState<boolean>(false)
+
     const setWhereKey = (key: string, value: string) => {
         const mockup = { ...where }
         mockup[key] = value
@@ -27,9 +29,11 @@ export default function ViewVendors() {
 
     const table_to_manage = "fornecedor"
 
-    const { defaultDataGet,defaultDataDelete } = useContext(TableEngineContext)
+    const { defaultDataGet, defaultDataDelete } = useContext(TableEngineContext)
     useEffect(() => {
+        setLoadingData(true)
         defaultDataGet(table_to_manage, where, setData)
+            .then(() => setLoadingData(false))
     }, [update])
 
 
@@ -93,7 +97,7 @@ export default function ViewVendors() {
                 searchHandler={searchHandler}
             />
             <div className="w-full h-full mt-[6.5rem]">
-                <Table
+                <Table loading={loadingData}
                     contextMenu={{ buttons: tableContextMenuButtons }}
                     onOrderChange={orderHandler}
                     data={data}

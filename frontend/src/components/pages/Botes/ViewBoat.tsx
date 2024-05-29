@@ -19,6 +19,8 @@ export default function ViewBoat() {
     const [update, setUpdate] = useState(true)
     const [where, setWhere] = useState<any>({ include: 'fornecedor' })
 
+    const [loadingData,setLoadingData] = useState<boolean>(false)
+
     const setWhereKey = (key: string, value: string) => {
         const mockup = { ...where }
         mockup[key] = value
@@ -28,7 +30,8 @@ export default function ViewBoat() {
     const table_to_manage = "bote"
 
     useEffect(() => {
-        defaultDataGet(table_to_manage, where, setData)
+        setLoadingData(true)
+        defaultDataGet(table_to_manage, where, setData).then(()=>setLoadingData(false))
     }, [update])
 
     // Quando é alterado a ordem
@@ -94,6 +97,7 @@ export default function ViewBoat() {
             />
             <div className="w-full h-full mt-[6.5rem]">
                 <Table
+                    loading={loadingData}
                     contextMenu={{ buttons: tableContextMenuButtons }}
                     data={data}
                     onOrderChange={orderHandler}

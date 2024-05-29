@@ -41,6 +41,9 @@ export default function Teste() {
 
     return <>
         <div>
+            <div className="w-64 h-64 overflow-hidden after:animate-skeleton-fade after:content-['%'] after:w-full after:h-full after:flex">
+
+            </div>
             <main>
                 <select name="mode" id="" onChange={(e) => setM(e.currentTarget.value)}>
                     <option value="GET">GET</option>

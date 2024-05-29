@@ -17,9 +17,10 @@ export default function ViewPerTransReceipt() {
     const { defaultDataGet } = useContext(TableEngineContext)
     const [data, setData] = useState<(transacaoProps & { bote: boteProps & { fornecedor: fornecedorProps } })[]>([])
     const [selected, setSelected] = useState<number[]>([])
+    const [loadingData,setLoadingData] = useState<boolean>(false)
     useEffect(() => {
-        defaultDataGet("transacao", { include: "bote{fornecedor}", tipo: 0, status: TRANSACTION_OPEN }, setData)
-        console.log(data)
+        setLoadingData(true)
+        defaultDataGet("transacao", { include: "bote{fornecedor}", tipo: 0, status: TRANSACTION_OPEN }, setData).then(()=>setLoadingData(false))
     }, [])
 
     function generateReceipts() {
@@ -35,7 +36,6 @@ export default function ViewPerTransReceipt() {
                 return;
             }
             lastBox = WriteReceipt2PDF(pdf, lastBox.y2 + 10, valor, bote.fornecedor?.nome ?? "Não definido", saturdayDate, "PAGTO FORNECIMENTO DE MERCADORIAS")
-
         })
         openPDF(pdf)
     }
@@ -53,6 +53,7 @@ export default function ViewPerTransReceipt() {
             </SubTopBar>
             <div className="w-full h-full mt-[6.5rem]">
                 <Table
+                    loading={loadingData}
                     data={data as transacaoProps[]}
                     tableItemHandler={(item: any) => {
                         let status = "Desconhecido"

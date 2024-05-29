@@ -28,6 +28,8 @@ export default function ViewEntry() {
     const blockedWhere = { include: "bote{fornecedor},usuario", limit: 100 }
     const [where, setWhere] = useState<any>({ ...blockedWhere, status: TRANSACTION_OPEN, order: "updatedAt,DESC" })
 
+    const [loadingData, setLoadingData] = useState(false)
+
     const setWhereKey = (key: string, value: string) => {
         const mockup = { ...where }
         mockup[key] = value
@@ -36,7 +38,8 @@ export default function ViewEntry() {
 
     const table_to_manage = "transacao"
     useEffect(() => {
-        defaultDataGet(table_to_manage, where, setData)
+        setLoadingData(true)
+        defaultDataGet(table_to_manage, where, setData).then(() => setLoadingData(false))
         window.addEventListener("scrollend", () => {
             console.log(window.scrollY + window.innerHeight, document.body.scrollHeight)
             if (window.scrollY + window.innerHeight > document.body.scrollHeight) {
@@ -104,6 +107,7 @@ export default function ViewEntry() {
             </SubTopBar>
             <div className="w-full h-full mt-[6.5rem]">
                 <Table
+                    loading={loadingData}
                     selected={selected}
                     selectedSetter={setSelected}
                     onOrderChange={orderHandler}
@@ -123,7 +127,7 @@ export default function ViewEntry() {
                         "ID", "Bote", "Fornecedor", "Peso (KG)", "Valor", "Data", "T"
                     ]}
                     contextMenu={{ buttons: tableContextMenuButtons }}
-                />
+                />  
             </div>
         </Content>
     </>

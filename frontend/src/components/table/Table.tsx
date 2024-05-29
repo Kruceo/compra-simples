@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import TableItem from "./TableItem";
 import TableContextMenu, { ContextMenuButton } from "./TableContextMenu";
 import { GlobalPopupsContext } from "../GlobalContexts/PopupContext";
+import SkeletonContainer from "../Layout/SkeletonContainer";
 
 export interface TableOrderEvent {
     key: string | string[],
@@ -18,12 +19,14 @@ interface TableAttributes {
     contextMenu?: { buttons: { element: React.ReactNode, handler: (id: number) => any }[] }
     enableContextMenu?: boolean,
 
+    loading?: boolean,
+
     selected?: number[],
     selectedSetter?: (d: number[]) => any
 }
 
 export default function Table(props: TableAttributes) {
-    let { data, disposition, tableHeader, tableItemHandler, tableOrderKeys, onOrderChange, enableContextMenu } = props
+    let { data, disposition, tableHeader, tableItemHandler, tableOrderKeys, onOrderChange, enableContextMenu, loading } = props
 
     //Usado para o menu de contexto
     const { setGlobalPopupByKey } = useContext(GlobalPopupsContext)
@@ -67,8 +70,18 @@ export default function Table(props: TableAttributes) {
                     </div>
                 })}
         </TableItem>
-        {data.length === 0 ? <p className="p-4 w-full text-center">Nenhum item</p> : null}
         {
+            loading ?
+                <div className={"flex flex-col gap-4 h-fit w-full p-4"}>
+                    {
+                        "0,".repeat(5).split(",")
+                            .map((_, index) => <SkeletonContainer key={index} className="h-12"/>)
+                    }
+                </div>
+                : null
+        }
+        {data.length === 0 && !loading ? <p className="p-4 w-full text-center">Nenhum item</p> : null}
+        {   !loading?
             data.map((item, index) => {
 
                 const itemID = item.id
@@ -101,6 +114,7 @@ export default function Table(props: TableAttributes) {
                     }
                 </TableItem>
             })
+            :null
         }
     </div >
 }

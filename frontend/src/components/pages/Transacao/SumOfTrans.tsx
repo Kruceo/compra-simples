@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import { TableEngineContext } from "../../GlobalContexts/TableEngineContext"
 import beautyNumber from "../../../constants/numberUtils"
+import SkeletonContainer from "../../Layout/SkeletonContainer"
 
 export default function SumOfTrans(props: { where: any ,update?:boolean}) {
 
@@ -33,6 +34,10 @@ export default function SumOfTrans(props: { where: any ,update?:boolean}) {
             setTotals({value:totalValue,weight:totalWeight})
         })
     }, [props.where,props.update])
+
+    if(totals.value <0 && totals.weight<0){
+        return <SkeletonContainer className="inline-block w-28 h-3"/>
+    }
 
     return `R$ ${beautyNumber(totals.value)} / ${totals.weight} KG`
 }

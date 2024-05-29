@@ -17,15 +17,18 @@ interface PerVendorResponse {
     fornecedor_nome: string, valor: number, tipo: boolean, id: number, bote_fornecedor_id: number
 }
 
-interface ParsedVendorResponse{
-    value:number,id:number,desconts:number,total:number,nome:string
+interface ParsedVendorResponse {
+    value: number, id: number, desconts: number, total: number, nome: string
 }
 
 export default function ViewPerVendorReceipt() {
     const { defaultDataGet } = useContext(TableEngineContext)
     const [data, setData] = useState<ParsedVendorResponse[]>([])
     const [selected, setSelected] = useState<number[]>([])
+    const [loadingData, setLoadingData] = useState(false)
+
     useEffect(() => {
+        setLoadingData(true)
         defaultDataGet("transacao", {
             include: "bote[]{fornecedor[]}",
             attributes: "bote.fornecedor_id,bote.fornecedor.nome,(sum)valor,tipo",
@@ -33,8 +36,8 @@ export default function ViewPerVendorReceipt() {
             status: TRANSACTION_OPEN
         }, (d: PerVendorResponse[]) => {
 
-            let p:ParsedVendorResponse[] = d.reduce((acum, next) => {
-                if (!acum[next.bote_fornecedor_id]) acum[next.bote_fornecedor_id] = { nome: next.fornecedor_nome, desconts: 0, value: 0, total: 0 ,id:-1}
+            let p: ParsedVendorResponse[] = d.reduce((acum, next) => {
+                if (!acum[next.bote_fornecedor_id]) acum[next.bote_fornecedor_id] = { nome: next.fornecedor_nome, desconts: 0, value: 0, total: 0, id: -1 }
                 if (next.tipo) {
                     acum[next.bote_fornecedor_id].desconts += next.valor
                 } else acum[next.bote_fornecedor_id].value += next.valor
@@ -43,8 +46,9 @@ export default function ViewPerVendorReceipt() {
                 return acum
             }, [] as ParsedVendorResponse[])
 
-            p = p.filter(each=>each!=null).map((each,index) => { return { ...each, id: parseInt(`${index}`) } })
+            p = p.filter(each => each != null).map((each, index) => { return { ...each, id: parseInt(`${index}`) } })
             setData(p)
+            setLoadingData(false)
         })
 
     }, [])
@@ -79,6 +83,7 @@ export default function ViewPerVendorReceipt() {
             </SubTopBar>
             <div className="w-full h-full mt-[6.5rem]">
                 <Table
+                    loading={loadingData}
                     data={data as any}
                     tableItemHandler={(item: ParsedVendorResponse) => {
                         return [
@@ -90,7 +95,7 @@ export default function ViewPerVendorReceipt() {
                         ]
                     }}
                     disposition={[2, 1, 1]}
-                    tableHeader={["Fornecedor", "Valor", "Descontos","Total"]}
+                    tableHeader={["Fornecedor", "Valor", "Descontos", "Total"]}
                     enableContextMenu={false}
                     selected={selected}
                     selectedSetter={setSelected}
