@@ -17,7 +17,7 @@
     "security": {
         "jwt": {
             "secret": "abc",
-            "tokenExpireTime": "24h"
+            "tokenExpireTime": "48h"
         },
         "prefixLength": 6,
         "sufixLength": 10

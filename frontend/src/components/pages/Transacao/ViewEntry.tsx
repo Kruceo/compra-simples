@@ -25,7 +25,7 @@ export default function ViewEntry() {
     const [data, setData] = useState<transacaoProps[]>([]);
     const [selected, setSelected] = useState<number[]>([])
     const [update, setUpdate] = useState(true)
-    const blockedWhere = { include: "bote{fornecedor},usuario", limit: 100 }
+    const blockedWhere = { include: "bote{fornecedor},usuario", limit: 200 }
     const [where, setWhere] = useState<any>({ ...blockedWhere, status: TRANSACTION_OPEN, order: "updatedAt,DESC" })
 
     const [loadingData, setLoadingData] = useState(false)
@@ -41,13 +41,11 @@ export default function ViewEntry() {
         setLoadingData(true)
         defaultDataGet(table_to_manage, where, setData).then(() => setLoadingData(false))
         window.addEventListener("scrollend", () => {
-            console.log(window.scrollY + window.innerHeight, document.body.scrollHeight)
             if (window.scrollY + window.innerHeight > document.body.scrollHeight) {
-                const limit = parseInt(where.limit) + 25
+                const limit = parseInt(where.limit) + 100
                 setWhereKey("limit", limit.toString())
             }
         })
-        console.log(data.length)
     }, [update, where])
 
     // Quando é alterado a ordem
@@ -103,7 +101,6 @@ export default function ViewEntry() {
                 }}><i>&#xe997;</i> Selecionar Todos</ToolBarButton>
                 <ToolBarButton enabled={selected.length > 0} onClick={closeHandler}>
                     <i>&#xe95e;</i> Fechamento</ToolBarButton>
-                {/* <ToolBarButton className="hover:bg-green-100" onClick={() => navigate("/create/entrada")}><i>&#xea3b;</i> Criar</ToolBarButton> */}
             </SubTopBar>
             <div className="w-full h-full mt-[6.5rem]">
                 <Table

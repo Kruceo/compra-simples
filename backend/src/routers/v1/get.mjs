@@ -51,12 +51,10 @@ export default async function getRequestHandler(req, res) {
             include: includeBuilder(include),
             order: orderClause,
             raw
-        }
-            ;
-
-
+        };
         const data = await tables[tableName].findAll(fullClause)
         res.json({ data })
+
     } catch (error) {
         return res.status(statusCodes.InternalServerError)
             .json({ error: true, message: error.message })

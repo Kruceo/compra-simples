@@ -20,7 +20,10 @@ async function authenticateUser(user, password) {
         expiresIn: cfg.security.jwt.tokenExpireTime
     })
 
-    return { token }
+    const expiresIn = calcExpiresIn(cfg.security.jwt.tokenExpireTime)
+
+
+    return { token, expiresIn: expiresIn.toISOString() }
 
 }
 
@@ -45,11 +48,30 @@ async function authenticationMiddleware(req, res, next) {
 
     //Provide the user to other services can use 
     req.auth = { user: validadtion }
-    
+
     if (!validadtion) return res.status(statusCodes.Unauthorized).json({
         error: true, message: "Autorização inválida."
     })
     next()
+}
+
+function calcExpiresIn(str) {
+    const key = str.replace(/\d+/, "")
+    const value = parseInt(str.replace(/[a-z]/g, ""))
+    const thisDate = new Date()
+    if (key == "s") {
+        thisDate.setSeconds(thisDate.getSeconds() + value)
+    }
+    if (key == "m") {
+        thisDate.setMinutes(thisDate.getMinutes() + value)
+    }
+    if (key == "h") {
+        thisDate.setHours(thisDate.getHours() + value)
+    }
+    if (key == "d") {
+        thisDate.setDate(thisDate.getDate() + value)
+    }
+    return thisDate
 }
 
 export { authenticateUser, authenticateToken, authenticationMiddleware }
