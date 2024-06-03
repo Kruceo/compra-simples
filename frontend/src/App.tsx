@@ -26,13 +26,13 @@ import EditEntry from './components/pages/Transacao/EditEntry'
 import SinglePageInputMap from './components/GlobalContexts/SinglePageInputMap'
 
 function App() {
-
   return (
     <>
       <PopupContext>
         <ErrorHandler>
           <TableEngine>
             <SinglePageInputMap>
+
               <Routes>
                 <Route path='/' element={<Proteged>{<ViewDashboard />}</Proteged>} />
                 <Route path='/view/bote' element={<Proteged>{<ViewBotes />}</Proteged>} />
@@ -60,6 +60,7 @@ function App() {
 
                 <Route path='/*' element={<View404 />} />
               </Routes>
+
             </SinglePageInputMap>
           </TableEngine>
         </ErrorHandler>

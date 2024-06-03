@@ -23,6 +23,7 @@ export default function TableItem(props: TableBarAttributes) {
     const gridTemplateColumns = disposition.reduce((acum, next) => acum + ` ${next}fr`, "")
 
     return <div
+        id="table-item"
         onContextMenu={props.onContextMenu}
         style={{ gridTemplateColumns: gridTemplateColumns }}
         className={`relative grid items-center p-4 transition-colors ${(!headerMode && !props.selected ? "hover:bg-hovers" : "font-bold shadow-lg")} ${props.selected == true ? "bg-selected hover:brightness-125" : ""} ${props.className}`}
