@@ -30,7 +30,7 @@ export default function Teste() {
         }, table[0].map(()=>0))
 
         
-        let lastbox = writeHeader(pdf,"",new Date(),new Date())
+        const lastbox = writeHeader(pdf,"",new Date(),new Date())
         pdf.setFontSize(12)
         writeTable(pdf, table, lastbox.x, lastbox.y2+6, header,disposition)
 
@@ -61,7 +61,7 @@ export default function Teste() {
                 setBody(e.currentTarget.value)
             }} />
             <Button className="mx-4" onClick={async () => {
-                let b = m == "GET" ? undefined : body
+                const b = m == "GET" ? undefined : body
                 const res = await fetch(add, {
                     body: b,
                     method: m,

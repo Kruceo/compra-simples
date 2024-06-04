@@ -1,9 +1,7 @@
 import OverPageInfo from "../Layout/OverPageInfo";
 import React, { createContext, useState, ReactElement, Dispatch, SetStateAction, PropsWithChildren } from 'react';
 
-interface PopupContent {
-    [key: string]: ReactElement | null;
-}
+type PopupContent = Record<string, ReactElement | null>;
 
 interface GlobalPopupsContextType {
     globalPopups: PopupContent;
@@ -23,7 +21,7 @@ export const GlobalPopupsContext = createContext<GlobalPopupsContextType>({
 
 export default function PopupContext(props: PropsWithChildren) {
 
-    const [globalPopups, setGlobalPopups] = useState<{ [key: string]: React.ReactElement | null }>({});
+    const [globalPopups, setGlobalPopups] = useState<Record<string, React.ReactElement | null>>({});
 
     function setGlobalPopupByKey(key: string, content: React.ReactElement | null) {
         setGlobalPopups(prevGlobalPopups => {

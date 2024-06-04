@@ -15,7 +15,7 @@ export default function TableItem(props: TableBarAttributes) {
 
     const children = Array.isArray(props.children) ? props.children : [props.children]
 
-    let disposition = Array.from({ length: children.length }, () => 1)
+    const disposition = Array.from({ length: children.length }, () => 1)
     if (props.disposition) props.disposition.forEach((each, index) =>
         disposition[index] = each
     )

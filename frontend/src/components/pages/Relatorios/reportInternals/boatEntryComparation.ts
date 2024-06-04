@@ -33,7 +33,7 @@ export async function boatEntryComparation(d1: Date, d2: Date, status: number) {
         }, {} as any),
         Total: 0
     }
-    let totals: any = { ...initProducts }
+    const totals: any = { ...initProducts }
     const reduced = data.reduce((acum, next) => {
         if (!acum[next.bote_nome]) acum[next.bote_nome] = { ...initProducts }
         acum[next.bote_nome][next.produto_nome] = next.valor_total
@@ -63,12 +63,12 @@ export async function boatEntryComparation(d1: Date, d2: Date, status: number) {
     const pdf = new jsPDF({orientation:"landscape"})
     
     const productsKeys = Object.keys(initProducts)
-    let styleDisposition = ["bold"]
+    const styleDisposition = ["bold"]
     
     styleDisposition[productsKeys.indexOf("Subtotal") + 1] = "bold"
     styleDisposition[productsKeys.length] = "bold"
 
-    var lastTable = writeHeader(pdf,"",d1,d2)
+    let lastTable = writeHeader(pdf,"",d1,d2)
     pdf.setFontSize(10)
     const header = ["Botes", ...getSigles(productsKeys)]
     

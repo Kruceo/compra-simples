@@ -1,6 +1,6 @@
 export default function TableContextMenu(props: { x: number, y: number, children: React.ReactNode }) {
 
-    let { x, y } = props
+    const { x, y } = props
     let transformY = "0%"
     let transformX = "0%"
     if (y > window.screen.height - 240)
@@ -8,7 +8,7 @@ export default function TableContextMenu(props: { x: number, y: number, children
     if (x > window.screen.width - 240)
         transformX = "-100%"
 
-    return <div className="bg-subpanel shadow-lg border-borders border min-w-40 flex flex-col fixed z-50" style={{ left: x, top: y, transform: `translate(${transformX},${transformY})` }}>
+    return <div id="table-context-menu" className="bg-subpanel shadow-lg border-borders border min-w-40 flex flex-col fixed z-50" style={{ left: x, top: y, transform: `translate(${transformX},${transformY})` }}>
         {props.children}
     </div>
 }

@@ -12,7 +12,7 @@ export default function FilterEntryForm(props: OverPageFormAttributes & { whereS
     const [maxDate, setMaxDate] = useState<Date>()
     const [minDate, setMinDate] = useState<Date>()
     const setWhereKey = (key: string, val: any) => {
-        let mockup: any = where
+        const mockup: any = where
         if (!val) delete mockup[key]
         else mockup[key] = val
         setWhere({ ...mockup, createdAt: genDateString() })
@@ -24,7 +24,7 @@ export default function FilterEntryForm(props: OverPageFormAttributes & { whereS
     //gera a clausula da data como >data ou <data ou os dois 
     const genDateString = () => {
         if (!minDate && !maxDate) return undefined
-        let clauses: string[] = []
+        const clauses: string[] = []
         if (minDate) clauses.push(">" + minDate.toISOString())
         if (maxDate) clauses.push("<" + maxDate.toISOString())
         return clauses.toString()

@@ -27,7 +27,7 @@ export default function FormSelection(props: FormSelectionAttributes) {
 
             setLoadingData(true)
 
-            let res = await backend.get(useTable, useTableWhere ?? {})
+            const res = await backend.get(useTable, useTableWhere ?? {})
 
             if (res.data.error) {
                 pageErrorHandler(res)

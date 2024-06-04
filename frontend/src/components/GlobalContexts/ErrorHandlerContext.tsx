@@ -22,7 +22,7 @@ export default function ErrorHandler(props: PropsWithChildren) {
         }
 
             
-        let message = axiosResponse.data.message ?? axiosResponse.statusText
+        const message = axiosResponse.data.message ?? axiosResponse.statusText
         simpleSpawnInfo(message)
     }
 

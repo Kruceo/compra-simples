@@ -4,7 +4,7 @@
         "password": "example",
         "port": 5432,
         "schema": "principal",
-        "host": "localhost",
+        "host": "192.168.0.62",
         "dialect": "postgres"
     },
     "server": {

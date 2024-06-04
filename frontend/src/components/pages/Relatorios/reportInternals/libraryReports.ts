@@ -13,10 +13,10 @@ interface PdfItemBoundings {
 
 export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: number, startY: number, header: string[], dispositionOfData?: number[], dispositionOfStyle?: string[]): PdfItemBoundings {
 
-    let sX = startX
-    let sY = startY
+    const sX = startX
+    const sY = startY
 
-    let disposition = (data[0]??header).map((_, index) => dispositionOfData ? (dispositionOfData[index] ?? 1) : 1)
+    const disposition = (data[0]??header).map((_, index) => dispositionOfData ? (dispositionOfData[index] ?? 1) : 1)
     const dispositionSum = disposition.reduce((acum, next) => acum + next, 0)
 
     const fullW = pdf.internal.pageSize.width

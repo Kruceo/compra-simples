@@ -43,7 +43,7 @@ export default async function totalsByVendors(d1: Date, d2: Date, status: number
     console.log("#####", table)
 
     const pdf = new jsPDF()
-    let lastBox = writeHeader(pdf, '', d1, d2)
+    const lastBox = writeHeader(pdf, '', d1, d2)
     pdf.setFontSize(10)
     writeTable(pdf, table, lastBox.x, lastBox.y2 + 6, ["Fornecedor", "Peso","Valor","Descontos","Total"],[2])
 

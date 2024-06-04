@@ -27,7 +27,7 @@ export default function TableEngine(props: PropsWithChildren) {
     }
 
     const defaultDataDelete = async (table: allTableNames, id: number) => {
-        const promise: Promise<void> = new Promise((resolve) => {
+        const promise = new Promise<void>((resolve) => {
             const onAcceptHandler = async () => {
                 const response = await backend.remove(table, id)
                 if (response.data.error)

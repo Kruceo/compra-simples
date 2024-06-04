@@ -52,10 +52,10 @@ export async function printSingleEntry(id: number | string) {
     localStorage.setItem("printerSessionLocker", "true")
     const width: number = (await thermalPrinter.getWidth()).data.width
     const chunkSize = width / 4
-    let d = await backend.get('transacao', { include: "bote{fornecedor},transacao_item{produto[nome]}", id })
+    const d = await backend.get('transacao', { include: "bote{fornecedor},transacao_item{produto[nome]}", id })
     if (d.data.error || !d.data.data || !Array.isArray(d.data.data)) return console.error(d.data.message);
 
-    let queries: string[][] = []
+    const queries: string[][] = []
     const item: transacaoProps = d.data.data[0]
     const itemDate = new Date(item.createdAt)
     const itemDateString = itemDate.toLocaleDateString() + ' ' + itemDate.toLocaleTimeString()

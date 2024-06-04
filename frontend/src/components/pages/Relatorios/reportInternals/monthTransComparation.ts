@@ -21,7 +21,7 @@ export default async function monthTransComparation(date1:Date,date2:Date,status
         return [junction,...Object.values(rest)]
     }) as string[][]
 
-    let lastBoundingBox = writeHeader(pdf,new Date().toLocaleDateString().slice(0,5),date1,date2)
+    const lastBoundingBox = writeHeader(pdf,new Date().toLocaleDateString().slice(0,5),date1,date2)
     pdf.setFontSize(12)
     writeTable(pdf,table,lastBoundingBox.x,lastBoundingBox.y2+7,["Mês/Ano","Peso","Valor"],[1,3,3])
 

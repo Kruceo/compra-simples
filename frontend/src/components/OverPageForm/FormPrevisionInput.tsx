@@ -19,7 +19,7 @@ interface FormPrevisionInputAttributes extends DefaultFormInput {
 export default function FormPrevisionInput(props: FormPrevisionInputAttributes) {
     const { defaultDataGet } = useContext(TableEngineContext)
     const visibleInputRef = useRef<HTMLInputElement>(null)
-    let { where, searchInTable, errored, next, placeholder, autoFocus, name, onChange, itemHandler, className } = props
+    const { where, searchInTable, errored, next, placeholder, autoFocus, name, onChange, itemHandler, className } = props
 
     const onBlurHandler: EventListener = (e: unknown) => {
         const t = e as React.FocusEvent<HTMLInputElement>
@@ -33,8 +33,8 @@ export default function FormPrevisionInput(props: FormPrevisionInputAttributes) 
     const inputHandler = () => {
 
         if (!visibleInputRef.current) return;
-        let w: any = {}
-        let v = visibleInputRef.current.value
+        const w: any = {}
+        const v = visibleInputRef.current.value
         if (v == "") return;
         if (includeJustNumbers(v))
             w['id'] = v
@@ -128,7 +128,7 @@ function Sugestions(props: { data: Object & { id: number }[], itemHandler: (item
 
 function includeJustNumbers(s: string) {
     // Percorre cada caractere da string
-    for (let char of s) {
+    for (const char of s) {
         // Se o caractere não for um dígito
         if (isNaN(parseInt(char))) {
             return false;

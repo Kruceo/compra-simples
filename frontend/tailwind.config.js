@@ -49,8 +49,8 @@ module.exports = {
       },
       keyframes: {
         "skeleton-fade": {
-          "0%": { transform: "translate(-100%,0%)",background: "linear-gradient(90deg,transparent,#fff1,transparent)" },
-          "100%": { transform: "translate(100%,0%)",background: "linear-gradient(90deg,transparent,#fff1,transparent)" }
+          "0%": { transform: "translate(-100%,0%)",background: "linear-gradient(90deg,transparent ,#fff1,#58a1,#fff1 ,transparent)" },
+          "100%": { transform: "translate(100%,0%)",background: "linear-gradient(90deg,transparent,#fff1,#58a1,#fff1,transparent)" }
         }
       },
       animation:{

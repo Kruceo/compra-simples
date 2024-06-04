@@ -62,7 +62,7 @@ export async function priceComparation(d1: Date, d2: Date,status:number) {
 
 
 function processInfo(data: transacaoProps[]) {
-    let table = data.map(each => Object.values(each))
+    const table = data.map(each => Object.values(each))
 
     let totalWeight = 0
     let totalValue = 0

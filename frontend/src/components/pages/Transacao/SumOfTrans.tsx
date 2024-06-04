@@ -7,7 +7,7 @@ export default function SumOfTrans(props: { where: any ,update?:boolean}) {
 
     const { defaultDataGet } = useContext(TableEngineContext)
     const [totals, setTotals] = useState<{value:number,weight:number}>({value:-1,weight:-1})
-    let mockWhere = { ...props.where }
+    const mockWhere = { ...props.where }
 
     delete mockWhere.limit
 
@@ -21,12 +21,12 @@ export default function SumOfTrans(props: { where: any ,update?:boolean}) {
 
     useEffect(() => {
         defaultDataGet("transacao", mockWhere, (data: { valor: number,peso:number, tipo: boolean }[]) => {
-            let totalValue: number = data.reduce((acum, next) => {
+            const totalValue: number = data.reduce((acum, next) => {
                 if (next.tipo) return acum - next.valor
                 else return acum + next.valor
             }, 0)
 
-            let totalWeight: number = data.reduce((acum, next) => {
+            const totalWeight: number = data.reduce((acum, next) => {
                 if (!next.tipo) return acum + next.peso
                 return acum
             }, 0)

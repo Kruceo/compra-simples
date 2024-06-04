@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TableItem from "./TableItem";
 import TableContextMenu, { ContextMenuButton } from "./TableContextMenu";
 import { GlobalPopupsContext } from "../GlobalContexts/PopupContext";
@@ -26,7 +26,7 @@ interface TableAttributes {
 }
 
 export default function Table(props: TableAttributes) {
-    let { data, disposition, tableHeader, tableItemHandler, tableOrderKeys, onOrderChange, enableContextMenu, loading } = props
+    const { data, disposition, tableHeader, tableItemHandler, tableOrderKeys, onOrderChange, enableContextMenu, loading } = props
 
     //Usado para o menu de contexto
     const { setGlobalPopupByKey } = useContext(GlobalPopupsContext)
@@ -62,7 +62,7 @@ export default function Table(props: TableAttributes) {
             let currentEl: HTMLElement = e.target
             let reached = false
             for (let x = 0; x < 4; x++) {
-                if (currentEl.id === "table-item") {
+                if (currentEl.id === "table-item"||currentEl.id==="table-context-menu") {
                     reached = true
                     break
                 }
