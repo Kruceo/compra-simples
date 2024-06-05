@@ -2,6 +2,7 @@ import Cookies from "js-cookie"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import pkg from '../../../package.json'
+import logo from "../../assets/fish.svg"
 
 export default function Bar() {
 
@@ -22,7 +23,10 @@ export default function Bar() {
     const user = Cookies.get("user")
     return <>
 
-        <header className="bg-bar w-full h-14 fixed left-0 top-0 flex items-center border-b border-borders z-[51] shadow-sm">
+        <header className="bg-bar border-b-default border-borders w-full h-14 fixed left-0 top-0 flex items-center z-[51]">
+            <div className="bg-[#2221] w-14 h-14 p-3 absolute">
+                <img src={logo} alt="logo" className="opacity-50 hover:opacity-100 transition-[opacity]" />
+            </div>
             <div className="ml-auto flex justify-center items-center gap-4 relative">
                 <UserIcon
                     className="mr-2 hover:opacity-75 cursor-pointer"
@@ -35,13 +39,13 @@ export default function Bar() {
                         onMouseLeave={() => setIsMouseOverPanel(false)}
                         onMouseEnter={() => setIsMouseOverPanel(true)}
                         className="px-4 top-full left-full -translate-x-full absolute">
-                        <div className="bg-bar border-borders border shadow-xl">
+                        <div className="bg-subpanel border-borders border shadow-xl">
                             <div className="flex flex-col justify-center items-center p-4 min-w-40">
                                 <UserIcon className="mb-2" />
                                 <p className="capitalize font-bold text-current">{user}</p>
                             </div>
                             <div className="mx-4 pb-4 flex">
-                                <p className="opacity-15 cursor-default">{pkg.version}</p>
+                                <p className="opacity-30 cursor-default">{pkg.version}</p>
                                 <Link to={"/login"} onClick={() => Cookies.set("token", "undefined")} title="Sair" className="w-fit ml-auto flex items-center justify-end gap-2 text-red-500">
                                     Sair{/* <i>&#xea14;</i> */}
                                 </Link>
@@ -56,7 +60,7 @@ export default function Bar() {
 }
 
 function UserIcon(props: React.HtmlHTMLAttributes<HTMLDivElement>) {
-    return <div {...props} className={props.className + " bg-current w-10 h-10 relative flex justify-center items-center rounded-full overflow-hidden transition-[opacity]"}>
-        <i className='text-4xl text-subpanel absolute top-[0.29rem]'>&#xe971;</i>
+    return <div {...props} className={props.className + " bg-subpanel w-10 h-10 relative flex justify-center items-center rounded-full overflow-hidden transition-[opacity]"}>
+        <i className='text-4xl text-default-text absolute top-[0.29rem]'>&#xe971;</i>
     </div>
 } 

@@ -12,7 +12,7 @@ export default function TableToolBar(props: TableToolBarAttributes) {
 
     return <SubTopBar
         // leftContent={selected.length > 0 ? selected.length + ' itens selecionados' : ''}
-        leftContent={<div className="flex border-default-text border-b ml-4">
+        leftContent={<div className="flex border-borders border-input-default rounded-input-default px-2 py-1 ml-4">
             <input
                 type="text"
                 placeholder="Pesquisar"

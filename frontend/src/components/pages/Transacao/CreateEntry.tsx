@@ -14,6 +14,7 @@ import Table from "../../table/Table";
 import TransitionItemAdder from "./TransitionAdder";
 import Button from "../../Layout/Button";
 import { SinglePageInputMapContext } from "../../GlobalContexts/SinglePageInputMap";
+import HelpButton from "../../Layout/HelpButton";
 
 export default function CreateEntry(props: { type: 0 | 1 }) {
 
@@ -62,7 +63,7 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
         }
     }
 
-    useEffect(()=>setPathKeyHandler(keyListenerHandler),[transitionBoat,addedTransitionItensData])
+    useEffect(() => setPathKeyHandler(keyListenerHandler), [transitionBoat, addedTransitionItensData])
 
     /** Funcao que finaliza a transacao */
     async function submitHandler(addedItens: transacaoitemProps[], boatID?: number) {
@@ -85,7 +86,8 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
         <Bar />
         <SideBar />
         <Content>
-            <section className="py-8 px-4 border-b border-borders">
+            <HelpButton content="F8 - Finalizar transação" className="absolute left-full -translate-x-full z-50"/>
+            <section className="py-8 px-4 border-b border-borders relative flex w-full">
                 <h2>Nova {props.type == 0 ? "Entrada" : "Saída"}</h2>
             </section>
 
@@ -106,13 +108,9 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
                         next="input[name=product]"
                     />
                 </div>
-                <div className="p-4 bg-subpanel border-borders border flex flex-col absolute -translate-x-full -translate-y-full" style={{ left: "calc(100% - 1rem)" }}>
-                    <h2>Atalhos</h2>
-                    <p>F8 - Finalizar transação</p>
-                </div>
             </section>
 
-            <section className="py-0 px-4 border-b border-borders">
+            <section className="py-0 pl-4 border-b border-borders">
                 <div className="grid grid-cols-3">
                     <div className="col-span-1 border-r border-borders pr-4 py-8">
                         {/* Altera o where dos produtos do transitionItemAdder de acordo se é venda ou compra "type == 0" ou "type == 1"*/}

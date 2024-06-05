@@ -110,7 +110,7 @@ export default function EditEntry() {
                     }} />
             </section>
 
-            <section className="px-4 py-0 border-b border-borders">
+            <section className="pl-4 py-0 border-b border-borders">
                 <div className="grid grid-cols-3">
                     <div className="col-span-1 border-r border-borders pr-4 py-8">
                         <TransitionItemAdder productWhere={{tipo:data.tipo}} onSubmit={(d) => setToAddItens([...toAddItens, d])}></TransitionItemAdder>

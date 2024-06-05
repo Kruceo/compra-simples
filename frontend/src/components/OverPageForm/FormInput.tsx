@@ -20,13 +20,13 @@ export default function FormInput(props: FormInputAttributes) {
         return <input
             {...restProps}
             type={type}
-            className={"bg-submit mt-4 p-2 font-bold rounded-sm cursor-pointer hover:brightness-125 " + className}
+            className={"bg-submit mt-4 p-2 font-bold cursor-pointer hover:brightness-125  border-borders border-button-default rounded-button-default " + className}
         />
     return <input
         {...restProps}
         onKeyUp={(e) => defaultKeyUpHandler(e, next)}
         type={type}
-        className={`bg-transparent px-3 py-2 border-borders border outline-none ${errored ? "border-red-600" : ""} ${className}`}
+        className={`bg-transparent px-3 py-2 border-borders border-input-default rounded-input-default outline-none ${errored ? "border-red-600" : ""} ${className}`}
         onWheel={(e) => e.currentTarget.blur()}
     />
 }

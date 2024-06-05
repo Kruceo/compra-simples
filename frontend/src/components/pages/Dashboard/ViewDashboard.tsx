@@ -4,6 +4,9 @@ import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
 import { useNavigate } from "react-router-dom";
 import { SinglePageInputMapContext } from "../../GlobalContexts/SinglePageInputMap";
+import HelpButton from "../../Layout/HelpButton";
+import logo from '../../../assets/fish.svg'
+
 
 export default function ViewDashboard() {
     const { setPathKeyHandler } = useContext(SinglePageInputMapContext)
@@ -31,12 +34,8 @@ export default function ViewDashboard() {
         <Bar />
         <SideBar />
         <Content className="flex">
-            <div className="p-4 bg-subpanel border-borders border flex flex-col relative m-4 ml-auto">
-                <h2>Atalhos</h2>
-                <p>F8 - Criação de entradas</p>
-                <p>F9 - Criação de saídas</p>
-            </div>
-            <img src="/icon.png" alt="icon" className="w-80 opacity-20 absolute ml-20 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2" />
+            <HelpButton content={"F8 - Nova entrada\nF9 - Nova saída"} className="absolute left-full -translate-x-full z-50" />
+            <img src={logo} alt="icon" className="w-80 opacity-5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
         </Content>
     </>
 }

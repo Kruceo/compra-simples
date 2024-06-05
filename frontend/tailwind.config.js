@@ -20,44 +20,74 @@ module.exports = {
         // hovers: "#0001",
 
         // DARK
-        toolbar: "#151515",
-        bar: "#131313",
-        sidebar: "#151515",
-        subpanel: "#171717",
-        submit: "#56f",
-        "submit-text": "#222",
-        notification: "#202020",
-        background: "#171717",
-        "default-text": "#c0c0c0",
-        borders: "#262626",
-        hovers: "#222",
-        selected: "#224"
-
-        // toolbar: "#753341",
-        // bar: "#722233",
-        // sidebar: "#773344",
-        // subpanel: "#553344",
-        // submit: "#44ff44",
+        // toolbar: "#151515",
+        // bar: "#131313",
+        // sidebar: "#151515",
+        // subpanel: "#171717",
+        // submit: "#56f",
         // "submit-text": "#222",
         // notification: "#202020",
-        // background: "#331122",
+        // background: "#171717",
         // "default-text": "#c0c0c0",
-        // borders: "#442233",
-        // hovers: "#664455",
-        // selected:"#997788"
+        // borders: "#262626",
+        // hovers: "#222",
+        // selected: "#224"
 
+
+        bar: "#dfe4f9",
+        sidebar: "#eef0f7",
+        toolbar: "#f2f4fb",
+        headers: "#f2f4fb",
+        subpanel: "#fcfcfc",
+        submit: "#f2f4fb",
+        "submit-text": "#535584",
+        notification: "#f2f4fb",
+        background: "#fcfcfc",
+        "default-text": "#535584",
+        borders: "#ccc8",
+        hovers: "#ccf",
+        selected: "#aaf"
+
+      },
+      borderWidth: {
+        "default": 0,
+        "panel-default": 0,
+        "input-default": 1,
+        "button-default": 1
+      },
+      borderRadius: {
+        "default": 0,
+        "panel-default": 0,
+        "input-default": 5,
+        "button-default": 3
       },
       keyframes: {
         "skeleton-fade": {
-          "0%": { transform: "translate(-100%,0%)",background: "linear-gradient(90deg,transparent ,#fff1,#58a1,#fff1 ,transparent)" },
-          "100%": { transform: "translate(100%,0%)",background: "linear-gradient(90deg,transparent,#fff1,#58a1,#fff1,transparent)" }
+          "0%": { transform: "translate(-100%,0%)", background: "linear-gradient(90deg,transparent ,#fff1,#58a1,#fff1 ,transparent)" },
+          "100%": { transform: "translate(100%,0%)", background: "linear-gradient(90deg,transparent,#fff1,#58a1,#fff1,transparent)" }
+        },
+        "explode":{
+          "0%":{
+            "outline":"0px solid",
+            "outline-offset":"0px"
+          },
+          "50%":{
+            "outline":"5px solid",
+            "outline-offset":"2px"
+          },
+          "100%":{
+            "outline":"0px solid",
+            "outline-offset":"5px"
+          }
+
         }
       },
-      animation:{
-        "skeleton-fade":"skeleton-fade 1s infinite linear"
+      animation: {
+        "explode":"explode 500ms both linear",
+        "skeleton-fade": "skeleton-fade 1s infinite linear",
       }
     },
   },
-  plugins: [],
+  plugins:[]
 }
 

@@ -41,7 +41,7 @@ export default function PopupContext(props: PropsWithChildren) {
                 onRecuse={onRecuse ? () => { onRecuse(); setGlobalPopupByKey(key, null) } : undefined}
 
             >
-                {content}
+                {content.split("\n").map(each=><p>{each}</p>)}
             </OverPageInfo>
         )
     }

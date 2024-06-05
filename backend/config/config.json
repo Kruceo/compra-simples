@@ -10,7 +10,7 @@
     "server": {
         "port": 8080,
         "cors": {
-            "origin": "http://192.168.0.62:5173",
+            "origin": ["http://192.168.0.62:5173","http://192.168.2.58:5173"],
             "credentials": true
         }
     },

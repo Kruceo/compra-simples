@@ -2,50 +2,58 @@ import React, { useState } from "react"
 import { Link } from "react-router-dom"
 
 export default function SideBar() {
+    const [show, setShow] = useState(false)
+    const [focus, setFocus] = useState(false)
     return <>
-        <nav className="bg-sidebar border-r border-borders w-44 mt-14 h-full fixed left-0 top-0 flex flex-col shadow-lg z-50">
-            <PanelLink href="/"><i>&#xe900;</i>Dashboard</PanelLink>
-            <DropButton
-                title="Cadastro"
-                dropDownContent={<>
-                    <PanelLink href="/view/produto">Produtos</PanelLink>
-                    <PanelLink href="/view/fornecedor">Fornecedores</PanelLink>
-                    <PanelLink href="/view/bote">Botes</PanelLink>
-                </>}>
-                <i>&#xe905;</i> Cadastro
-            </DropButton>
-            <DropButton
-                title="Transação"
-                dropDownContent={<>
-                    <PanelLink href="/create/entrada">Nova Entrada</PanelLink>
-                    <PanelLink href="/create/saida">Nova Saída</PanelLink>
-                    <PanelLink href="/view/transacao">Listagem</PanelLink>
-                    {/* <PanelLink href="/close/transacao">Fechamento</PanelLink> */}
-                </>}>
-                <i>&#xe935;</i> Transação
-            </DropButton>
-            <DropButton
-                title="Relatórios"
-                dropDownContent={<>
-                    <PanelLink href="/report/1">Comparativo de Preços</PanelLink>
-                    <PanelLink href="/report/2">Comparativo de Botes</PanelLink>
-                    <PanelLink href="/report/3">Comparativo por Mês</PanelLink>
-                    <PanelLink href="/report/4">Itens da Transação</PanelLink>
-                    <PanelLink href="/report/5">Totais por fornecedor</PanelLink>
-                </>}>
+        <nav
+            onFocus={() => setFocus(true)}
+            onBlur={() => setFocus(false)}
+            onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}
+            className={`bg-sidebar border-borders border-r-default mt-14 h-full fixed left-0 top-0 z-[52]`}>
+            <div id="buttons-grid" className={`flex flex-col ${show || focus ? (focus ? "overflow-visible" : "w-44 opened-sidebar-trans") : "w-14 closed-sidebar-trans"} overflow-hidden`}>
+                <PanelLink href="/"><i className="text-xl mr-4">&#xe900;</i>Dashboard</PanelLink>
+                <DropButton
+                    title="Cadastro"
+                    dropDownContent={<>
+                        <PanelLink href="/view/produto">Produtos</PanelLink>
+                        <PanelLink href="/view/fornecedor">Fornecedores</PanelLink>
+                        <PanelLink href="/view/bote">Botes</PanelLink>
+                    </>}>
+                    <i className="text-xl mr-4 ">&#xe905;</i> Cadastro
+                </DropButton>
+                <DropButton
+                    title="Transação"
+                    dropDownContent={<>
+                        <PanelLink href="/create/entrada">Nova Entrada</PanelLink>
+                        <PanelLink href="/create/saida">Nova Saída</PanelLink>
+                        <PanelLink href="/view/transacao">Listagem</PanelLink>
+                        {/* <PanelLink href="/close/transacao">Fechamento</PanelLink> */}
+                    </>}>
+                    <i className="text-xl mr-4">&#xe935;</i> Transação
+                </DropButton>
+                <DropButton
+                    title="Relatórios"
+                    dropDownContent={<>
+                        <PanelLink href="/report/1">Comparativo de Preços</PanelLink>
+                        <PanelLink href="/report/2">Comparativo de Botes</PanelLink>
+                        <PanelLink href="/report/3">Comparativo por Mês</PanelLink>
+                        <PanelLink href="/report/4">Itens da Transação</PanelLink>
+                        <PanelLink href="/report/5">Totais por fornecedor</PanelLink>
+                    </>}>
 
-                <i>&#xe99c;</i> Relatório
-            </DropButton>
-            <DropButton
-                title="Recibos"
-                dropDownContent={<>
-                    <PanelLink href="/receipt/once">Avulso</PanelLink>
-                    <PanelLink href="/receipt/transaction">Por transação</PanelLink>
-                    <PanelLink href="/receipt/vendor">Por fornecedor</PanelLink>
-                </>}>
+                    <i className="text-xl mr-4">&#xe99c;</i> Relatório
+                </DropButton>
+                <DropButton
+                    title="Recibos"
+                    dropDownContent={<>
+                        <PanelLink href="/receipt/once">Avulso</PanelLink>
+                        <PanelLink href="/receipt/transaction">Por transação</PanelLink>
+                        <PanelLink href="/receipt/vendor">Por fornecedor</PanelLink>
+                    </>}>
 
-                <i>&#xe93b;</i> Recibos
-            </DropButton>
+                    <i className="text-xl mr-4">&#xe93b;</i> Recibos
+                </DropButton>
+            </div>
         </nav>
 
     </>
@@ -68,9 +76,9 @@ export function DropButton(props: DropButtonAttributes) {
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
         >
-            <div className="gap-2 flex px-4 w-full">
+            <div className="gap-2 flex px-4 w-full items-center">
                 {props.children}
-                <span className="ml-auto">&gt;</span>
+                <span className="ml-auto text-xs flex items-center opacity-25">+</span>
             </div>
             {
                 (focused || isMouseOverSubPanel) ?
@@ -87,5 +95,8 @@ export function DropButton(props: DropButtonAttributes) {
 }
 
 function PanelLink(props: React.HTMLAttributes<HTMLAnchorElement> & { href: string }) {
-    return <Link className="transition-colors hover:bg-hovers text-default-text font-normal text-left h-14 flex items-center px-4 gap-2" to={props.href}>{props.children}</Link>
+    return <Link className="" to={props.href}>
+        <div className="transition-colors hover:bg-hovers text-default-text font-normal text-left h-14 flex items-center px-4 gap-2">
+            {props.children}
+        </div></Link>
 }

@@ -74,7 +74,7 @@ export default function FormPrevisionInput(props: FormPrevisionInputAttributes) 
 
     }, [selectedData, inputFocus])
 
-    return <div className={`relative box-border top-0 bg-transparent px-3 py-2 border-borders border outline-none ${className} ${errored ? " border-red-600" : ""}`}>
+    return <div className={`relative box-border top-0 bg-transparent px-3 py-2 border-borders border-input-default rounded-input-default outline-none ${className} ${errored ? " border-red-600" : ""}`}>
         <div className="relative">
             <input className={"w-full bg-transparent outline-none " + (inputVisible ? "" : "fixed -top-64")}
                 onInput={inputHandler}
