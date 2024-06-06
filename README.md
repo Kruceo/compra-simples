@@ -1,5 +1,7 @@
 # Easyfish
 
+[![Docker Image](https://github.com/Kruceo/easyfish/actions/workflows/docker-image.yml/badge.svg)](https://github.com/Kruceo/easyfish/actions/workflows/docker-image.yml)
+
 ![screenshot](https://raw.githubusercontent.com/Kruceo/easyfish/main/docs/media/ss3.png)
 
 O Easyfish é uma plataforma desenvolvida para simplificar e automatizar o gerenciamento de entrada e saída de produtos. Seu principal objetivo é otimizar processos repetitivos e demorados, proporcionando agilidade e eficiência para os usuários.

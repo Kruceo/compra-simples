@@ -2,7 +2,7 @@ import Cookies from "js-cookie"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import pkg from '../../../package.json'
-import logo from "../../assets/fish.svg"
+import logo from "../../assets/icon.svg"
 
 export default function Bar() {
 
@@ -25,7 +25,7 @@ export default function Bar() {
 
         <header className="bg-bar border-b-default border-borders w-full h-14 fixed left-0 top-0 flex items-center z-[51]">
             <div className="bg-[#2221] w-14 h-14 p-3 absolute">
-                <img src={logo} alt="logo" className="opacity-50 hover:opacity-100 transition-[opacity]" />
+                <img src={logo} alt="logo" className="opacity-25 hover:opacity-75 transition-[opacity]" />
             </div>
             <div className="ml-auto flex justify-center items-center gap-4 relative">
                 <UserIcon

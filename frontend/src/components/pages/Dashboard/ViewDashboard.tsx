@@ -5,7 +5,7 @@ import SideBar from "../../Layout/SideBar";
 import { useNavigate } from "react-router-dom";
 import { SinglePageInputMapContext } from "../../GlobalContexts/SinglePageInputMap";
 import HelpButton from "../../Layout/HelpButton";
-import logo from '../../../assets/fish.svg'
+import logo from '../../../assets/icon.svg'
 
 
 export default function ViewDashboard() {

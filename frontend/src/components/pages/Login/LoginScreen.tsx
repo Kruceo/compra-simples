@@ -4,7 +4,7 @@ import { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import backend, { api_address } from "../../../constants/backend/backend";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-
+import bg from "../../../assets/bg.jpg"
 export default function LoginScreen() {
     const navigate = useNavigate()
     const [loading,setLoading] = useState(false);
@@ -35,12 +35,10 @@ export default function LoginScreen() {
             setLoading(false)
             setMessage("Não foi possível se conectar ao servidor.")
         }
-        
-
     }
 
-    return <div className="flex justify-center items-center h-screen w-screen bg-no-repeat bg-cover" style={{ backgroundImage: "url(https://www.bing.com/th?id=OBTQ.BT5E5226697BC9627BA6BA4740AED82E5A51E949E7F70321A9B83A0819BAFEC98A&rs=2&c=1)" }}>
-        <form onSubmit={submitHandler} className={"flex flex-col w-80 bg-subpanel p-4 border-borders border shadow-xl bg-cover bg-no-repeat " + (loading?"cursor-wait brightness-50 relative overflow-hidden after:content-[''] after:absolute after:left-0 after:top-0 after:block after:w-full after:h-full after:z-50 after:animate-skeleton-fade":"")}>
+    return <div className="flex justify-center items-center h-screen w-screen bg-no-repeat bg-cover" style={{ backgroundImage: `url(${bg})` }}>
+        <form onSubmit={submitHandler} className={"flex flex-col w-80 bg-subpanel p-4 border-borders border shadow-xl bg-bottom bg-cover bg-no-repeat " + (loading?"cursor-wait brightness-50 relative overflow-hidden after:content-[''] after:absolute after:left-0 after:top-0 after:block after:w-full after:h-full after:z-50 after:animate-skeleton-fade":"")}>
             <h2>Login</h2>
             <RequiredLabel>Usuário</RequiredLabel>
             <FormInput placeholder="Insira seu usuário" name="user" type="text" errored={error == "user"} autoFocus />
