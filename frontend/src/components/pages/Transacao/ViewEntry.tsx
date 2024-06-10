@@ -40,12 +40,12 @@ export default function ViewEntry() {
     useEffect(() => {
         setLoadingData(true)
         defaultDataGet(table_to_manage, where, setData).then(() => setLoadingData(false))
-        window.addEventListener("scrollend", () => {
-            if (window.scrollY + window.innerHeight > document.body.scrollHeight) {
-                const limit = parseInt(where.limit) + 100
-                setWhereKey("limit", limit.toString())
-            }
-        })
+        // window.addEventListener("scrollend", () => {
+            // if (window.scrollY + window.innerHeight > document.body.scrollHeight) {
+                // const limit = parseInt(where.limit) + 100
+                // setWhereKey("limit", limit.toString())
+            // }
+        // })
     }, [update, where])
 
     // Quando é alterado a ordem
@@ -65,6 +65,7 @@ export default function ViewEntry() {
         simpleSpawnInfo(`Deseja mesmo invalidar este item?`, onAcceptHandler, () => null)
     }
 
+    // Quando é clicado no botão "Fechamento"
     const closeHandler = () => {
         simpleSpawnInfo("Tem certeza que deseja continuar?", async () => {
             backend.bulkEdit("transacao", selected.map(id => {
@@ -99,7 +100,7 @@ export default function ViewEntry() {
                     if (selected.length > 0) setSelected([])
                     else setSelected(data.map(each => each.id ?? -1))
                 }}><i>&#xe997;</i> Selecionar Todos</ToolBarButton>
-                <ToolBarButton enabled={selected.length > 0} onClick={closeHandler}>
+                <ToolBarButton enabled={selected.length > 0} onClick={closeHandler} title={selected.length<1?"Selecione algum item":undefined}>
                     <i>&#xe95e;</i> Fechamento</ToolBarButton>
             </SubTopBar>
             <div className="w-full h-full mt-[6.5rem]">
@@ -121,7 +122,7 @@ export default function ViewEntry() {
                     ]}
                     tableOrderKeys={["id", ["Bote", "nome"], ["Bote", "Fornecedor", "nome"], "peso", "valor", "createdAt", "tipo"]}
                     tableHeader={[
-                        "ID", "Bote", "Fornecedor", "Peso (KG)", "Valor", "Data", "T"
+                        "ID", "Bote", "Fornecedor", "Peso (KG)", "Valor", "Data", "Tipo"
                     ]}
                     contextMenu={{ buttons: tableContextMenuButtons }}
                 />  

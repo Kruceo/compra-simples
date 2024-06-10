@@ -33,7 +33,7 @@ export default function TableItem(props: TableBarAttributes) {
             children.map((child, index) => {
                 return <div
                     key={index}
-                    className={`${index == 0 ? "border-none" : "border-borders"} border-l col-span-1 px-3`}>
+                    className={`${index == 0 ? "border-none" : "border-borders"} border-l col-span-1 px-2 whitespace-pre`}>
                     {child}
                 </div>
             })

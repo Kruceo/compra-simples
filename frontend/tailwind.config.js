@@ -3,10 +3,11 @@ module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
+  darkmode:"class",
   theme: {
     extend: {
       colors: {
-
+        
         // toolbar: "#fff",
         // bar: "#eaeaff",
         // sidebar: "#efefff",
@@ -33,20 +34,34 @@ module.exports = {
         // hovers: "#222",
         // selected: "#224"
 
-
         bar: "#dfe4f9",
-        sidebar: "#eef0f7",
-        toolbar: "#f2f4fb",
-        headers: "#f2f4fb",
-        subpanel: "#fcfcfc",
-        submit: "#f2f4fb",
-        "submit-text": "#535584",
-        notification: "#f2f4fb",
-        background: "#fcfcfc",
-        "default-text": "#535584",
-        borders: "#ccc8",
-        hovers: "#ccf",
-        selected: "#aaf"
+          sidebar: "#eef0f7",
+          toolbar: "#f2f4fb",
+          headers: "#f2f4fb",
+          subpanel: "#fcfcfc",
+          submit: "#f2f4fb",
+          "submit-text": "#535584",
+          notification: "#f2f4fb",
+          background: "#fcfcfc",
+          "default-text": "#535584",
+          borders: "#ccc8",
+          hovers: "#ccf",
+          selected: "#aaf"
+       
+
+        // bar: "#434349",
+        // sidebar: "#434349",
+        // toolbar: "#3d3d43",
+        // headers: "#3d3d43",
+        // subpanel: "#434349",
+        // submit: "#22242b",
+        // "submit-text": "#999999",
+        // notification: "#f2f4fb",
+        // background: "#39393f",
+        // "default-text": "#cce",
+        // borders: "#ccc2",
+        // hovers: "#161622",
+        // selected: "#162222"
 
       },
       borderWidth: {

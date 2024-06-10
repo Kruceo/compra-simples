@@ -62,7 +62,7 @@ export default function FormSelection(props: FormSelectionAttributes) {
         }
         <select ref={ref} {...restProps}
             // defaultValue={defaultValue}
-            className={`bg-transparent px-3 py-2 border-borders border-input-default rounded-input-default outline-none ${errored ? "border-red-600" : ""} ${props.className} focus:-outline-offset-2 outline-2 focus:outline-white ${loadingData ? "!h-0 !w-0 !appearance-none !p-0 !border-none absolute" : ""}`}>
+            className={`bg-transparent px-3 py-2 border-borders border-input-default rounded-input-default ${errored ? "border-red-600" : ""} ${props.className} focus:outline-offset-1 focus:outline-1 focus:outline-default-text ${loadingData ? "!h-0 !w-0 !appearance-none !p-0 !border-none absolute" : ""}`}>
             {
                 props.children
             }

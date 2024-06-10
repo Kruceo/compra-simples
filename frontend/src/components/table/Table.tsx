@@ -62,7 +62,7 @@ export default function Table(props: TableAttributes) {
             let currentEl: HTMLElement = e.target
             let reached = false
             for (let x = 0; x < 4; x++) {
-                if (currentEl.id === "table-item"||currentEl.id==="table-context-menu") {
+                if (currentEl.id === "table-item" || currentEl.id === "table-context-menu") {
                     reached = true
                     break
                 }
@@ -129,7 +129,6 @@ export default function Table(props: TableAttributes) {
                         }
                         disposition={disposition}
                         key={index}
-                    // className={index/2 != Math.round(index/2)?"bg-[#00000019]":""}
                     >
                         {
                             tableItemHandler(item, index).map((attr, attrIndex) => <div className={enableContextMenu == false ? "" : "cursor-context-menu"} key={attrIndex}>
@@ -155,7 +154,7 @@ function OrderButton(props: OrderButtonAttributes) {
         props.onClick(currentOrder ? "ASC" : "DESC")
         setCurrentOrder(!currentOrder)
     }
-    } className="ml-auto mr-2 opacity-0 group-hover:opacity-100">
+    } className="ml-auto opacity-0 group-hover:opacity-100">
         {
             currentOrder ?
                 <i>&#xea3e;</i> :
