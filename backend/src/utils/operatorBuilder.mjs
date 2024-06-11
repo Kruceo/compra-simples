@@ -19,7 +19,8 @@ function opBuilder(query) {
                 clause = { ...clause, [Op.gt]: value }
                 break;
             case "^":
-                clause = { ...clause, [Op.iLike]: "%" + value.substring(1) + '%' }
+                clause = { ...clause, [Op.iLike]: "%" + value + '%' }
+                console.log(clause)
                 break;
             case "|":
                 clause = { ...clause, [Op.or]: value.split("|") }

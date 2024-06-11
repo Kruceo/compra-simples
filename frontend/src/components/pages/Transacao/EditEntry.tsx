@@ -140,7 +140,7 @@ export default function EditEntry() {
 
             <section className="px-4 py-8 border-b border-borders flex flex-col">
                 <RequiredLabel>Observação</RequiredLabel>
-                <textarea name="obs" id="obs" cols={50} rows={2} defaultValue={data.obs}
+                <textarea className="border-borders p-2 rounded-md border-input-default bg-transparent" name="obs" id="obs" cols={50} rows={2} defaultValue={data.obs}
                     onChange={(e) => changeKey("obs", e.target.value)}></textarea>
             </section>
 

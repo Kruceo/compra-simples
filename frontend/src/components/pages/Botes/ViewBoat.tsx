@@ -13,13 +13,15 @@ import { TableEngineContext } from "../../GlobalContexts/TableEngineContext";
 
 
 export default function ViewBoat() {
+    const fornecedor_id = new URL(window.location.href).searchParams.get("fornecedor_id")
+
     const { setGlobalPopupByKey, simpleSpawnInfo } = useContext(GlobalPopupsContext)
     const { defaultDataGet, defaultDataDelete } = useContext(TableEngineContext)
     const [data, setData] = useState<boteProps[]>([]);
     const [update, setUpdate] = useState(true)
-    const [where, setWhere] = useState<any>({ include: 'fornecedor' })
+    const [where, setWhere] = useState<any>({ include: 'fornecedor', fornecedor_id })
 
-    const [loadingData,setLoadingData] = useState<boolean>(false)
+    const [loadingData, setLoadingData] = useState<boolean>(false)
 
     const setWhereKey = (key: string, value: string) => {
         const mockup = { ...where }
@@ -31,7 +33,7 @@ export default function ViewBoat() {
 
     useEffect(() => {
         setLoadingData(true)
-        defaultDataGet(table_to_manage, where, setData).then(()=>setLoadingData(false))
+        defaultDataGet(table_to_manage, where, setData).then(() => setLoadingData(false))
     }, [update])
 
     // Quando é alterado a ordem
@@ -70,7 +72,7 @@ export default function ViewBoat() {
             <CreationForm
                 key={'editingForm'}
                 mode="editing"
-                defaultValues={{ id, nome, fornecedor_id: fornecedor?.id??-1 }}
+                defaultValues={{ id, nome, fornecedor_id: fornecedor?.id ?? -1 }}
                 onCancel={() => setGlobalPopupByKey("EditForm", null)}
                 afterSubmit={() => setUpdate(!update)}
             />

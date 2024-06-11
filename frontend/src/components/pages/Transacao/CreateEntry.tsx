@@ -102,8 +102,8 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
                         }}
                         autoFocus={true}
                         searchInTable="bote"
-                        where={{ include: 'fornecedor', limit: 5 }}
-                        itemHandler={(item: boteProps) => `${item.id} - ${item.nome} | ${item.fornecedor?.nome}`}
+                        where={{ include: 'fornecedor', limit: 5, }}
+                        itemHandler={(item: boteProps) => `${item.id} - ${item.nome} - ${item.fornecedor?.nome}`}
                         onSubmit={() => null}
                         next="input[name=product]"
                     />

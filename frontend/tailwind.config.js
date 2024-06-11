@@ -65,7 +65,7 @@ module.exports = {
 
       },
       borderWidth: {
-        "default": 0,
+        "default": 0 ,
         "panel-default": 0,
         "input-default": 1,
         "button-default": 1

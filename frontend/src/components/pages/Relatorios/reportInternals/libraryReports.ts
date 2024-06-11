@@ -16,7 +16,7 @@ export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: numb
     const sX = startX
     const sY = startY
 
-    const disposition = (data[0]??header).map((_, index) => dispositionOfData ? (dispositionOfData[index] ?? 1) : 1)
+    const disposition = (data[0] ?? header).map((_, index) => dispositionOfData ? (dispositionOfData[index] ?? 1) : 1)
     const dispositionSum = disposition.reduce((acum, next) => acum + next, 0)
 
     const fullW = pdf.internal.pageSize.width
@@ -27,19 +27,24 @@ export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: numb
     const dataWithHeader = [[...header], ...data]
     const sumH = dataWithHeader.length * rowH
 
-    
-   
+    //this is used for sub the page height in case of various pages
+    let subtract = 0
     dataWithHeader.forEach((row, rowIndex) => {
-        let y = sY + (rowIndex * rowH)
-        
+       
+        let y = (subtract ? 0 : sY) + (rowIndex * rowH) - subtract
+       
+
+        if (y + rowH * 2 > fullH) {
+            pdf.addPage()
+            pdf.setPage(pdf.internal.pages.length)
+            subtract = rowIndex * rowH - rowH
+            y = (subtract ? 0 : sY) + (rowIndex * rowH) - subtract
+        }
+        console.log("", Math.round(y), Math.round(fullH), Math.floor(subtract))
         let colXSum = 0
         row.forEach((column, columnIndex) => {
 
-            if (y + 7 > fullH - 7) {
-                pdf.addPage()
-                pdf.setPage(pdf.internal.pages.length)
-                y = 5
-            }
+
 
             const cellW = cellFraction * disposition[columnIndex]
             if (typeof (column) == 'number') column = beautyNumber(column)
@@ -64,7 +69,7 @@ export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: numb
 
             const x = sX + colXSum
             const box = writeBox(pdf, x, y, cellW, rowH)
-            
+
             let align: "left" | "right" | "center" = 'center'
             let textX = box.centerX
 
@@ -73,7 +78,7 @@ export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: numb
                 align = "right"
                 textX = box.x2 - 1
             }
-            else if(rowIndex != 0) {
+            else if (rowIndex != 0) {
                 align = "left"
                 textX = box.x + 1
             }
@@ -99,7 +104,7 @@ export function writeHeader(pdf: jsPDF, identification: string, date1: Date, dat
     // const pageH = pdf.internal.pageSize.height
 
     pdf.setLineWidth(0.75);
-    const headerBox = writeBox(pdf, startX, startY, pageW-10, height)
+    const headerBox = writeBox(pdf, startX, startY, pageW - 10, height)
     // const dateBox = writeBox(pdf, headerBox.x2, headerBox.y, 35, headerBox.h)
 
     pdf.setFontSize(16)
@@ -112,9 +117,9 @@ export function writeHeader(pdf: jsPDF, identification: string, date1: Date, dat
 
     pdf.setFont(pdf.getFont().fontName, "", "bold")
     pdf.setFontSize(6)
-    pdf.text(`${identification}`, headerBox.x2-2, headerBox.y2-2, { align: "right" })
+    pdf.text(`${identification}`, headerBox.x2 - 2, headerBox.y2 - 2, { align: "right" })
 
-    const totalW = headerBox.w 
+    const totalW = headerBox.w
     // + dateBox.w
 
     return { x: startX, y: startY, h: height, w: totalW, x2: startX + totalW, y2: startY + height, centerX: startX + totalW / 2 }

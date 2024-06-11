@@ -21,7 +21,6 @@ export default function Teste() {
         const disposition = [header,...table].reduce((acum, next) => {
             next.forEach((value, index) => {
                 const str = ("" + value)
-                console.log(str, str.length, acum[index])
                 if (str.length > acum[index]) {
                     acum[index] = str.length
                 }
@@ -32,7 +31,7 @@ export default function Teste() {
         
         const lastbox = writeHeader(pdf,"",new Date(),new Date())
         pdf.setFontSize(12)
-        writeTable(pdf, table, lastbox.x, lastbox.y2+6, header,disposition)
+        writeTable(pdf, table, lastbox.x, lastbox.y2 + 5, header,disposition)
 
         openPDF(pdf)
 
@@ -41,9 +40,6 @@ export default function Teste() {
 
     return <>
         <div>
-            <div className="w-64 h-64 overflow-hidden after:animate-skeleton-fade after:content-['%'] after:w-full after:h-full after:flex">
-
-            </div>
             <main>
                 <select name="mode" id="" onChange={(e) => setM(e.currentTarget.value)}>
                     <option value="GET">GET</option>
@@ -51,7 +47,7 @@ export default function Teste() {
                 </select>
             </main>
             <main>
-                <textarea className="w-full h-64" defaultValue={add} onChange={(e) => {
+                <textarea className="w-full h-64 text-default-text bg-background border-input-default border-borders" defaultValue={add} onChange={(e) => {
                     window.localStorage.setItem("_vasAdd", e.currentTarget.value)
                     setAdd(e.currentTarget.value.replace(/\n/g, ""))
                 }} />

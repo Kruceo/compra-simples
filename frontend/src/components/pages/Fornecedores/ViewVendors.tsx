@@ -4,6 +4,7 @@ import Content from "../../Layout/Content";
 import SideBar from "../../Layout/SideBar";
 import backend from "../../../constants/backend/backend";
 import CreationForm from "./FormVendors";
+import { useNavigate } from 'react-router-dom'
 
 import Table, { TableOrderEvent } from "../../table/Table";
 import { bDate } from "../../../constants/dateUtils";
@@ -12,7 +13,7 @@ import { GlobalPopupsContext } from "../../GlobalContexts/PopupContext";
 import { TableEngineContext } from "../../GlobalContexts/TableEngineContext";
 
 export default function ViewVendors() {
-
+    const navigate = useNavigate()
     const { setGlobalPopupByKey, simpleSpawnInfo } = useContext(GlobalPopupsContext)
 
     const [data, setData] = useState<fornecedorProps[]>([]);
@@ -85,6 +86,7 @@ export default function ViewVendors() {
 
     const tableContextMenuButtons = [
         { element: <><i>&#xe905;</i>Editar</>, handler: editHandler },
+        { element: <><i>&#xe969;</i>Botes</>, handler: (id: number) => navigate("/view/bote?fornecedor_id=" + id) },
         { element: <><i>&#xe9ac;</i>Remover</>, handler: deleteHandler }
     ]
 

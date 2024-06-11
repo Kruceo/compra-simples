@@ -69,7 +69,9 @@ export async function boatEntryComparation(d1: Date, d2: Date, status: number) {
     styleDisposition[productsKeys.length] = "bold"
 
     let lastTable = writeHeader(pdf,"",d1,d2)
-    pdf.setFontSize(10)
+    let fontSize = 18.5 - productsKeys.length
+    if(fontSize < 5) fontSize = 5
+    pdf.setFontSize(fontSize)
     const header = ["Botes", ...getSigles(productsKeys)]
     
     lastTable = writeTable(pdf, table, lastTable.x,lastTable.y2+6,header , [2], styleDisposition)
