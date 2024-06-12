@@ -110,7 +110,7 @@ function Sugestions(props: { data: Object & { id: number }[], itemHandler: (item
         })
     })
 
-    return <div className={`bg-subpanel border-borders border z-40 shadow-lg absolute top-full left-0 w-full flex flex-col justify-start m-o ${(props.isVisible || hovering) && (!clicked && props.data.length > 0) ? "visible" : "invisible"}`}
+    return <div className={`bg-subpanel border-borders border z-40 shadow-lg max-h-96 h-fit overflow-y-auto absolute top-full left-0 w-full flex flex-col justify-start m-o ${(props.isVisible || hovering) && (!clicked && props.data.length > 0) ? "visible" : "invisible"}`}
         onMouseOver={() => setHovering(true)}
         onMouseLeave={() => setHovering(false)}
     >

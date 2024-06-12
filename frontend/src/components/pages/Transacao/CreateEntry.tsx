@@ -15,15 +15,17 @@ import TransitionItemAdder from "./TransitionAdder";
 import Button from "../../Layout/Button";
 import { SinglePageInputMapContext } from "../../GlobalContexts/SinglePageInputMap";
 import HelpButton from "../../Layout/HelpButton";
+import { printSingleEntry } from "./PrintEntry";
 
 export default function CreateEntry(props: { type: 0 | 1 }) {
-
+    const [forceUpdate, setForceUpdate] = useState(false)
     const navigate = useNavigate()
     const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
     const { setPathKeyHandler } = useContext(SinglePageInputMapContext)
     const [addedTransitionItensData, setAddedTransitionItensData] = useState<transacaoitemProps[]>([])
     const [transitionBoat, setTransitionBoat] = useState<boteProps>()
     const [obs, setObs] = useState("")
+    // const [keepBoatID,setKeepBoatID] = useState(false)
 
     // adiciona um transacao item á lista de adicionados
     const addTransitionItem = (Transação_item: transacaoitemProps) => setAddedTransitionItensData([...addedTransitionItensData, { ...Transação_item, id: addedTransitionItensData.length + 1 }])
@@ -51,11 +53,17 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
         switch (e.key) {
             case "F8":
                 if (!transitionBoat) {
-                    console.log("breaked")
                     break
                 };
                 window.document.body.focus()
-                submitHandler(addedTransitionItensData, transitionBoat.id)
+                submitHandler(addedTransitionItensData, transitionBoat.id, "/create/entrada")
+                break;
+            case "F9":
+                if (!transitionBoat) {
+                    break
+                };
+                window.document.body.focus()
+                submitHandler(addedTransitionItensData, transitionBoat.id, "/create/saida?bote_id=" + transitionBoat.id)
                 break;
 
             default:
@@ -65,8 +73,15 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
 
     useEffect(() => setPathKeyHandler(keyListenerHandler), [transitionBoat, addedTransitionItensData])
 
+    function resetStates() {
+        setAddedTransitionItensData([])
+        setTransitionBoat(undefined)
+        setObs("")
+        setForceUpdate(!forceUpdate)
+    }
+
     /** Funcao que finaliza a transacao */
-    async function submitHandler(addedItens: transacaoitemProps[], boatID?: number) {
+    async function submitHandler(addedItens: transacaoitemProps[], boatID?: number, outNavigate?: string) {
 
         if (boatID == undefined) return simpleSpawnInfo("É necessario selecionar um bote.")
         if (addedItens.length === 0) return simpleSpawnInfo("É necessario adicionar algum item à transação.")
@@ -76,17 +91,23 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
         if (response.error || !response.data)
             return simpleSpawnInfo(response.message ?? "Houve um problema desconhecido ao criar uma Transação.")
         if (!Array.isArray(response.data)) {
-            // printSingleEntry(response.data.transacao_id ?? -1)
-            if (response.data.transacao_id)
-                navigate('/print/transacao/?id=' + response.data.transacao_id)
+            printSingleEntry(response.data.transacao_id ?? -1)
+            // if (response.data.transacao_id)
+            // navigate('/view/transacao')
+            resetStates()
+            navigate(outNavigate ?? "/create/entrada", { replace: true })
+
+
         }
     }
+
+    const thisUrl = new URL(window.location.href)
 
     return <>
         <Bar />
         <SideBar />
         <Content>
-            <HelpButton content="F8 - Finalizar transação" className="absolute left-full -translate-x-full z-50"/>
+            <HelpButton content={"F8 - Finalizar e adicionar nova entrada\nF9 - Finalizar e adicionar nova saída"} className="absolute left-full -translate-x-full z-50" />
             <section className="py-8 px-4 border-b border-borders relative flex w-full">
                 <h2>Nova {props.type == 0 ? "Entrada" : "Saída"}</h2>
             </section>
@@ -95,14 +116,16 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
                 <div>
                     <RequiredLabel>Bote</RequiredLabel>
                     <FormPrevisionInput
-                        className="w-64"
+                        key={forceUpdate ? 1 : 2}
+                        className="w-96"
                         placeholder="Insira o codigo do bote"
                         onChange={(value: boteProps) => {
-                            setTransitionBoat(value ?? undefined)
+                            setTransitionBoat(value)
                         }}
+                        defaultValue={thisUrl.searchParams.get("bote_id") ? parseInt(thisUrl.searchParams.get("bote_id") as string) : undefined}
                         autoFocus={true}
                         searchInTable="bote"
-                        where={{ include: 'fornecedor', limit: 5, }}
+                        where={{ include: 'fornecedor', limit: 50, }}
                         itemHandler={(item: boteProps) => `${item.id} - ${item.nome} - ${item.fornecedor?.nome}`}
                         onSubmit={() => null}
                         next="input[name=product]"
@@ -160,12 +183,20 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
                     />
                 </div>
             </section>
-            <section className="py-8 px-4 border-b border-borders">
+            <section className="py-8 px-4 border-b border-borders gap-4 flex">
                 <Button
+                    title="Finalizar e adicionar nova entrada"
                     id="submitTransaction"
                     onClick={() => submitHandler(addedTransitionItensData, transitionBoat?.id)}
                 >
-                    <i>&#xe962;</i> Finalizar
+                    <i>&#xe962;</i> Finalizar + entrada
+                </Button>
+                <Button
+                    title="Finalizar e adicionar nova saída"
+                    id="submitTransaction"
+                    onClick={() => submitHandler(addedTransitionItensData, transitionBoat?.id, "/create/saida")}
+                >
+                    <i>&#xe962;</i> Finalizar + saída
                 </Button>
             </section>
         </Content>
