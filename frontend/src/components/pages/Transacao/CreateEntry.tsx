@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import Bar from "../../Layout/Bar";
 import Content from "../../Layout/Content";
@@ -13,7 +13,6 @@ import { RequiredLabel } from "../../OverPageForm/OverPageForm";
 import Table from "../../table/Table";
 import TransitionItemAdder from "./TransitionAdder";
 import Button from "../../Layout/Button";
-import { SinglePageInputMapContext } from "../../GlobalContexts/SinglePageInputMap";
 import HelpButton from "../../Layout/HelpButton";
 import { printSingleEntry } from "./PrintEntry";
 
@@ -21,7 +20,6 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
     const [forceUpdate, setForceUpdate] = useState(false)
     const navigate = useNavigate()
     const { simpleSpawnInfo } = useContext(GlobalPopupsContext)
-    const { setPathKeyHandler } = useContext(SinglePageInputMapContext)
     const [addedTransitionItensData, setAddedTransitionItensData] = useState<transacaoitemProps[]>([])
     const [transitionBoat, setTransitionBoat] = useState<boteProps>()
     const [obs, setObs] = useState("")
@@ -48,7 +46,7 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
         { element: <><i>&#xe9ac;</i>Remover</>, handler: removeTransitionItem }
     ]
     //listener para a tecla f8 finalizar a transacao
-    const keyListenerHandler: React.KeyboardEventHandler = (e) => {
+    const keyListenerHandler = (e: KeyboardEvent) => {
         // console.log("#",e)
         switch (e.key) {
             case "F8":
@@ -71,7 +69,10 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
         }
     }
 
-    useEffect(() => setPathKeyHandler(keyListenerHandler), [transitionBoat, addedTransitionItensData])
+    useEffect(() => {
+        window.addEventListener("keydown",keyListenerHandler)
+        return window.removeEventListener("keydown",keyListenerHandler)
+    }, [transitionBoat, addedTransitionItensData])
 
     function resetStates() {
         setAddedTransitionItensData([])

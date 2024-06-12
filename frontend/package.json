@@ -1,7 +1,7 @@
 {
   "name": "compra-simples-frontend",
   "private": true,
-  "version": "0.25.9",
+  "version": "0.25.11",
   "type": "module",
   "scripts": {
     "dev": "vite",

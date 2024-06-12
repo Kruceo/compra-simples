@@ -1,4 +1,4 @@
-name: Docker Build
+name: Frontend Build
 
 on:
   push:
@@ -14,6 +14,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker compose build
+    - name: Build the frontend
+      run: cd frontend && npm i && npm run build
       

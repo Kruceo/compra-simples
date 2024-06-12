@@ -23,7 +23,6 @@ import ViewEntryItemReport from './components/pages/Relatorios/ViewEntryItemRepo
 import ViewTotalsByVendors from './components/pages/Relatorios/ViewTotalsByVendors'
 import ViewPerVendorReceipt from './components/pages/Recibos/ViewPerVendor'
 import EditEntry from './components/pages/Transacao/EditEntry'
-import SinglePageInputMap from './components/GlobalContexts/SinglePageInputMap'
 import { useEffect } from 'react'
 import icon from './assets/icon.svg'
 
@@ -37,7 +36,6 @@ function App() {
       <PopupContext>
         <ErrorHandler>
           <TableEngine>
-            <SinglePageInputMap>
 
               <Routes>
                 <Route path='/' element={<Proteged>{<ViewDashboard />}</Proteged>} />
@@ -66,8 +64,6 @@ function App() {
 
                 <Route path='/*' element={<View404 />} />
               </Routes>
-
-            </SinglePageInputMap>
           </TableEngine>
         </ErrorHandler>
       </PopupContext>
