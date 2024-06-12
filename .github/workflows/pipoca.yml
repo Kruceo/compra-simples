@@ -1,0 +1,29 @@
+name: Pipoca Workflow
+
+on:
+  push:
+    branches:
+      - main  # ou a branch que você deseja monitorar
+
+jobs:
+  pipoca:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Run Pipoca
+      run: cd frontend && npx kruceo/pipoca -s
+
+    - name: Commit and push
+      run: |
+        git config --global user.name '$GITHUB_USER'
+        git config --global user.email '$GITHUB_EMAIL'
+        git add package.json
+        git commit --amend --no-edit
+        git push -f
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        GITHUB_USER: ${{ vars.GH_USER }}
+        GITHUB_EMAIL: ${{ vars.GH_EMAIL }}
