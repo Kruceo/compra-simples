@@ -40,17 +40,15 @@ export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: numb
             subtract = rowIndex * rowH - rowH
             y = (subtract ? 0 : sY) + (rowIndex * rowH) - subtract
         }
-        console.log("", Math.round(y), Math.round(fullH), Math.floor(subtract))
+
         let colXSum = 0
         row.forEach((column, columnIndex) => {
-
-
 
             const cellW = cellFraction * disposition[columnIndex]
             if (typeof (column) == 'number') column = beautyNumber(column)
             if (column == "-") { colXSum += cellW; return; }
 
-            //Case is first index
+            //Case is first index , is HEADER
             if (rowIndex == 0) {
                 pdf.setFont(pdf.getFont().fontName, "bold")
                 pdf.setLineWidth(0.75)
@@ -78,6 +76,7 @@ export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: numb
                 align = "right"
                 textX = box.x2 - 1
             }
+            //Case is string and is not a header (first row index)
             else if (rowIndex != 0) {
                 align = "left"
                 textX = box.x + 1
@@ -88,7 +87,7 @@ export function writeTable(pdf: jsPDF, data: (string | number)[][], startX: numb
         })
 
     })
-    return { x: sX, y: sY, w: fullW, h: sumH, x2: sX + fullW, y2: sY + sumH, centerX: fullW / 2 }
+    return { x: sX, y: sY, w: fullW, h: sumH, x2: sX + fullW, y2: (subtract?0:sY) + sumH - subtract, centerX: fullW / 2 }
 }
 
 export function writeBox(pdf: jsPDF, x: number, y: number, w: number, h: number): PdfItemBoundings {

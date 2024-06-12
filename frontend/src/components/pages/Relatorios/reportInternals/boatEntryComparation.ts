@@ -74,9 +74,9 @@ export async function boatEntryComparation(d1: Date, d2: Date, status: number) {
     pdf.setFontSize(fontSize)
     const header = ["Botes", ...getSigles(productsKeys)]
     
-    lastTable = writeTable(pdf, table, lastTable.x,lastTable.y2+6,header , [2], styleDisposition)
+    lastTable = writeTable(pdf, table, lastTable.x,lastTable.y2+6,header , [4], styleDisposition)
     
-    writeTable(pdf,[], lastTable.x, lastTable.y2+6, totalsTable as string[], [2], styleDisposition)
+    writeTable(pdf,[], lastTable.x, lastTable.y2+6, totalsTable as string[], [4], styleDisposition)
     openPDF(pdf)
 }
 
