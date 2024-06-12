@@ -71,8 +71,8 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
 
     useEffect(() => {
         window.addEventListener("keydown",keyListenerHandler)
-        return window.removeEventListener("keydown",keyListenerHandler)
-    }, [transitionBoat, addedTransitionItensData])
+        return ()=>window.removeEventListener("keydown",keyListenerHandler)
+    }, [transitionBoat,addedTransitionItensData])
 
     function resetStates() {
         setAddedTransitionItensData([])

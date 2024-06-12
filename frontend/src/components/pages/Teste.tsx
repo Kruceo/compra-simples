@@ -44,6 +44,7 @@ export default function Teste() {
                 <select name="mode" id="" onChange={(e) => setM(e.currentTarget.value)}>
                     <option value="GET">GET</option>
                     <option value="POST">POST</option>
+                    <option value="PUT">PUT</option>
                 </select>
             </main>
             <main>
