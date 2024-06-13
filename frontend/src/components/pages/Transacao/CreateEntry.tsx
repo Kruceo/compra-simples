@@ -24,7 +24,17 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
     const [transitionBoat, setTransitionBoat] = useState<boteProps>()
     const [obs, setObs] = useState("")
     // const [keepBoatID,setKeepBoatID] = useState(false)
-
+    function resetStates() {
+        setAddedTransitionItensData([])
+        setTransitionBoat(undefined)
+        setObs("")
+        setForceUpdate(!forceUpdate)
+        console.log("reset")
+    }
+    
+    // previne que ao mudar de create/entrada para create/saida, ele nao mantenha os estados do anterior
+    useEffect(resetStates,[window.location.pathname])
+    
     // adiciona um transacao item á lista de adicionados
     const addTransitionItem = (Transação_item: transacaoitemProps) => setAddedTransitionItensData([...addedTransitionItensData, { ...Transação_item, id: addedTransitionItensData.length + 1 }])
 
@@ -73,13 +83,6 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
         window.addEventListener("keydown",keyListenerHandler)
         return ()=>window.removeEventListener("keydown",keyListenerHandler)
     }, [transitionBoat,addedTransitionItensData])
-
-    function resetStates() {
-        setAddedTransitionItensData([])
-        setTransitionBoat(undefined)
-        setObs("")
-        setForceUpdate(!forceUpdate)
-    }
 
     /** Funcao que finaliza a transacao */
     async function submitHandler(addedItens: transacaoitemProps[], boatID?: number, outNavigate?: string) {
@@ -195,7 +198,7 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
                 <Button
                     title="Finalizar e adicionar nova saída"
                     id="submitTransaction"
-                    onClick={() => submitHandler(addedTransitionItensData, transitionBoat?.id, "/create/saida")}
+                    onClick={() => submitHandler(addedTransitionItensData, transitionBoat?.id, `/create/saida?${transitionBoat?"bote_id=" + transitionBoat.id:""}` )}
                 >
                     <i>&#xe962;</i> Finalizar + saída
                 </Button>
