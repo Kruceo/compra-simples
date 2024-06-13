@@ -1,0 +1,28 @@
+name: Docker Compose
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build
+      run: docker compose build frontend backend
+
+    - name: Setup
+      run: docker compose up -d frontend backend db 
+
+    - name: Test Backend
+      run: sleep 30 && curl -f http://localhost:8080/status
+    
+    - name: Test Frontend
+      run: sleep 30 && curl -f http://localhost/login
+      

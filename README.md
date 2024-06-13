@@ -1,6 +1,6 @@
 # Easyfish
 
-[![Frontend Build](https://github.com/Kruceo/easyfish/actions/workflows/frontend-build.yml/badge.svg)](https://github.com/Kruceo/easyfish/actions/workflows/frontend-build.yml)
+[![Docker Compose](https://github.com/Kruceo/easyfish/actions/workflows/compose.yml/badge.svg)](https://github.com/Kruceo/easyfish/actions/workflows/compose.yml)
 
 ![screenshot](https://raw.githubusercontent.com/Kruceo/easyfish/main/docs/media/ss3.png)
 

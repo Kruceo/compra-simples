@@ -22,4 +22,8 @@ app.use('/v1',
 )
 app.use(authRouter)
 
+app.get("/status",(req,res)=>{
+    res.send("OK")
+})
+
 app.listen(cfg.server.port, () => console.log(`Server running in ${cfg.server.port}`))
