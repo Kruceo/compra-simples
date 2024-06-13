@@ -13,6 +13,7 @@ export default function attributeBuilder(text) {
         //this blocks when the user calls /v1/usuario?attributes=senha
         //this block /v1/usuario?attributes=(concat)nome+senha
         for (const part of parsedName.split(/\.| /)) {
+            console.log(part)
             if (blockedAttributes.includes(part))
                 throw new Error("Atributo bloqueado")
         }

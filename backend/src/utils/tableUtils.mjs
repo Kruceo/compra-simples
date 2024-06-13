@@ -1,4 +1,4 @@
-export const blockedAttributes = ["senha","password","pwd","pass","secret","secrets"]
+export const blockedAttributes = ["senha","password","pwd","pass","secret","secrets","usuario","user"]
 
 /**
  * Return only the "allowNull:true" attributes
