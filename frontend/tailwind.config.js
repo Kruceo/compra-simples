@@ -3,11 +3,11 @@ module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
-  darkmode:"class",
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
-        
+
         // toolbar: "#fff",
         // bar: "#eaeaff",
         // sidebar: "#efefff",
@@ -35,19 +35,18 @@ module.exports = {
         // selected: "#224"
 
         bar: "#dfe4f9",
-          sidebar: "#eef0f7",
-          toolbar: "#f2f4fb",
-          headers: "#f2f4fb",
-          subpanel: "#fcfcfc",
-          submit: "#f2f4fb",
-          "submit-text": "#535584",
-          notification: "#f2f4fb",
-          background: "#fcfcfc",
-          "default-text": "#535584",
-          borders: "#ccc8",
-          hovers: "#ccf",
-          selected: "#aaf"
-       
+        sidebar: "#eef0f7",
+        toolbar: "#f2f4fb",
+        headers: "#f2f4fb",
+        subpanel: "#fcfcfc",
+        submit: "#f2f4fb",
+        "submit-text": "#535584",
+        notification: "#f2f4fb",
+        background: "#fcfcfc",
+        "default-text": "#535584",
+        borders: "#ccc8",
+        hovers: "#ccf",
+        selected: "#aaf"
 
         // bar: "#434349",
         // sidebar: "#434349",
@@ -65,7 +64,7 @@ module.exports = {
 
       },
       borderWidth: {
-        "default": 0 ,
+        "default": 0,
         "panel-default": 0,
         "input-default": 1,
         "button-default": 1
@@ -81,28 +80,28 @@ module.exports = {
           "0%": { transform: "translate(-100%,0%)", background: "linear-gradient(90deg,transparent ,#fff1,#58a1,#fff1 ,transparent)" },
           "100%": { transform: "translate(100%,0%)", background: "linear-gradient(90deg,transparent,#fff1,#58a1,#fff1,transparent)" }
         },
-        "explode":{
-          "0%":{
-            "outline":"0px solid",
-            "outline-offset":"0px"
+        "explode": {
+          "0%": {
+            "outline": "0px solid",
+            "outline-offset": "0px"
           },
-          "50%":{
-            "outline":"5px solid",
-            "outline-offset":"2px"
+          "50%": {
+            "outline": "5px solid",
+            "outline-offset": "2px"
           },
-          "100%":{
-            "outline":"0px solid",
-            "outline-offset":"5px"
+          "100%": {
+            "outline": "0px solid",
+            "outline-offset": "5px"
           }
 
         }
       },
       animation: {
-        "explode":"explode 500ms both linear",
+        "explode": "explode 500ms both linear",
         "skeleton-fade": "skeleton-fade 1s infinite linear",
       }
     },
   },
-  plugins:[]
+  plugins: []
 }
 

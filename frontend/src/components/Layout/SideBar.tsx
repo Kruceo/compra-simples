@@ -5,12 +5,12 @@ export default function SideBar() {
     const [show, setShow] = useState(false)
     const [focus, setFocus] = useState(false)
     return <>
-        <nav
+        <nav 
             onFocus={() => setFocus(true)}
             onBlur={() => setFocus(false)}
             onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}
-            className={`bg-sidebar border-borders border-r-default mt-14 h-full fixed left-0 top-0 z-[52]`}>
-            <div id="buttons-grid" className={`flex flex-col ${show || focus ? (focus ? "overflow-visible" : "w-44 opened-sidebar-trans") : "w-14 closed-sidebar-trans"} overflow-hidden`}>
+            className={`bg-sidebar border-borders border-r-default mt-14 h-full fixed left-0 top-0 z-[52] flex flex-col`}>
+            <div id="buttons-grid" className={`flex flex-col h-full ${show || focus ? (focus ? "overflow-visible" : "w-44 opened-sidebar-trans") : "w-14 closed-sidebar-trans"} overflow-hidden`}>
                 <PanelLink href="/"><i className="text-xl mr-4">&#xe900;</i>Dashboard</PanelLink>
                 <DropButton
                     title="Cadastro"
@@ -53,7 +53,9 @@ export default function SideBar() {
 
                     <i className="text-xl mr-4">&#xe93b;</i> Recibos
                 </DropButton>
+                <PanelLink href="/teste" title="Testes" className="mt-auto -translate-y-full opacity-50"><i className="text-xl mr-4">&#xe9aa;</i></PanelLink>
             </div>
+            
         </nav>
 
     </>
@@ -95,7 +97,7 @@ export function DropButton(props: DropButtonAttributes) {
 }
 
 function PanelLink(props: React.HTMLAttributes<HTMLAnchorElement> & { href: string }) {
-    return <Link className="" to={props.href}>
+    return <Link className={props.className} title={props.title} to={props.href}>
         <div className="transition-colors hover:bg-hovers text-default-text font-normal text-left h-14 flex items-center px-4 gap-2">
             {props.children}
         </div></Link>
