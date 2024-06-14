@@ -7,19 +7,6 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-
-        // toolbar: "#fff",
-        // bar: "#eaeaff",
-        // sidebar: "#efefff",
-        // subpanel: "#eee",
-        // submit: "#66f",
-        // "submit-text": "#222",
-        // notification: "#ddf",
-        // background: "#fff",
-        // "default-text": "#222",
-        // borders: "#0002",
-        // hovers: "#0001",
-
         // DARK
         // toolbar: "#151515",
         // bar: "#131313",
@@ -34,6 +21,7 @@ module.exports = {
         // hovers: "#222",
         // selected: "#224"
 
+        // LIGHT
         bar: "#dfe4f9",
         sidebar: "#eef0f7",
         toolbar: "#f2f4fb",
@@ -47,21 +35,6 @@ module.exports = {
         borders: "#ccc8",
         hovers: "#ccf",
         selected: "#aaf"
-
-        // bar: "#434349",
-        // sidebar: "#434349",
-        // toolbar: "#3d3d43",
-        // headers: "#3d3d43",
-        // subpanel: "#434349",
-        // submit: "#22242b",
-        // "submit-text": "#999999",
-        // notification: "#f2f4fb",
-        // background: "#39393f",
-        // "default-text": "#cce",
-        // borders: "#ccc2",
-        // hovers: "#161622",
-        // selected: "#162222"
-
       },
       borderWidth: {
         "default": 0,

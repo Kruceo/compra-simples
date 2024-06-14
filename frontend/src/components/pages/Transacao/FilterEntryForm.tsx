@@ -25,6 +25,17 @@ export default function FilterEntryForm(props: OverPageFormAttributes & { whereS
     const genDateString = () => {
         if (!minDate && !maxDate) return undefined
         const clauses: string[] = []
+        
+        // deixa as datas no extremo de cada ponta
+        // 1 segundo depois da meia noita para a data minima
+        // 1 segundo antes da meia noite para a data maxima
+        minDate?.setHours(23)
+        minDate?.setMinutes(59)
+        minDate?.setSeconds(59)
+        maxDate?.setHours(47)
+        maxDate?.setMinutes(59)
+        maxDate?.setSeconds(59)
+        alert(minDate?.toLocaleString() + " --> " + maxDate?.toLocaleString())
         if (minDate) clauses.push(">" + minDate.toISOString())
         if (maxDate) clauses.push("<" + maxDate.toISOString())
         return clauses.toString()

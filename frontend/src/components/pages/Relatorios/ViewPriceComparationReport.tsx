@@ -22,6 +22,7 @@ export default function BoatEntryComparationReport() {
     const [date1, setDate1] = useState(defaultLastWeek)
     const [date2, setDate2] = useState(nowDate)
     const [status, setStatus] = useState(TRANSACTION_OPEN)
+   
 
     return <>
         <Bar />

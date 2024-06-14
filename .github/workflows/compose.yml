@@ -16,13 +16,19 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build
       run: docker compose build frontend backend
+    
+    - name: Setup Backend
+      run: timeout 30s docker compose up backend db || [[ $? -eq 124 ]] && exit 0
 
-    - name: Setup
-      run: docker compose up -d frontend backend db 
+    - name: Setup Frontend
+      run: timeout 30s docker compose up frontend backend db || [[ $? -eq 124 ]] && exit 0
 
+    - name: Setup All
+      run: docker compose up -d frontend backend db
+    
     - name: Test Backend
       run: sleep 30 && curl -f http://localhost:8080/status
     
     - name: Test Frontend
-      run: sleep 30 && curl -f http://localhost/login
+      run: sleep 60 && curl -f http://localhost/login
       

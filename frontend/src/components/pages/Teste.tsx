@@ -45,10 +45,10 @@ export default function Teste() {
         <Bar />
         <SideBar />
         <Content className="p-4">
-            <button onClick={()=>document.documentElement.classList.toggle("dark")}>Dark-Light</button>
             <main className="flex my-4">
                 <h3>Metodo:</h3>
-                <select name="mode" id="" onChange={(e) => setM(e.currentTarget.value)}>
+                <select className="bg-background border-borders border-input-default"
+                 name="mode" id="" onChange={(e) => setM(e.currentTarget.value)}>
                     <option value="GET">GET</option>
                     <option value="POST">POST</option>
                     <option value="PUT">PUT</option>

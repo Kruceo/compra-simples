@@ -11,7 +11,7 @@ export default function OverPageForm(props: OverPageFormAttributes) {
    
     return <>
         <header className="w-screen h-screen left-0 top-0 fixed bg-[#0008] z-[51]" />
-        <div className="bg-subpanel rounded-sm bg-red w-96 h-fit p-4 z-[60] fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-xl flex flex-col">
+        <div className="bg-subpanel rounded-md bg-red w-96 h-fit p-4 z-[60] fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-xl flex flex-col">
             <button className="ml-auto mb-4 cursor-pointer" autoFocus
                 onClick={() => onCancel ? onCancel() : null} >
                 <i title="Cancelar" className="opacity-20 hover:opacity-100 hover:text-red-600" >&#xea0f;</i>
