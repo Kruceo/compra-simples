@@ -1,8 +1,8 @@
 import fs from 'fs'
-const [, , db_username, db_password, db_schema, db_port, db_host, db_dialect, cors_origin, secret, output] = process.argv
+const [, , db_username, db_password, db_schema, db_port, db_host, db_dialect, cors_origin, secret, tokenExpireTime, testmode, output] = process.argv
 
-if (!db_username, !db_password, !db_schema, !db_port, !db_host, !db_dialect, !cors_origin, !secret, !output) {
-    console.error("use args 'db_username' 'db_password' 'db_schema' 'db_host' 'db_dialect' 'cors_origin' 'secret' 'output'")
+if (!db_username, !db_password, !db_schema, !db_port, !db_host, !db_dialect, !cors_origin, !secret, !tokenExpireTime, !testmode, !output) {
+    console.error("use args 'db_username' 'db_password' 'db_schema' 'db_host' 'db_dialect' 'cors_origin' 'secret' 'testmode' 'output'")
     process.exit()
 }
 
@@ -25,11 +25,12 @@ const f = {
     "security": {
         "jwt": {
             "secret": secret,
-            "tokenExpireTime": "24h"
+            "tokenExpireTime": tokenExpireTime
         },
         "prefixLength": 6,
         "sufixLength": 10
-    }
+    },
+    "test": parseInt(testmode)
 }
 
 fs.writeFileSync(output, JSON.stringify(f))

@@ -35,7 +35,7 @@ export default function FilterEntryForm(props: OverPageFormAttributes & { whereS
         maxDate?.setHours(47)
         maxDate?.setMinutes(59)
         maxDate?.setSeconds(59)
-        alert(minDate?.toLocaleString() + " --> " + maxDate?.toLocaleString())
+        
         if (minDate) clauses.push(">" + minDate.toISOString())
         if (maxDate) clauses.push("<" + maxDate.toISOString())
         return clauses.toString()
