@@ -3,7 +3,7 @@ import statusCodes from "../../utils/statusCode.mjs";
 import { upperCaseLetter } from "../../utils/stringUtils.mjs";
 import { getOnlyNecessaryAttributes } from "../../utils/tableUtils.mjs";
 
-const blockedTables = ["usuario"]
+const blockedTables = ["usuario",'user','usuarios','users']
 
 /**
  * V1 request handler to be used in Routers 

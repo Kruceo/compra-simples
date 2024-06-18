@@ -120,8 +120,14 @@ const Transacao = dbserver.define("transacao", {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0
+    },
+    createdAt:{
+        type:DataTypes.DATE,
+        defaultValue:DataTypes.NOW,
+        allowNull:false
     }
 }, {
+    timestamps:true,
     tableName: "transacoes",
     freezeTableName: true,
     name: {
