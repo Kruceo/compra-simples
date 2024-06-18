@@ -15,6 +15,7 @@ import TransitionItemAdder from "./TransitionAdder";
 import Button from "../../Layout/Button";
 import HelpButton from "../../Layout/HelpButton";
 import { printSingleEntry } from "./PrintEntry";
+import { date2input } from "../Relatorios/ViewPriceComparationReport";
 
 export default function CreateEntry(props: { type: 0 | 1 }) {
     const [forceUpdate, setForceUpdate] = useState(false)
@@ -23,6 +24,11 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
     const [addedTransitionItensData, setAddedTransitionItensData] = useState<transacaoitemProps[]>([])
     const [transitionBoat, setTransitionBoat] = useState<boteProps>()
     const [obs, setObs] = useState("")
+
+    const [dateMode, setDateMode] = useState(window.localStorage.getItem("datemode") ?? "auto")
+    const [transactionDate, setTransactionDate] = useState(new Date())
+    const [customTransactionDate, setCustomTransactionDate] = useState(new Date(window.localStorage.getItem("custom-date") ?? new Date()))
+
     // const [keepBoatID,setKeepBoatID] = useState(false)
     function resetStates() {
         setAddedTransitionItensData([])
@@ -31,10 +37,10 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
         setForceUpdate(!forceUpdate)
         console.log("reset")
     }
-    
+
     // previne que ao mudar de create/entrada para create/saida, ele nao mantenha os estados do anterior
-    useEffect(resetStates,[window.location.pathname])
-    
+    useEffect(resetStates, [window.location.pathname])
+
     // adiciona um transacao item á lista de adicionados
     const addTransitionItem = (Transação_item: transacaoitemProps) => setAddedTransitionItensData([...addedTransitionItensData, { ...Transação_item, id: addedTransitionItensData.length + 1 }])
 
@@ -80,9 +86,9 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
     }
 
     useEffect(() => {
-        window.addEventListener("keydown",keyListenerHandler)
-        return ()=>window.removeEventListener("keydown",keyListenerHandler)
-    }, [transitionBoat,addedTransitionItensData])
+        window.addEventListener("keydown", keyListenerHandler)
+        return () => window.removeEventListener("keydown", keyListenerHandler)
+    }, [transitionBoat, addedTransitionItensData])
 
     /** Funcao que finaliza a transacao */
     async function submitHandler(addedItens: transacaoitemProps[], boatID?: number, outNavigate?: string) {
@@ -90,7 +96,15 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
         if (boatID == undefined) return simpleSpawnInfo("É necessario selecionar um bote.")
         if (addedItens.length === 0) return simpleSpawnInfo("É necessario adicionar algum item à transação.")
 
-        const response = await saveEntryStack(boatID, obs, sumValor(), sumPeso(), props.type, backend.utils.removeAttributeFromAll<transacaoitemProps>(addedItens, "id") as transacaoitemProps[])
+        const response = await saveEntryStack(
+            boatID,
+            obs,
+            sumValor(),
+            sumPeso(),
+            props.type,
+            backend.utils.removeAttributeFromAll<transacaoitemProps>(addedItens, "id") as transacaoitemProps[],
+            dateMode == "auto" ? transactionDate : customTransactionDate
+        )
 
         if (response.error || !response.data)
             return simpleSpawnInfo(response.message ?? "Houve um problema desconhecido ao criar uma Transação.")
@@ -134,6 +148,42 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
                         onSubmit={() => null}
                         next="input[name=product]"
                     />
+                </div>
+                <div className="ml-auto">
+                    <RequiredLabel className="flex">Data</RequiredLabel>
+                    <div className="block">
+                        <label htmlFor="lock-date" tabIndex={dateMode == "auto" ? -1 : 0} className="cursor-pointer select-none mr-2">
+                            {
+                                dateMode == "auto" ?
+                                    <i title="Automático">&#xe98f;</i> :
+                                    <i title="Manual">&#xe990;</i>
+                            }
+                        </label>
+                        <input type="checkbox" defaultChecked={dateMode=="auto"} id="lock-date" name="lock-date" tabIndex={-1} className="hidden" onChange={(e) => {
+                            const newDatemode = e.target.checked ? "auto" : "manual"
+                            setDateMode(newDatemode)
+                            if (newDatemode == "auto") {
+                                setTransactionDate(new Date())
+                            }
+                            window.localStorage.setItem("datemode", newDatemode)
+                        }} />
+
+                        {
+                            dateMode == "auto" ?
+                                <FormInput key="auto" type="date" value={date2input(new Date())} tabIndex={-1} readOnly className="opacity-25" />
+                                :
+                                <FormInput key={"manual"} type="date" id="lock-date"
+                                    onChange={(e) => {
+                                        if (!e.currentTarget.valueAsDate) return
+                                        const date = e.currentTarget.valueAsDate
+                                        date.setHours(24)
+                                        setCustomTransactionDate(date)
+                                        window.localStorage.setItem("custom-date", date.toISOString())
+                                    }}
+                                    defaultValue={date2input(customTransactionDate)} />
+                        }
+
+                    </div>
                 </div>
             </section>
 
@@ -198,7 +248,7 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
                 <Button
                     title="Finalizar e adicionar nova saída"
                     id="submitTransaction"
-                    onClick={() => submitHandler(addedTransitionItensData, transitionBoat?.id, `/create/saida?${transitionBoat?"bote_id=" + transitionBoat.id:""}` )}
+                    onClick={() => submitHandler(addedTransitionItensData, transitionBoat?.id, `/create/saida?${transitionBoat ? "bote_id=" + transitionBoat.id : ""}`)}
                 >
                     <i>&#xe962;</i> Finalizar + saída
                 </Button>

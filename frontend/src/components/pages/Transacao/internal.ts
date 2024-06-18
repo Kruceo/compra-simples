@@ -6,7 +6,7 @@ interface saveEntryStackResponse {
     data?: Partial<transacaoitemProps>
 }
 
-export async function saveEntryStack(bote_id: number, obs: string, valor: number, peso: number, tipo: 0 | 1, transacaoItens: transacaoitemProps[]): Promise<saveEntryStackResponse> {
+export async function saveEntryStack(bote_id: number, obs: string, valor: number, peso: number, tipo: 0 | 1, transacaoItens: transacaoitemProps[],createdAt:Date): Promise<saveEntryStackResponse> {
 
     const boteResponse = await backend.get('bote', { id: bote_id })
     if (boteResponse.data.error || !boteResponse.data.data || !Array.isArray(boteResponse.data.data) || !boteResponse.data.data[0]) return { message: boteResponse.data.message, error: true }
@@ -19,7 +19,8 @@ export async function saveEntryStack(bote_id: number, obs: string, valor: number
         obs,
         tipo,
         valor: valor,
-        peso: peso
+        peso: peso,
+        createdAt
     })
     if (transacaoResponse.data.error || !transacaoResponse.data.data || Array.isArray(transacaoResponse.data.data) || !transacaoResponse.data.data.id) return { message: transacaoResponse.data.message, error: true };
 

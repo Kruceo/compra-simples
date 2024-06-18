@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import beautyNumber from "../../../constants/numberUtils";
 import FormPrevisionInput from "../../OverPageForm/FormPrevisionInput";
 import FormInput from "../../OverPageForm/FormInput";
+import { date2input } from "../Relatorios/ViewPriceComparationReport";
 
 export default function EditEntry() {
     const url = new URL(window.location.href);
@@ -31,7 +32,7 @@ export default function EditEntry() {
      * @param key 
      * @param value 
      */
-    function changeKey(key: "bote_id" | "obs" | "valor" | "peso" | "usuario_id", value: any) {
+    function changeKey(key: "bote_id" | "obs" | "valor" | "peso" | "usuario_id" | "createdAt", value: any) {
         if (!data) return
         const newData = { ...data }
 
@@ -95,25 +96,43 @@ export default function EditEntry() {
                 <h2>Editor de Transação</h2>
             </section>
 
-            <section className="px-4 py-8 border-b border-borders">
-                <RequiredLabel className="relative block">Bote</RequiredLabel>
-                <FormPrevisionInput className="w-64"
-                    searchInTable="bote"
-                    itemHandler={(item: boteProps) => item.nome}
-                    onSubmit={() => null}
-                    where={{}}
-                    autoFocus
-                    defaultValue={data.bote_id}
-                    onChange={(e: boteProps | null) => {
-                        if (e)
-                            changeKey("bote_id", e.id)
-                    }} />
+            <section className="px-4 py-8 border-b border-borders flex">
+                <div>
+                    <RequiredLabel className="relative block">Bote</RequiredLabel>
+                    <FormPrevisionInput className="w-96"
+                        searchInTable="bote"
+                        itemHandler={(item: boteProps) => item.nome}
+                        onSubmit={() => null}
+                        where={{}}
+                        autoFocus
+                        defaultValue={data.bote_id}
+                        onChange={(e: boteProps | null) => {
+                            if (e)
+                                changeKey("bote_id", e.id)
+                        }} />
+                </div>
+                <div className="ml-auto">
+                    <RequiredLabel className="flex">Data</RequiredLabel>
+                    <div className="block">
+
+                        <FormInput type="date"
+                            onChange={(e) => {
+                                if (!e.currentTarget.valueAsDate) return
+                                const date = e.currentTarget.valueAsDate
+                                date.setHours(24)
+                                changeKey("createdAt", date.toISOString())
+                            }}
+                            defaultValue={date2input(new Date(data.createdAt))} />
+
+
+                    </div>
+                </div>
             </section>
 
             <section className="pl-4 py-0 border-b border-borders">
                 <div className="grid grid-cols-3">
                     <div className="col-span-1 border-r border-borders pr-4 py-8">
-                        <TransitionItemAdder productWhere={{tipo:data.tipo}} onSubmit={(d) => setToAddItens([...toAddItens, d])}></TransitionItemAdder>
+                        <TransitionItemAdder productWhere={{ tipo: data.tipo }} onSubmit={(d) => setToAddItens([...toAddItens, d])}></TransitionItemAdder>
                     </div>
                     <div className="col-span-2">
                         <Table
@@ -195,9 +214,9 @@ async function finishEdit(data: transacaoProps, toAdd: transacaoitemProps[], toR
 
     // Edita os itens um a um
     const editRes = await backend.bulkEdit("transacao_item", data.transacao_itens)
-    
+
     if (editRes.data.error && editRes.data.message)
-    return editRes.data
+        return editRes.data
 
     // mas isso deleta cada um dos itens um a um
     // se houver um erro, retorna     
@@ -207,7 +226,7 @@ async function finishEdit(data: transacaoProps, toAdd: transacaoitemProps[], toR
     }
 
     //Por fim apenas edita a transacao com as somas e dados atualizados
-    const transactionEditRes = await backend.edit("transacao", data.id, { valor: totalValue, peso: totalWeight, bote_id: data.bote_id, obs: data.obs })
+    const transactionEditRes = await backend.edit("transacao", data.id, { valor: totalValue, peso: totalWeight, bote_id: data.bote_id, obs: data.obs, createdAt: data.createdAt })
 
     if (transactionEditRes.data.error) return { error: true, message: transactionEditRes.data.message }
 
