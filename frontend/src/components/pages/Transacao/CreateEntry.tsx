@@ -177,6 +177,9 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
                                         if (!e.currentTarget.valueAsDate) return
                                         const date = e.currentTarget.valueAsDate
                                         date.setHours(24)
+                                        date.setHours(transactionDate.getHours())
+                                        date.setMinutes(transactionDate.getMinutes())
+                                        date.setSeconds(transactionDate.getSeconds())
                                         setCustomTransactionDate(date)
                                         window.localStorage.setItem("custom-date", date.toISOString())
                                     }}

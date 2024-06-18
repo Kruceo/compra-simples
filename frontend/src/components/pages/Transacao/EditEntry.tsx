@@ -119,7 +119,11 @@ export default function EditEntry() {
                             onChange={(e) => {
                                 if (!e.currentTarget.valueAsDate) return
                                 const date = e.currentTarget.valueAsDate
+                                const now = new Date()
                                 date.setHours(24)
+                                date.setHours(now.getHours())
+                                date.setMinutes(now.getMinutes())
+                                date.setSeconds(now.getSeconds())
                                 changeKey("createdAt", date.toISOString())
                             }}
                             defaultValue={date2input(new Date(data.createdAt))} />

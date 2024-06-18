@@ -48,7 +48,7 @@ export default function Teste() {
             <main className="flex my-4">
                 <h3>Metodo:</h3>
                 <select className="bg-background border-borders border-input-default"
-                 name="mode" id="" onChange={(e) => setM(e.currentTarget.value)}>
+                    name="mode" id="" onChange={(e) => setM(e.currentTarget.value)}>
                     <option value="GET">GET</option>
                     <option value="POST">POST</option>
                     <option value="PUT">PUT</option>
@@ -57,8 +57,22 @@ export default function Teste() {
                 </select>
             </main>
             <main className="my-4">
-                <h3>URL</h3>
-                <textarea className="w-full h-32 p-2 rounded-md text-default-text bg-background border-input-default border-borders" defaultValue={add} onChange={(e) => {
+                <div className="flex">
+                    <h3>URL</h3>
+                    <button className="ml-auto mr-4" onClick={() => {
+                        const el: HTMLInputElement | null = document.querySelector("#url")
+                        if (!el) return
+
+                        el.value = el.value.replace(/\n/g, "")
+                    }}>minify</button>
+                    <button onClick={() => {
+                        const el: HTMLInputElement | null = document.querySelector("#url")
+                        if (!el) return
+
+                        el.value = el.value.replace(/&|\?/g, (r: string) => r + "\n")
+                    }}>maxify</button>
+                </div>
+                <textarea id="url" className="w-full h-32 p-2 rounded-md text-default-text bg-background border-input-default border-borders" defaultValue={add} onChange={(e) => {
                     window.localStorage.setItem("_vasAdd", e.currentTarget.value)
                     setAdd(e.currentTarget.value.replace(/\n/g, ""))
                 }} />
@@ -83,9 +97,9 @@ export default function Teste() {
             }}>Enviar</Button>
 
             <Button onClick={pdftest}>Gerar PDF</Button>
-            <main className="my-4 border-t-borders border-t">
+            <main className="my-4 py-4 border-t-borders border-t">
                 <h3>Resultado (JSON)</h3>
-                <pre>
+                <pre className="border-borders border rounded-md min-h-64">
                     <code>
                         {resText}
                     </code>
