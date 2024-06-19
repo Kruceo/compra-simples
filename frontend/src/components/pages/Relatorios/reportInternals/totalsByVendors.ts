@@ -10,7 +10,8 @@ export default async function totalsByVendors(d1: Date, d2: Date, status: number
         attributes: "bote.fornecedor.nome,(sum)valor,(sum)peso,tipo",
         group: "bote.fornecedor.nome,tipo",
         status: status,
-        order: "tipo,DESC"
+        order: "tipo,DESC",
+        createdAt:">"+d1.toISOString()+",<"+d2.toISOString()
     })
 
     if (res0.data.error || !res0.data.data) return console.error(res0.data.message)
