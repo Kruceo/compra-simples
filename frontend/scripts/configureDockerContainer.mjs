@@ -2,12 +2,14 @@
 
 import fs from "fs"
 import cp from "child_process"
+const WWW_PATH = "/var/www/app/"
 
 const nginxConfig = `\
-server {                                         
-    listen 80;                                    
+server {                        
+    listen 80 default_server;                 
+    listen [::]:80 default_server;                                    
     server_name ${process.env.DOMAIN};                        
-    root /var/www;                                
+    root ${WWW_PATH};                                
     index index.html;                             
                                                   
     location / {                                  
@@ -17,8 +19,9 @@ server {
 
 const prod = process.env.PROD ? true : false
 
-if (prod)
-    fs.writeFileSync("/etc/nginx/conf.d/react-app.conf", nginxConfig)
+if (prod) {
+    fs.writeFileSync(`/etc/nginx/conf.d/app.conf`, nginxConfig)
+}
 
 let config = {
     "api_address": process.env.API_ADDRESS,
@@ -34,7 +37,9 @@ let config = {
 fs.writeFileSync("config.json", JSON.stringify(config, null, 2))
 console.log("Configuration created.")
 
-if (fs.existsSync("/var/www/assets")) process.exit()
+
+
+if (fs.existsSync(WWW_PATH + "assets")) process.exit()
 
 if (!fs.existsSync("./dist/assets")) {
     console.log("dist not exists")
@@ -43,9 +48,9 @@ if (!fs.existsSync("./dist/assets")) {
 
 if (!prod) process.exit()
 
-if (!fs.existsSync("/var/www"))
-    fs.mkdirSync("/var/www", { recursive: true })
+if (!fs.existsSync(WWW_PATH))
+    fs.mkdirSync(WWW_PATH, { recursive: true })
 
-if (!fs.existsSync("/var/www/assets"))
-    cp.execSync("cp -r ./dist/* /var/www/", { stdio: "inherit" })
+if (!fs.existsSync(WWW_PATH + "assets"))
+    cp.execSync(`cp -r ./dist/* ${WWW_PATH}`, { stdio: "inherit" })
 

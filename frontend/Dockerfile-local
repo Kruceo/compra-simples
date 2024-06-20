@@ -4,15 +4,13 @@ RUN apt update
 RUN apt install git -y
 
 RUN apt install nginx -y
-RUN rm /etc/nginx/conf.d/*
-RUN rm /etc/nginx/sites-available/*
 
 WORKDIR /easyfish/frontend
 ENV DOMAIN=localhost
 
 # Downloads only package.json and install dependencies first
-RUN curl https://raw.githubusercontent.com/Kruceo/easyfish/main/frontend/package.json -o package.json
-RUN curl https://raw.githubusercontent.com/Kruceo/easyfish/main/frontend/package-lock.json -o package-lock.json
+COPY package.json package.json
+COPY package-lock.json package-lock.json
 RUN npm i
 RUN rm package.json
 RUN rm package-lock.json
@@ -20,12 +18,7 @@ RUN rm package-lock.json
 # Clone just the "frontend" of github repo
 LABEL random="0"
 WORKDIR /easyfish
-RUN git init
-RUN git branch -m main
-RUN git remote add -f origin https://github.com/Kruceo/easyfish.git
-RUN git config core.sparseCheckout true
-RUN echo "frontend" >> .git/info/sparse-checkout
-RUN git pull origin main
+COPY . frontend
 
 # Return to frontend folder
 WORKDIR /easyfish/frontend
@@ -38,6 +31,9 @@ ENV API_PORT=8080
 ENV PRINTER_ADDRESS=localhost
 ENV PRINTER_PROTOCOL=http
 ENV PRINTER_PORT=8888  
+
+# RUN rm /etc/nginx/conf.d/
+RUN rm /etc/nginx/sites-enabled/*
 
 # Configure the frontend entrypoint
 RUN echo "node ./scripts/configureDockerContainer.mjs"     > start.sh && \
