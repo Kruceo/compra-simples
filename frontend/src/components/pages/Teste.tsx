@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Button from "../Layout/Button"
 import jsPDF from "jspdf"
-import { openPDF, writeHeader, writeTable } from "./Relatorios/reportInternals/libraryReports"
+import { openPDF, writeHeader, writeTable } from "./Reports/reportInternals/libraryReports"
 import { getSigles } from "../../constants/stringUtils"
 import SideBar from "../Layout/SideBar"
 import Bar from "../Layout/Bar"
@@ -9,7 +9,7 @@ import Content from "../Layout/Content"
 
 export default function Teste() {
     const [body, setBody] = useState("")
-    const [add, setAdd] = useState(window.localStorage.getItem("_vasAdd") ?? "http://localhost:8080/v1/produto")
+    const [add, setAdd] = useState(window.localStorage.getItem("test-url") ?? "http://localhost:8080/v1/produto")
     const [m, setM] = useState("GET")
     const [resText, setResText] = useState("")
 
@@ -73,7 +73,7 @@ export default function Teste() {
                     }}>maxify</button>
                 </div>
                 <textarea id="url" className="w-full h-32 p-2 rounded-md text-default-text bg-background border-input-default border-borders" defaultValue={add} onChange={(e) => {
-                    window.localStorage.setItem("_vasAdd", e.currentTarget.value)
+                    window.localStorage.setItem("test-item", e.currentTarget.value)
                     setAdd(e.currentTarget.value.replace(/\n/g, ""))
                 }} />
             </main>

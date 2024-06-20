@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import beautyNumber from "../../../constants/numberUtils";
 import FormPrevisionInput from "../../OverPageForm/FormPrevisionInput";
 import FormInput from "../../OverPageForm/FormInput";
-import { date2input } from "../Relatorios/ViewPriceComparationReport";
+import { date2input } from "../Reports/ViewPriceComparationReport";
 
 export default function EditEntry() {
     const url = new URL(window.location.href);

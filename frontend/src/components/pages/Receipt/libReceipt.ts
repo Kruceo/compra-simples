@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import beautyNumber from "../../../constants/numberUtils";
 import extenso from "extenso";
-import { writeBox } from "../Relatorios/reportInternals/libraryReports";
+import { writeBox } from "../Reports/reportInternals/libraryReports";
 import { extenseDate } from "../../../constants/dateUtils";
 
 export function WriteReceipt2PDF(pdf: jsPDF, y: number, value: number, receiverName: string, date: Date, referenceText?: string, n?: number) {

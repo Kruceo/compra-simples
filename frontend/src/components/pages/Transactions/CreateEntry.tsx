@@ -15,7 +15,7 @@ import TransitionItemAdder from "./TransitionAdder";
 import Button from "../../Layout/Button";
 import HelpButton from "../../Layout/HelpButton";
 import { printSingleEntry } from "./PrintEntry";
-import { date2input } from "../Relatorios/ViewPriceComparationReport";
+import { date2input } from "../Reports/ViewPriceComparationReport";
 
 export default function CreateEntry(props: { type: 0 | 1 }) {
     const [forceUpdate, setForceUpdate] = useState(false)

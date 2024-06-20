@@ -1,12 +1,12 @@
 import { Route, Routes } from 'react-router-dom'
-import ViewBotes from './components/pages/Botes/ViewBoat'
-import ViewProducts from './components/pages/Produtos/ViewProducts'
-import ViewVendors from './components/pages/Fornecedores/ViewVendors'
-import CreateEntry from './components/pages/Transacao/CreateEntry'
-import PrintEntry from './components/pages/Transacao/PrintEntry'
-import ViewEntry from './components/pages/Transacao/ViewEntry'
-import ViewReports from './components/pages/Relatorios/ViewPriceComparationReport'
-import DetailsEntry from './components/pages/Transacao/DetailsEntry'
+import ViewBotes from './components/pages/Boats/ViewBoat'
+import ViewProducts from './components/pages/Products/ViewProducts'
+import ViewVendors from './components/pages/Vendors/ViewVendors'
+import CreateEntry from './components/pages/Transactions/CreateEntry'
+import PrintEntry from './components/pages/Transactions/PrintEntry'
+import ViewEntry from './components/pages/Transactions/ViewEntry'
+import ViewReports from './components/pages/Reports/ViewPriceComparationReport'
+import DetailsEntry from './components/pages/Transactions/DetailsEntry'
 import LoginScreen from './components/pages/Login/LoginScreen'
 import ViewDashboard from './components/pages/Dashboard/ViewDashboard'
 import { Proteged } from './components/Layout/ProtegedRoute'
@@ -15,14 +15,14 @@ import ErrorHandler from './components/GlobalContexts/ErrorHandlerContext'
 import TableEngine from './components/GlobalContexts/TableEngineContext'
 import View404 from './components/pages/404/View404'
 import Teste from './components/pages/Teste'
-import ViewBoatEntryComparationReport from './components/pages/Relatorios/ViewBoatEntryComparationReport'
-import ViewTransComparationReport from './components/pages/Relatorios/ViewTransComparationReport'
-import ViewReceipt from './components/pages/Recibos/ViewOnceReceipt'
-import ViewPerTransReceipt from './components/pages/Recibos/ViewPerTransReceipt'
-import ViewEntryItemReport from './components/pages/Relatorios/ViewEntryItemReport'
-import ViewTotalsByVendors from './components/pages/Relatorios/ViewTotalsByVendors'
-import ViewPerVendorReceipt from './components/pages/Recibos/ViewPerVendor'
-import EditEntry from './components/pages/Transacao/EditEntry'
+import ViewBoatEntryComparationReport from './components/pages/Reports/ViewBoatEntryComparationReport'
+import ViewTransComparationReport from './components/pages/Reports/ViewTransComparationReport'
+import ViewReceipt from './components/pages/Receipt/ViewOnceReceipt'
+import ViewPerTransReceipt from './components/pages/Receipt/ViewPerTransReceipt'
+import ViewEntryItemReport from './components/pages/Reports/ViewEntryItemReport'
+import ViewTotalsByVendors from './components/pages/Reports/ViewTotalsByVendors'
+import ViewPerVendorReceipt from './components/pages/Receipt/ViewPerVendor'
+import EditEntry from './components/pages/Transactions/EditEntry'
 import { useEffect } from 'react'
 import icon from './assets/icon.svg'
 
@@ -67,9 +67,6 @@ function App() {
           </TableEngine>
         </ErrorHandler>
       </PopupContext>
-
-
-
     </>
   )
 }

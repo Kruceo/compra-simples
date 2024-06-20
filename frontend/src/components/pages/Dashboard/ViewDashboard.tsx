@@ -39,6 +39,7 @@ export default function ViewDashboard() {
         <Content className="flex">
             <HelpButton content={"F8 - Nova entrada\nF9 - Nova saída"} className="absolute left-full -translate-x-full z-50" />
             <img src={logo} alt="icon" className="w-80 opacity-5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+            <iframe className="w-full min-h-96" src="http://192.168.0.10:3000/public-dashboards/0a3787b579304dcdbf51106f5ad45f8b?theme=light" frameBorder="1"></iframe>
         </Content>
     </>
 }

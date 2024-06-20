@@ -8,7 +8,7 @@ import Table from "../../table/Table";
 import SubTopBar, { ToolBarButton } from "../../Layout/SubTopBar";
 import { WriteReceipt2PDF } from "./libReceipt";
 import jsPDF from "jspdf";
-import { openPDF, writeBox } from "../Relatorios/reportInternals/libraryReports";
+import { openPDF, writeBox } from "../Reports/reportInternals/libraryReports";
 import { getNextSaturday } from "../../../constants/dateUtils";
 import { TRANSACTION_OPEN } from "../../../constants/codes";
 import beautyNumber from "../../../constants/numberUtils";
