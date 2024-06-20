@@ -169,14 +169,14 @@ const Transacao_item = dbserver.define("transacao_item", {
         singular: "transacao_item"
     }
 })
-await Produto.sync({ force: false })
-await Usuario.sync({ force: false })
-await Fornecedor.sync({ force: false })
-
-
-await Bote.sync({ force: false })
-await Transacao.sync({ force: false })
-await Transacao_item.sync({ force: false })
+// await Produto.sync({ force: false })
+// await Usuario.sync({ force: false })
+// await Fornecedor.sync({ force: false })
+// 
+// 
+// await Bote.sync({ force: false })
+// await Transacao.sync({ force: false })
+// await Transacao_item.sync({ force: false })
 
 
 /** Setup relations */
@@ -204,12 +204,12 @@ Usuario.hasMany(Transacao, { foreignKey: 'usuario_id' })
 
 // Sync relations
 
-await Produto.sync({ alter: true })
-await Usuario.sync({ alter: true })
-await Bote.sync({ alter: true })
-await Fornecedor.sync({ alter: true })
-await Transacao.sync({ alter: true })
-await Transacao_item.sync({ alter: true })
+// await Produto.sync({ alter: true })
+// await Usuario.sync({ alter: true })
+// await Bote.sync({ alter: true })
+// await Fornecedor.sync({ alter: true })
+// await Transacao.sync({ alter: true })
+// await Transacao_item.sync({ alter: true })
 
 export default {
     Bote, Fornecedor, Produto, Transacao, Transacao_item, Usuario

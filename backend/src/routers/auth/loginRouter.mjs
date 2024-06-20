@@ -46,7 +46,7 @@ authRouter.post("/auth/login", async (req, res) => {
 authRouter.get("/auth/validate", async (req, res) => {
 
     const token = req.cookies.token
-
+    
     if (!token) return res.status(statusCodes.Unauthorized)
         .json({ error: true, message: "Sem as credenciais necessárias." })
 

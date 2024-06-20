@@ -25,17 +25,19 @@ ENV   DB_DIALECT=postgres
 
 ENV CORS_ORIGIN=localhost
 
+ENV CORS_SAME_FROM_REQUEST=false
+
 ENV SECRET=2crows
 
 ENV TEST=false
 
 ENV TOKEN_EXPIRE_TIME=24h
 
-ENV TESTMODE=0
+ENV TESTMODE=false
 
 RUN npm i
 
-RUN echo "node ./tools/genConfigFile.mjs \$DB_USERNAME \$DB_PASSWORD \$DB_SCHEMA \$DB_PORT \$DB_HOST \$DB_DIALECT \$CORS_ORIGIN \$SECRET \$TOKEN_EXPIRE_TIME \$TESTMODE ./config/config.json" > start.sh
+RUN echo "node ./tools/genConfigFile.mjs \$DB_USERNAME \$DB_PASSWORD \$DB_SCHEMA \$DB_PORT \$DB_HOST \$DB_DIALECT \$CORS_ORIGIN \$CORS_SAME_FROM_REQUEST \$SECRET \$TOKEN_EXPIRE_TIME \$TESTMODE ./config/config.json" > start.sh
 RUN echo "node index.mjs" >> start.sh
 RUN chmod +x start.sh
 

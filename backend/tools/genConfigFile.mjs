@@ -1,8 +1,8 @@
 import fs from 'fs'
-const [, , db_username, db_password, db_schema, db_port, db_host, db_dialect, cors_origin, secret, tokenExpireTime, testmode, output] = process.argv
+const [, , db_username, db_password, db_schema, db_port, db_host, db_dialect, cors_origin, cors_sameFromRequest, secret, tokenExpireTime, testmode, output] = process.argv
 
-if (!db_username, !db_password, !db_schema, !db_port, !db_host, !db_dialect, !cors_origin, !secret, !tokenExpireTime, !testmode, !output) {
-    console.error("use args 'db_username' 'db_password' 'db_schema' 'db_host' 'db_dialect' 'cors_origin' 'secret' 'testmode' 'output'")
+if (!db_username, !db_password, !db_schema, !db_port, !db_host, !db_dialect, !cors_origin, !cors_sameFromRequest, !secret, !tokenExpireTime, !testmode, !output) {
+    console.error("use args 'db_username' 'db_password' 'db_schema' 'db_host' 'db_dialect' 'cors_origin' 'cors_sameFromRequest' 'secret' 'testmode' 'output'")
     process.exit()
 }
 
@@ -19,7 +19,8 @@ const f = {
         "port": 8080,
         "cors": {
             "origin": cors_origin.split(","),
-            "credentials": true
+            "credentials": true,
+            "sameFromRequest": cors_sameFromRequest == "true"
         }
     },
     "security": {
@@ -30,7 +31,7 @@ const f = {
         "prefixLength": 6,
         "sufixLength": 10
     },
-    "test": parseInt(testmode)
+    "test": testmode == "true"
 }
 
 fs.writeFileSync(output, JSON.stringify(f))
