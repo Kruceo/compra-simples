@@ -73,7 +73,7 @@ export default function Teste() {
                     }}>maxify</button>
                 </div>
                 <textarea id="url" className="w-full h-32 p-2 rounded-md text-default-text bg-background border-input-default border-borders" defaultValue={add} onChange={(e) => {
-                    window.localStorage.setItem("test-item", e.currentTarget.value)
+                    window.localStorage.setItem("test-url", e.currentTarget.value)
                     setAdd(e.currentTarget.value.replace(/\n/g, ""))
                 }} />
             </main>

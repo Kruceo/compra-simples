@@ -89,7 +89,7 @@ export default function ViewEntry() {
     return <>
         <Bar />
         <SideBar />
-        <Content>
+        <Content includeSubTopBar>
             <SubTopBar leftContent={<>
                 <ToolBarButton onClick={() => setGlobalPopupByKey("TransactionFilter",
                     <FilterEntryForm whereSetter={(w) => { setWhere({ ...blockedWhere, ...w }); setSelected([]) }} onCancel={() => setGlobalPopupByKey("TransactionFilter", null)} />
@@ -103,7 +103,7 @@ export default function ViewEntry() {
                 <ToolBarButton enabled={selected.length > 0} onClick={closeHandler} title={selected.length<1?"Selecione algum item":undefined}>
                     <i>&#xe95e;</i> Fechamento</ToolBarButton>
             </SubTopBar>
-            <div className="w-full h-full mt-[6.5rem]">
+            <div className="w-full h-full">
                 <Table
                     loading={loadingData}
                     selected={selected}

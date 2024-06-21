@@ -23,8 +23,8 @@ export default function Bar() {
     const user = Cookies.get("user")
     return <>
 
-        <header className="bg-bar border-b-default border-borders w-full h-14 fixed left-0 top-0 flex items-center z-[51]">
-            <div className="bg-[#2221] w-14 h-14 p-3 absolute">
+        <header className="bg-bar border-b-default border-borders w-full h-bar-h fixed left-0 top-0 flex items-center z-[51]">
+            <div className="bg-[#2221] w-bar-h h-bar-h p-3 absolute">
                 <img src={logo} alt="logo" className="opacity-25 hover:opacity-75 transition-[opacity]" />
             </div>
             <div className="ml-auto flex justify-center items-center gap-4 relative">

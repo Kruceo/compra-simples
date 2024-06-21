@@ -1,11 +1,17 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+var myTheme = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   darkMode: "class",
   theme: {
     extend: {
+      sizes: {
+        "bar-h": "52px",
+        "sidebar-w": "52px",
+        "content-w": "calc(100vw - %sizes.sidebar-w%)",
+        "content-h": "calc(100vh - %sizes.bar-h%)"
+      },
       colors: {
         // DARK
         // toolbar: "#151515",
@@ -72,9 +78,43 @@ module.exports = {
       animation: {
         "explode": "explode 500ms both linear",
         "skeleton-fade": "skeleton-fade 1s infinite linear",
-      }
+      },
+
     },
   },
   plugins: []
 }
+
+// Mini plugin to support variable links (%my.var%)
+Object.keys(myTheme.theme.extend).forEach(style => {
+  Object.keys(myTheme.theme.extend[style]).forEach(each => {
+    
+    let v = myTheme.theme.extend[style][each]
+   
+    const regx = /%[a-z\-A-Z]+?\.[a-z\-A-Z]+?%/g
+    
+    if (regx.test(v)) {
+      v = v.replace(regx, (r) => {
+        const splited = r.slice(1, r.length - 1).split(".")
+        const newValue = splited.reduce((acum, next) => {
+          return acum[next]
+        }, myTheme.theme.extend)
+
+        return newValue
+      })
+      myTheme.theme.extend[style][each] = v
+    }
+  })
+})
+
+
+const keysToSet = ["width", "height", "margin", "borderWidth", "padding", "inset","minHeight","minWidth"]
+keysToSet.forEach(k => {
+  if (myTheme.theme.extend[k]) {
+    myTheme.theme.extend[k] = { ...myTheme.theme.extend[k], ...myTheme.theme.extend.sizes }
+  }
+  else myTheme.theme.extend[k] = myTheme.theme.extend.sizes
+})
+
+module.exports = myTheme
 

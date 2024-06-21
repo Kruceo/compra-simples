@@ -93,12 +93,12 @@ export default function ViewVendors() {
     return <>
         <Bar />
         <SideBar />
-        <Content>
+        <Content includeSubTopBar>
             <TableToolBar
                 createHandler={createHandler}
                 searchHandler={searchHandler}
             />
-            <div className="w-full h-full mt-[6.5rem]">
+            <div className="w-full h-full">
                 <Table loading={loadingData}
                     contextMenu={{ buttons: tableContextMenuButtons }}
                     onOrderChange={orderHandler}

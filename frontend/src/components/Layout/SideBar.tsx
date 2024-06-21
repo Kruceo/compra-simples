@@ -9,8 +9,8 @@ export default function SideBar() {
             onFocus={() => setFocus(true)}
             onBlur={() => setFocus(false)}
             onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}
-            className={`bg-sidebar border-borders border-r-default mt-14 h-full fixed left-0 top-0 z-[52] flex flex-col`}>
-            <div id="buttons-grid" className={`flex flex-col h-full ${show || focus ? (focus ? "overflow-visible" : "w-44 opened-sidebar-trans") : "w-14 closed-sidebar-trans"} overflow-hidden`}>
+            className={`bg-sidebar border-borders border-r-default mt-bar-h h-full fixed left-0 top-0 z-[52] flex flex-col`}>
+            <div id="buttons-grid" className={`flex flex-col h-full ${show || focus ? (focus ? "overflow-visible" : "w-44 opened-sidebar-trans") : "w-sidebar-w closed-sidebar-trans"} overflow-hidden`}>
                 <PanelLink href="/"><i className="text-xl mr-4">&#xe900;</i>Dashboard</PanelLink>
                 <DropButton
                     title="Cadastro"

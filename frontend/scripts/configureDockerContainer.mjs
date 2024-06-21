@@ -31,7 +31,8 @@ let config = {
         "address": process.env.PRINTER_ADDRESS,
         "protocol": process.env.PRINTER_PROTOCOL,
         "port": process.env.PRINTER_PORT
-    }
+    },
+    "dashboard_custom_page":process.env.DASHBOARD_CUSTOM_PAGE
 }
 
 fs.writeFileSync("config.json", JSON.stringify(config, null, 2))

@@ -5,7 +5,7 @@ import SideBar from "../../Layout/SideBar";
 import { useNavigate } from "react-router-dom";
 import HelpButton from "../../Layout/HelpButton";
 import logo from '../../../assets/icon.svg'
-
+import cfg from '../../../../config.json'
 
 export default function ViewDashboard() {
     const navigate = useNavigate()
@@ -32,14 +32,18 @@ export default function ViewDashboard() {
     // remove date settings saved from CreateEntry.tsx page
     window.localStorage.removeItem("datemode")
     window.localStorage.removeItem("custom-date")
-
     return <>
         <Bar />
         <SideBar />
         <Content className="flex">
             <HelpButton content={"F8 - Nova entrada\nF9 - Nova saída"} className="absolute left-full -translate-x-full z-50" />
-            <img src={logo} alt="icon" className="w-80 opacity-5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
-            <iframe className="w-full min-h-96" src="https://grafana.kruceo.com/public-dashboards/0a3787b579304dcdbf51106f5ad45f8b?orgId=1"></iframe>
+            
+            {
+                cfg.dashboard_custom_page ?
+                    <iframe id="frame" className="w-full h-content-h bg-black" src={cfg.dashboard_custom_page}></iframe>
+                    : <img src={logo} alt="icon" className="w-80 opacity-5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+            }
+
         </Content>
     </>
 }

@@ -36,6 +36,7 @@ ENV API_PORT=8080
 ENV PRINTER_ADDRESS=localhost
 ENV PRINTER_PROTOCOL=http
 ENV PRINTER_PORT=8888  
+# ENV DASHBOARD_CUSTOM_PAGE="https://kruceo.com"
 
 # Configure the frontend entrypoint
 RUN echo "node ./scripts/configureDockerContainer.mjs"     > start.sh && \

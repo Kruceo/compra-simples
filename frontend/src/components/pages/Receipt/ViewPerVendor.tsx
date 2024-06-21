@@ -73,7 +73,7 @@ export default function ViewPerVendorReceipt() {
     return <>
         <Bar></Bar>
         <SideBar></SideBar>
-        <Content>
+        <Content includeSubTopBar>
             <SubTopBar>
                 <ToolBarButton onClick={() => {
                     if (selected.length > 0) setSelected([])
@@ -81,7 +81,7 @@ export default function ViewPerVendorReceipt() {
                 }}><i>&#xe997;</i> Selecionar Todos</ToolBarButton>
                 <ToolBarButton enabled={selected.length > 0} onClick={generateReceipts}><i>&#xe93b;</i> Gerar Recibos</ToolBarButton>
             </SubTopBar>
-            <div className="w-full h-full mt-[6.5rem]">
+            <div className="w-full h-full">
                 <Table
                     loading={loadingData}
                     data={data as any}
