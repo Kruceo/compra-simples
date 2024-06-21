@@ -42,14 +42,19 @@ async function authenticateToken(token) {
  * @param {import('express').NextFunction} next 
  */
 async function authenticationMiddleware(req, res, next) {
+    //Testmode
     if (cfg.test) {
         req.auth = { user: (await Usuario.findOne()).dataValues }
         next()
         return;
     }
-    if (!req.cookies || !req.cookies.token) return res.status(statusCodes.Unauthorized)
+
+    //Normal mode
+    if (!req.headers.authorization) return res.status(statusCodes.Unauthorized)
         .json({ error: true, message: "Autorização inválida ou inexistente." })
-    const validadtion = await authenticateToken(req.cookies.token)
+
+    const token = req.headers.authorization.replace("bearer ", "")
+    const validadtion = await authenticateToken(token)
 
     //Provide the user to other services can use 
     req.auth = { user: validadtion }

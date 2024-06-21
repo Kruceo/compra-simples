@@ -13,7 +13,11 @@ export function Proteged(props: PropsWithChildren) {
     useEffect(() => {
         (async () => {
             try {
-                const response = await axios.get(api_protocol + "://" + api_address + ":" + api_port + "/auth/validate", { withCredentials: true })
+                const response = await axios.get(api_protocol + "://" + api_address + ":" + api_port + "/auth/validate", 
+                { 
+                    withCredentials: true,
+                    headers:{Authorization:`bearer ${window.localStorage.getItem("auth-token")}`}
+                })
                 if (response.data && !response.data.error) {
                     Cookies.set("user", response.data.user, { domain: api_address })
                     setAuthorized(true)

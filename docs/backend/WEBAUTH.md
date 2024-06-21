@@ -34,7 +34,7 @@ RESPONSE:
 }
 ```
 
-Se não houver nenhum ***erro***, a utilização do token deve ser como `COOKIE` com o nome `"token"`.
+Se não houver nenhum ***erro***, a utilização do token deve ser como `HEADER AUTHORIZATION`.
 
 <br/>
 

@@ -21,13 +21,9 @@ authRouter.post("/auth/login", async (req, res) => {
         const hostDate = new Date(hostTime)
 
         if (today.getTime() < hostDate.getTime()) {
-            // res.status(statusCodes.Unauthorized).json({
-            //     error: true,
-            //     message: "Blocked"
-            // })
             const newLvl = lvl < 120 ? lvl + 1 : lvl
             hosts.set(req.hostname, hostDate.getTime() + (200 * newLvl) + "," + (newLvl))
-            return res.status(statusCodes.Unauthorized).json({error:true,message:"Address blocked."});
+            return res.status(statusCodes.Unauthorized).json({ error: true, message: "Endereço bloqueado." });
         }
         hosts.delete(req.hostname)
     }
@@ -45,12 +41,12 @@ authRouter.post("/auth/login", async (req, res) => {
 
 authRouter.get("/auth/validate", async (req, res) => {
 
-    const token = req.cookies.token
-    
+    const token = req.headers.authorization
+
     if (!token) return res.status(statusCodes.Unauthorized)
         .json({ error: true, message: "Sem as credenciais necessárias." })
 
-    const resolvedToken = await authenticateToken(token)
+    const resolvedToken = await authenticateToken(token.replace("bearer ", ""))
 
     if (!resolvedToken) return res.status(statusCodes.Unauthorized)
         .json({ error: true, message: "Autenticação inválida." })

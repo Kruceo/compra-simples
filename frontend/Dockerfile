@@ -4,8 +4,6 @@ RUN apt update
 RUN apt install git -y
 
 RUN apt install nginx -y
-RUN rm /etc/nginx/conf.d/*
-RUN rm /etc/nginx/sites-available/*
 
 WORKDIR /easyfish/frontend
 ENV DOMAIN=localhost
@@ -44,6 +42,8 @@ RUN echo "node ./scripts/configureDockerContainer.mjs"     > start.sh && \
     echo "nginx -g 'daemon off;'"                          >> start.sh
 
 RUN chmod +x start.sh
+
+RUN rm /etc/nginx/sites-enabled/*
 
 ENV PROD=true
 

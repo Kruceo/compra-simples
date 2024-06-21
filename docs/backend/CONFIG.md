@@ -23,9 +23,10 @@ O arquivo de configuração fica localizado em `./config/config.json`.
 
 |CAMPO|DESCRIÇÃO|
 |---|---|
-|port      |A porta em que a API funcionará.
-|origin    |Endereço do cliente (frontend) que utilizará a API, serve para fins de autenticação.
-|credential|Define se é aceito o recebimento de credencials.|
+|port           |A porta em que a API funcionará.
+|origin         |Endereço do cliente (frontend) que utilizará a API, serve para fins de autenticação.
+|credential     |Define se é aceito o recebimento de credencials.|
+|sameFromRequest|Define se é aceito requisições de qualquer origem (Recomendado apenas para testes)|
 
 ## **SECURITY**
 
@@ -33,6 +34,9 @@ O arquivo de configuração fica localizado em `./config/config.json`.
 |---|---|
 |secret         |De preferência textos longos e com caracteres bem diversos, não há uma regra.
 |tokenExpireTime|Define o tempo que o cliente seguirá autenticado no servidor.
+|prefixLength   |Ajuste fino da encriptação, define o tamanho dos textos aleatórios que serão concatenados no inicio do texto alvo.
+|sufixLength    |Ajuste fino da encriptação, define o tamanho dos textos aleatórios que serão concatenados no fim do texto alvo.
+|test           |Desliga a necessidade de autenticação para requisições da API.
 
 ## **EXEMPLO**
 
@@ -42,22 +46,32 @@ O arquivo de configuração fica localizado em `./config/config.json`.
 {
     "database": {
         "username": "postgres",
-        "password": "admin",
+        "password": "example",
+        "port": 5432,
         "schema": "principal",
         "host": "localhost",
         "dialect": "postgres"
     },
-    "server":{
-        "port":8080,
-        "cors":{
-            "origin":"http://localhost:5173",
-            "credentials":true
+    "server": {
+        "port": 8080,
+        "cors": {
+            "origin": [
+                "http://192.168.0.62:5173",
+                "http://localhost:5173"
+            ],
+            "credentials": true,
+            "sameFromRequest":false
         }
     },
-    "security":{
-        "secret":"th1s1sTh3S3cr3t:aV3ryH4rdStr1ngT0R3allyD1ff1cultyTh3H4ck3rL1f3!!!",
-        "tokenExpireTime":"20m"
-    }
+    "security": {
+        "jwt": {
+            "secret": "abc",
+            "tokenExpireTime": "48h"
+        },
+        "prefixLength": 6,
+        "sufixLength": 10
+    },
+    "test": false
 }
 
 ```

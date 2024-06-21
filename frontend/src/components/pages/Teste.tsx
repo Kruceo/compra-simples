@@ -89,7 +89,7 @@ export default function Teste() {
                     body: b,
                     method: m,
                     credentials: "include",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { "Content-Type": "application/json",Authorization:`bearer ${window.localStorage.getItem("auth-token")}` },
                     mode: "cors"
                 })
 

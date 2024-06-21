@@ -10,7 +10,7 @@ export const api_protocol = config.api_protocol
 export const api_port = config.api_port
 export const api_v = "v1"
 
-export const backendAxios = axios.create({ withCredentials: true })
+export const backendAxios = axios.create({ withCredentials: true,headers:{Authorization:`bearer ${window.localStorage.getItem("auth-token")}`} })
 
 interface BackendResponse<T> {
     error?: boolean,
