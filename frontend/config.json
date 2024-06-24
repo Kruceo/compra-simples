@@ -1,4 +1,11 @@
 {
-  "printer": {},
+  "api_address": "localhost",
+  "api_protocol": "http",
+  "api_port": "8080",
+  "printer": {
+    "address": "localhost",
+    "protocol": "http",
+    "port": "8888"
+  },
   "dashboard_custom_page": null
 }

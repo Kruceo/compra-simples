@@ -16,6 +16,7 @@ import Button from "../../Layout/Button";
 import HelpButton from "../../Layout/HelpButton";
 import { printSingleEntry } from "./PrintEntry";
 import { date2input } from "../Reports/ViewPriceComparationReport";
+import SkeletonContainer from "../../Layout/SkeletonContainer";
 
 export default function CreateEntry(props: { type: 0 | 1 }) {
     const [forceUpdate, setForceUpdate] = useState(false)
@@ -29,7 +30,9 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
     const [transactionDate, setTransactionDate] = useState(new Date())
     const [customTransactionDate, setCustomTransactionDate] = useState(new Date(window.localStorage.getItem("custom-date") ?? new Date()))
 
-    // const [keepBoatID,setKeepBoatID] = useState(false)
+    // serve para previnir que o usuario possa clicar varias vezes em finalizar  em conexoes lentas
+    const [finalizing, setFinalizing] = useState(false)
+
     function resetStates() {
         setAddedTransitionItensData([])
         setTransitionBoat(undefined)
@@ -38,7 +41,7 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
         console.log("reset")
     }
 
-    // previne que ao mudar de create/entrada para create/saida, ele nao mantenha os estados do anterior
+    // previne que ao mudar de create/entrada para create/saida, ele mantenha os estados do anterior
     useEffect(resetStates, [window.location.pathname])
 
     // adiciona um transacao item á lista de adicionados
@@ -63,17 +66,16 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
     ]
     //listener para a tecla f8 finalizar a transacao
     const keyListenerHandler = (e: KeyboardEvent) => {
-        // console.log("#",e)
         switch (e.key) {
             case "F8":
-                if (!transitionBoat) {
+                if (!transitionBoat || finalizing) {
                     break
                 };
                 window.document.body.focus()
                 submitHandler(addedTransitionItensData, transitionBoat.id, "/create/entrada")
                 break;
             case "F9":
-                if (!transitionBoat) {
+                if (!transitionBoat || finalizing) {
                     break
                 };
                 window.document.body.focus()
@@ -88,13 +90,15 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
     useEffect(() => {
         window.addEventListener("keydown", keyListenerHandler)
         return () => window.removeEventListener("keydown", keyListenerHandler)
-    }, [transitionBoat, addedTransitionItensData])
+    }, [transitionBoat, addedTransitionItensData,finalizing])
 
     /** Funcao que finaliza a transacao */
     async function submitHandler(addedItens: transacaoitemProps[], boatID?: number, outNavigate?: string) {
 
         if (boatID == undefined) return simpleSpawnInfo("É necessario selecionar um bote.")
         if (addedItens.length === 0) return simpleSpawnInfo("É necessario adicionar algum item à transação.")
+
+        setFinalizing(true)
 
         const response = await saveEntryStack(
             boatID,
@@ -106,9 +110,12 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
             dateMode == "auto" ? transactionDate : customTransactionDate
         )
 
-        if (response.error || !response.data)
+        if (response.error || !response.data) {
+            setFinalizing(false)
             return simpleSpawnInfo(response.message ?? "Houve um problema desconhecido ao criar uma Transação.")
+        }
         if (!Array.isArray(response.data)) {
+            setFinalizing(false)
             printSingleEntry(response.data.transacao_id ?? -1)
             // if (response.data.transacao_id)
             // navigate('/view/transacao')
@@ -125,6 +132,8 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
         <Bar />
         <SideBar />
         <Content>
+            {finalizing ? "true" : "false"}
+            <SkeletonContainer className={`${finalizing ? "" : "w-0 h-0 invisible"} z-20 w-full h-full left-0 top-0 fixed`} />
             <HelpButton content={"F8 - Finalizar e adicionar nova entrada\nF9 - Finalizar e adicionar nova saída"} className="absolute left-full -translate-x-full z-50" />
             <section className="py-8 px-4 border-b border-borders relative flex w-full">
                 <h2>Nova {props.type == 0 ? "Entrada" : "Saída"}</h2>
@@ -159,7 +168,7 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
                                     <i title="Manual">&#xe990;</i>
                             }
                         </label>
-                        <input type="checkbox" defaultChecked={dateMode=="auto"} id="lock-date" name="lock-date" tabIndex={-1} className="hidden" onChange={(e) => {
+                        <input type="checkbox" defaultChecked={dateMode == "auto"} id="lock-date" name="lock-date" tabIndex={-1} className="hidden" onChange={(e) => {
                             const newDatemode = e.target.checked ? "auto" : "manual"
                             setDateMode(newDatemode)
                             if (newDatemode == "auto") {
