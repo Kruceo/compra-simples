@@ -32,13 +32,15 @@ let config = {
         "protocol": process.env.PRINTER_PROTOCOL,
         "port": process.env.PRINTER_PORT
     },
-    "dashboard_custom_page":process.env.DASHBOARD_CUSTOM_PAGE
+    "dashboard_custom_page": process.env.DASHBOARD_CUSTOM_PAGE ?? null
 }
 
 fs.writeFileSync("config.json", JSON.stringify(config, null, 2))
 console.log("Configuration created.")
 
-
+if (!prod) {
+    console.log(config)
+}
 
 if (fs.existsSync(WWW_PATH + "assets")) process.exit()
 
