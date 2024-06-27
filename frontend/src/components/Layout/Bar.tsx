@@ -18,7 +18,10 @@ export default function Bar() {
         else setIsOpenDropDown(false)
     }
 
-    useEffect(() => window.addEventListener('click', clickHandler), [isMouseOverIcon, isMouseOverPanel])
+    useEffect(() => {
+        window.addEventListener('click', clickHandler)
+        return () => removeEventListener("click", clickHandler)
+    }, [isMouseOverIcon, isMouseOverPanel])
 
     const user = Cookies.get("user")
     return <>
@@ -38,8 +41,8 @@ export default function Bar() {
                     isOpenDropDown ? <div
                         onMouseLeave={() => setIsMouseOverPanel(false)}
                         onMouseEnter={() => setIsMouseOverPanel(true)}
-                        className="px-4 top-full left-full -translate-x-full absolute">
-                        <div className="bg-subpanel border-borders border shadow-xl">
+                        className="px-4 top-full left-full  -translate-x-full absolute">
+                        <div className="bg-subpanel border-borders border rounded-panel-default shadow-xl">
                             <div className="flex flex-col justify-center items-center p-4 min-w-40">
                                 <UserIcon className="mb-2" />
                                 <p className="capitalize font-bold text-current">{user}</p>

@@ -132,7 +132,6 @@ export default function CreateEntry(props: { type: 0 | 1 }) {
         <Bar />
         <SideBar />
         <Content>
-            {finalizing ? "true" : "false"}
             <SkeletonContainer className={`${finalizing ? "" : "w-0 h-0 invisible"} z-20 w-full h-full left-0 top-0 fixed`} />
             <HelpButton content={"F8 - Finalizar e adicionar nova entrada\nF9 - Finalizar e adicionar nova saída"} className="absolute left-full -translate-x-full z-50" />
             <section className="py-8 px-4 border-b border-borders relative flex w-full">

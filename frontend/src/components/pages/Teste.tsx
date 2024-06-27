@@ -134,7 +134,7 @@ function TestPrinterSect() {
     return <>
         <h3>Testar Impressora</h3>
         <p>Width: {pWidth} chars</p>
-        <FormInput></FormInput>
+        <FormInput onChange={(e)=>setPInput(e.currentTarget.value)}/>
         <Button onClick={() => {
             thermalPrinter.print([["println", pInput], ['cut']]).catch(err => {
                 setErr(err.message)
