@@ -50,7 +50,7 @@ var myTheme = {
       },
       borderRadius: {
         "default": 0,
-        "panel-default": 0,
+        "panel-default": 5,
         "input-default": 5,
         "button-default": 3
       },

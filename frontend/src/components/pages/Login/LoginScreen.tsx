@@ -24,11 +24,17 @@ export default function LoginScreen() {
             setError("")
             setLoading(true)
             const response = await backend.auth.login(user.toString(), password.toString())
-            setLoading(false)
-            if (response.error) return setMessage(response.message)
+            if (response.error) {
+                setLoading(false)
+                return setMessage(response.message)
+            }
             if (response.token) {
                 window.localStorage.setItem("auth-token", response.token)
-                navigate("/")
+                // console.warn('500ms cooldown')
+                setTimeout(() => {
+                    navigate("/")
+                }, 500)
+
             }
         } catch (error) {
             setLoading(false)

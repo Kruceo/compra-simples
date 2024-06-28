@@ -2,7 +2,7 @@ import axios from "axios"
 import { get } from './get'
 import { create, bulkCreate } from "./create"
 import { edit, bulkEdit } from "./edit"
-import { remove,bulkRemove } from "./remove"
+import { remove, bulkRemove } from "./remove"
 import config from "../../../config.json" assert {type: "json"}
 
 export const api_address = config.api_address
@@ -10,7 +10,7 @@ export const api_protocol = config.api_protocol
 export const api_port = config.api_port
 export const api_v = "v1"
 
-export const backendAxios = axios.create({ withCredentials: true,headers:{Authorization:`bearer ${window.localStorage.getItem("auth-token")}`} })
+export const backendAxios = axios.create({ withCredentials: true, headers: { Authorization: `bearer ${window.localStorage.getItem("auth-token")}` } })
 
 interface BackendResponse<T> {
     error?: boolean,
@@ -51,7 +51,7 @@ const utils = {
     removeAttributeFromAll
 }
 
-export { get, create, bulkCreate,bulkEdit, remove,bulkRemove , edit, utils, auth }
-export default { get,bulkCreate,bulkEdit, create, bulkRemove,  remove, edit, utils, auth }
+export { get, create, bulkCreate, bulkEdit, remove, bulkRemove, edit, utils, auth }
+export default { get, bulkCreate, bulkEdit, create, bulkRemove, remove, edit, utils, auth }
 
 export type { BackendResponse }

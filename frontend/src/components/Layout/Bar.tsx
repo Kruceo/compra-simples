@@ -17,6 +17,7 @@ export default function Bar() {
         }
         else setIsOpenDropDown(false)
     }
+    const [newVersionDisponible, setNewVersionDisponible] = useState(false)
 
     useEffect(() => {
         window.addEventListener('click', clickHandler)
@@ -24,6 +25,43 @@ export default function Bar() {
     }, [isMouseOverIcon, isMouseOverPanel])
 
     const user = Cookies.get("user")
+
+
+
+    useEffect(() => {
+        // version checker
+        // armazena a versão e a data da ultima checagem no browser
+        // verifica se a diferença entre datas é menor que 'expireTime'
+        // se for, ele faz um novo fetch, caso não ele ainda checa a
+        // ultima versão armazena e compara
+        const storedWeek = window.localStorage.getItem("last-v-check-date")
+        let needAfetch = true
+        const expireTime = 24 * 60 * 60 * 1000
+        if (storedWeek) {
+            if (Date.now() - parseInt(storedWeek) < expireTime) {
+                needAfetch = false
+            }
+        }
+
+        if (needAfetch) {
+            console.log("fetching version")
+            fetch("https://raw.githubusercontent.com/Kruceo/easyfish/main/frontend/package.json").then((res) => res.json()
+                .then(data => {
+                    if (data.version != pkg.version) setNewVersionDisponible(true)
+                    localStorage.setItem('last-v-check-date', Date.now().toString())
+                    localStorage.setItem('last-v', data.version)
+                }))
+        }
+        else {
+            const storedVersion = localStorage.getItem('last-v')
+            if (storedVersion != pkg.version) {
+                setNewVersionDisponible(true)
+            }
+        }
+    }, [])
+
+
+
     return <>
 
         <header className="bg-bar border-b-default border-borders w-full h-bar-h fixed left-0 top-0 flex items-center z-[51]">
@@ -48,8 +86,8 @@ export default function Bar() {
                                 <p className="capitalize font-bold text-current">{user}</p>
                             </div>
                             <div className="mx-4 pb-4 flex">
-                                <p className="opacity-30 cursor-default">{pkg.version}</p>
-                                <Link to={"/login"} onClick={() => Cookies.set("token", "undefined")} title="Sair" className="w-fit ml-auto flex items-center justify-end gap-2 text-red-500">
+                                <p title={newVersionDisponible ? "Nova versão disponível" : "Versão"} className={`opacity-30 cursor-default ${newVersionDisponible ? "line-through" : ""}`}>{pkg.version}</p>
+                                <Link to={"/login"} onClick={() => localStorage.setItem("auth-token", "-")} title="Sair" className="w-fit ml-auto flex items-center justify-end gap-2 text-red-500">
                                     Sair{/* <i>&#xea14;</i> */}
                                 </Link>
                             </div>
